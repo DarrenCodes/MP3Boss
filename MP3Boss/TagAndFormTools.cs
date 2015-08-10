@@ -1,92 +1,118 @@
 ﻿using System.Linq;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
+using System;
 
 namespace MP3Boss
 {
     class TagAndFormTools
     {
-        public TagAndFormTools()
+        internal void populateListView(FormMP3Boss obj)
         {
+            obj.listViewMP3s.Items.Clear();
+
+            obj.files = Directory.GetFiles(obj.fBDialogLoadMP3s.SelectedPath, "*.mp3", SearchOption.AllDirectories); //Loads mp3 files from selected path
+
+            if (obj.files != null)
+            {
+                //Adds list of files to List View element in GUI
+                foreach (string file in obj.files)
+                {
+                    obj.listViewMP3s.Items.Add(file.Substring(file.LastIndexOf('\\') + 1), file.LastIndexOf('.'));
+                }
+            }
         }
 
         //Set the attributes of the song according to the selected item in its respective Main Form textboxes
-        internal void setFormAttributes(string path)
+        internal void setFormAttributes(string path, FormMP3Boss obj)
         {
             TagLib.File file = TagLib.File.Create(path);
-            clearFormAttributes();
+
+            clearFormAttributes(obj);
 
             //Instantiate object with address of selected MP3 file
-            if (FormMP3Boss.cBoxTitle.Checked != true)
-                FormMP3Boss.tBoxTitle.Text = file.Tag.Title;
-            if (FormMP3Boss.cBoxAlbumArtist.Checked != true)
-                FormMP3Boss.tBoxAlbumArtist.Text = file.Tag.FirstAlbumArtist;
+            if (obj.cBoxTitle.Checked != true)
+                obj.tBoxTitle.Text = file.Tag.Title;
+            if (obj.cBoxAlbumArtist.Checked != true)
+                obj.tBoxAlbumArtist.Text = file.Tag.FirstAlbumArtist;
             //Loop for finding & displaying all contributing artists from MP3 file (array)
-            if (FormMP3Boss.cBoxContArtists.Checked != true)
+            if (obj.cBoxContArtists.Checked != true)
             {
                 for (int i = 0; i < file.Tag.Performers.Length; i++)
                 {
                     if (i == (file.Tag.Performers.Length - 1))
                     {
-                        FormMP3Boss.tBoxContArtists.Text += file.Tag.Performers[i];
+                        obj.tBoxContArtists.Text += file.Tag.Performers[i];
                     }
                     else
-                        FormMP3Boss.tBoxContArtists.Text += file.Tag.Performers[i] + ";";
+                        obj.tBoxContArtists.Text += file.Tag.Performers[i] + ";";
                 }
             }
-            if (FormMP3Boss.cBoxAlbum.Checked != true)
-                FormMP3Boss.tBoxAlbum.Text = file.Tag.Album;
-            if (FormMP3Boss.cBoxYear.Checked != true)
-                FormMP3Boss.tBoxYear.Text = file.Tag.Year.ToString();
-            if (FormMP3Boss.cBoxTrackNo.Checked != true)
-                FormMP3Boss.tBoxTrackNo.Text = file.Tag.Track.ToString();
-            if (FormMP3Boss.cBoxGenre.Checked != true)
+            if (obj.cBoxAlbum.Checked != true)
+                obj.tBoxAlbum.Text = file.Tag.Album;
+            if (obj.cBoxYear.Checked != true)
+                obj.tBoxYear.Text = file.Tag.Year.ToString();
+            if (obj.cBoxTrackNo.Checked != true)
+                obj.tBoxTrackNo.Text = file.Tag.Track.ToString();
+            if (obj.cBoxGenre.Checked != true)
             {
                 for (int i = 0; i < file.Tag.Genres.Length; i++)
                 {
                     if (i == (file.Tag.Genres.Length - 1))
                     {
-                        FormMP3Boss.tBoxGenre.Text += file.Tag.Genres[i];
+                        obj.tBoxGenre.Text += file.Tag.Genres[i];
                     }
                     else
-                        FormMP3Boss.tBoxGenre.Text += file.Tag.Genres[i] + ";";
+                        obj.tBoxGenre.Text += file.Tag.Genres[i] + ";";
                 }
             }
         }
 
-        //Clear all text from the Main Form textboxs
-        internal void clearFormAttributes()
+        internal void renameFiles(string originalPath, string newFileName, FormMP3Boss obj)
         {
-            if (FormMP3Boss.cBoxTitle.Checked != true)
-                FormMP3Boss.tBoxTitle.Clear();
-            if (FormMP3Boss.cBoxAlbumArtist.Checked != true)
-                FormMP3Boss.tBoxAlbumArtist.Clear();
-            if (FormMP3Boss.cBoxContArtists.Checked != true)
-                FormMP3Boss.tBoxContArtists.Clear();
-            if (FormMP3Boss.cBoxAlbum.Checked != true)
-                FormMP3Boss.tBoxAlbum.Clear();
-            if (FormMP3Boss.cBoxYear.Checked != true)
-                FormMP3Boss.tBoxYear.Clear();
-            if (FormMP3Boss.cBoxTrackNo.Checked != true)
-                FormMP3Boss.tBoxTrackNo.Clear();
-            if (FormMP3Boss.cBoxGenre.Checked != true)
-                FormMP3Boss.tBoxGenre.Clear();
+            try
+            {
+                System.IO.File.Move(originalPath, newFileName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Important Message");
+            }
         }
 
-        internal void saveChangesToFile(string path)
+        //Clear all text from the Main Form textboxs
+        internal void clearFormAttributes(FormMP3Boss obj)
+        {
+            if (obj.cBoxTitle.Checked != true)
+                obj.tBoxTitle.Clear();
+            if (obj.cBoxAlbumArtist.Checked != true)
+                obj.tBoxAlbumArtist.Clear();
+            if (obj.cBoxContArtists.Checked != true)
+                obj.tBoxContArtists.Clear();
+            if (obj.cBoxAlbum.Checked != true)
+                obj.tBoxAlbum.Clear();
+            if (obj.cBoxYear.Checked != true)
+                obj.tBoxYear.Clear();
+            if (obj.cBoxTrackNo.Checked != true)
+                obj.tBoxTrackNo.Clear();
+            if (obj.cBoxGenre.Checked != true)
+                obj.tBoxGenre.Clear();
+        }
+
+        internal void saveChangesToFile(string path, FormMP3Boss obj)
         {
             TagLib.File file = TagLib.File.Create(path);
 
-            if (FormMP3Boss.tBoxTitle.Text != file.Tag.Title)
-                file.Tag.Title = FormMP3Boss.tBoxTitle.Text;
+            if (obj.tBoxTitle.Text != file.Tag.Title)
+                file.Tag.Title = obj.tBoxTitle.Text;
 
-            if (FormMP3Boss.tBoxAlbumArtist.Text != file.Tag.FirstAlbumArtist)
+            if (obj.tBoxAlbumArtist.Text != file.Tag.FirstAlbumArtist)
             {
                 file.Tag.AlbumArtists = null;
-                file.Tag.AlbumArtists = new[] { FormMP3Boss.tBoxAlbumArtist.Text };
+                file.Tag.AlbumArtists = new[] { obj.tBoxAlbumArtist.Text };
             }
 
-            string[] contArtistArr = FormMP3Boss.tBoxContArtists.Text.Split(';'); //Split user entered string into array
+            string[] contArtistArr = obj.tBoxContArtists.Text.Split(';'); //Split user entered string into array
             bool contEqual = Enumerable.SequenceEqual(file.Tag.Performers, contArtistArr); //Check if user changed field
             //Copy user's changes to tag
             if (contEqual == false)
@@ -95,17 +121,18 @@ namespace MP3Boss
                 file.Tag.Performers = contArtistArr;
             }
 
-            if (FormMP3Boss.tBoxAlbum.Text != file.Tag.Album)
-                file.Tag.Album = FormMP3Boss.tBoxAlbum.Text;
+            if (obj.tBoxAlbum.Text != file.Tag.Album)
+                file.Tag.Album = obj.tBoxAlbum.Text;
 
-            if (FormMP3Boss.tBoxYear.Text != file.Tag.Year.ToString())
-                file.Tag.Year = uint.Parse(FormMP3Boss.tBoxYear.Text);
+            if (obj.tBoxYear.Text != file.Tag.Year.ToString())
+                file.Tag.Year = uint.Parse(obj.tBoxYear.Text);
 
-            if (FormMP3Boss.tBoxTrackNo.Text != file.Tag.Track.ToString())
-                file.Tag.Track = uint.Parse(FormMP3Boss.tBoxTrackNo.Text);
+            if (obj.tBoxTrackNo.Text != file.Tag.Track.ToString())
+                file.Tag.Track = uint.Parse(obj.tBoxTrackNo.Text);
 
-            string[] genre = FormMP3Boss.tBoxGenre.Text.Split(';'); //Split user entered string into array
+            string[] genre = obj.tBoxGenre.Text.Split(';'); //Split user entered string into array
             bool genreEqual = Enumerable.SequenceEqual(file.Tag.Genres, genre); //Check if user changed field
+
             //Copy user's changes to tag
             if (genreEqual == false)
             {
@@ -114,6 +141,65 @@ namespace MP3Boss
             }
 
             file.Save();
+
+
+            switch (obj.comboBoxFormat.SelectedIndex)
+            {
+                case 1: //#. Title - Artist     format
+                    {
+                        string newFileName = path.Substring(0, path.LastIndexOf('\\') + 1) +
+                            file.Tag.Track + ". " +
+                            file.Tag.Title + " - " +
+                            file.Tag.FirstAlbumArtist + ".mp3";
+
+                        renameFiles(path, newFileName, obj);
+
+                        break;
+                    }
+                case 2: //#. Artist - Title     format
+                    {
+                        string newFileName = path.Substring(0, path.LastIndexOf('\\') + 1) +
+                            file.Tag.Track + ". " +
+                            file.Tag.FirstAlbumArtist + " - " +
+                            file.Tag.Title + ".mp3";
+
+                        renameFiles(path, newFileName, obj);
+
+                        break;
+                    }
+                case 3: //Artist - Title    format
+                    {
+                        string newFileName = path.Substring(0, path.LastIndexOf('\\') + 1) +
+                            file.Tag.FirstAlbumArtist + " - " +
+                            file.Tag.Title + ".mp3";
+
+                        renameFiles(path, newFileName, obj);
+
+                        break;
+                    }
+                case 4: //#. Title      format
+                    {
+                        string newFileName = path.Substring(0, path.LastIndexOf('\\') + 1) +
+                            file.Tag.Track + ". " +
+                            file.Tag.Title + ".mp3";
+
+                        renameFiles(path, newFileName, obj);
+
+                        break;
+                    }
+                case 5: //Title - Artist      format
+                    {
+                        string newFileName = path.Substring(0, path.LastIndexOf('\\') + 1) +
+                            file.Tag.Title + " - " + 
+                            file.Tag.FirstAlbumArtist + ".mp3";
+
+                        renameFiles(path, newFileName, obj);
+
+                        break;
+                    }
+                default:
+                    break;
+            }
         }
     }
 }
