@@ -56,6 +56,7 @@
             this.comboBoxFormat = new System.Windows.Forms.ComboBox();
             this.lblFormat = new System.Windows.Forms.Label();
             this.btnRefresh = new System.Windows.Forms.Button();
+            this.fileMenuOpenDeep = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -91,7 +92,8 @@
             // fileMenuItem
             // 
             this.fileMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileMenuOpen});
+            this.fileMenuOpen,
+            this.fileMenuOpenDeep});
             this.fileMenuItem.Name = "fileMenuItem";
             this.fileMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileMenuItem.Text = "File";
@@ -99,9 +101,9 @@
             // fileMenuOpen
             // 
             this.fileMenuOpen.Name = "fileMenuOpen";
-            this.fileMenuOpen.Size = new System.Drawing.Size(112, 22);
-            this.fileMenuOpen.Text = "Open...";
-            this.fileMenuOpen.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            this.fileMenuOpen.Size = new System.Drawing.Size(181, 22);
+            this.fileMenuOpen.Text = "Find files (shallow)...";
+            this.fileMenuOpen.Click += new System.EventHandler(this.fileMenuOpen_Click);
             // 
             // tBoxTitle
             // 
@@ -300,6 +302,13 @@
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
+            // fileMenuOpenDeep
+            // 
+            this.fileMenuOpenDeep.Name = "fileMenuOpenDeep";
+            this.fileMenuOpenDeep.Size = new System.Drawing.Size(181, 22);
+            this.fileMenuOpenDeep.Text = "Find files (deep)...";
+            this.fileMenuOpenDeep.Click += new System.EventHandler(this.fileMenuOpenDeep_Click);
+            // 
             // FormMP3Boss
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -373,6 +382,7 @@
         internal System.Windows.Forms.ComboBox comboBoxFormat;
         private System.Windows.Forms.Label lblFormat;
         private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.ToolStripMenuItem fileMenuOpenDeep;
     }
 }
 

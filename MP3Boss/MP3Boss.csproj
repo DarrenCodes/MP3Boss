@@ -61,6 +61,10 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=4.0.4.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.4.0.4\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -98,6 +102,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="MP3Boss_TemporaryKey.pfx" />
+    <None Include="packages.config" />
     <None Include="Properties\DataSources\formMP3Boss.datasource" />
     <None Include="Properties\DataSources\MP3Boss.Properties.Resources.datasource" />
     <None Include="Properties\DataSources\MP3Boss.Properties.Settings.datasource" />

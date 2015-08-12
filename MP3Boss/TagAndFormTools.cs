@@ -11,7 +11,10 @@ namespace MP3Boss
         {
             obj.listViewMP3s.Items.Clear();
 
-            obj.files = Directory.GetFiles(obj.fBDialogLoadMP3s.SelectedPath, "*.mp3", SearchOption.AllDirectories); //Loads mp3 files from selected path
+            if (obj.fileScanIsDeep == false)
+                obj.files = Directory.GetFiles(obj.fBDialogLoadMP3s.SelectedPath, "*.mp3"); //Loads mp3 files from selected path
+            else if(obj.fileScanIsDeep == true)
+                obj.files = Directory.GetFiles(obj.fBDialogLoadMP3s.SelectedPath, "*.mp3", SearchOption.AllDirectories); //Loads all mp3 files from selected path and subdirectories
 
             if (obj.files != null)
             {
@@ -68,7 +71,7 @@ namespace MP3Boss
             }
         }
 
-        internal void renameFiles(string originalPath, string newFileName, FormMP3Boss obj)
+        internal void renameFiles(string originalPath, string newFileName)
         {
             try
             {
@@ -84,25 +87,110 @@ namespace MP3Boss
         internal void clearFormAttributes(FormMP3Boss obj)
         {
             if (obj.cBoxTitle.Checked != true)
-                obj.tBoxTitle.Clear();
+                obj.tBoxTitle.Text = null;
             if (obj.cBoxAlbumArtist.Checked != true)
-                obj.tBoxAlbumArtist.Clear();
+                obj.tBoxAlbumArtist.Text = null;
             if (obj.cBoxContArtists.Checked != true)
-                obj.tBoxContArtists.Clear();
+                obj.tBoxContArtists.Text = null;
             if (obj.cBoxAlbum.Checked != true)
-                obj.tBoxAlbum.Clear();
+                obj.tBoxAlbum.Text = null;
             if (obj.cBoxYear.Checked != true)
-                obj.tBoxYear.Clear();
+                obj.tBoxYear.Text = null;
             if (obj.cBoxTrackNo.Checked != true)
-                obj.tBoxTrackNo.Clear();
+                obj.tBoxTrackNo.Text = null;
             if (obj.cBoxGenre.Checked != true)
-                obj.tBoxGenre.Clear();
+                obj.tBoxGenre.Text = null;
         }
 
-        internal void saveChangesToFile(string path, FormMP3Boss obj)
+        private void checkFormMessage(FormMP3Boss obj)
         {
-            TagLib.File file = TagLib.File.Create(path);
+            DialogResult dialogResult = MessageBox.Show("All fields not filled.\nFill now? (Might result in error.)", "Important Message", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.No)
+            {
+                obj.formIsCompletedFlag = true;
+                obj.skipRestFlag = true;
+            }
+            if (dialogResult == DialogResult.Yes)
+            {
+                obj.formIsCompletedFlag = false;
+                obj.skipRestFlag = true;
+            }
+        }
 
+        private bool messageIsCalled(TagLib.File file, string textBox, string fileTag, FormMP3Boss obj)
+        {
+            if (fileTag == null)
+                fileTag = "";
+
+            if (textBox == fileTag
+                && (fileTag == ""))
+                return true;
+            else
+                return false;
+        }
+
+        private bool messageIsCalled(TagLib.File file, string textBox, string[] fileTag, FormMP3Boss obj)
+        {
+            string[] contArtistArr = null;
+
+            if (textBox != "")
+                contArtistArr = textBox.Split(';'); //Split user entered string into array
+
+            if (fileTag == contArtistArr
+                && (fileTag == null))
+                return true;
+            else
+                return false;
+        }
+
+        internal void formChecker(string path, FormMP3Boss obj)
+        {
+            obj.formIsCompletedFlag = true;
+            obj.skipRestFlag = false;
+
+            TagLib.File file = TagLib.File.Create(path);
+            
+            if (!obj.skipRestFlag && messageIsCalled(file, obj.tBoxTitle.Text, file.Tag.Title, obj))
+            {
+                checkFormMessage(obj);
+            }
+
+            if (!obj.skipRestFlag && messageIsCalled(file, obj.tBoxAlbumArtist.Text, file.Tag.FirstAlbumArtist, obj))
+            {
+                checkFormMessage(obj);
+            }
+
+            if (!obj.skipRestFlag && messageIsCalled(file, obj.tBoxContArtists.Text, file.Tag.Performers, obj))
+            {
+                checkFormMessage(obj);
+            }
+
+            if (!obj.skipRestFlag && messageIsCalled(file, obj.tBoxAlbum.Text, file.Tag.Album, obj))
+            {
+                checkFormMessage(obj);
+            }
+
+            if (!obj.skipRestFlag && messageIsCalled(file, obj.tBoxYear.Text, file.Tag.Year.ToString(), obj))
+            {
+                checkFormMessage(obj);
+            }
+
+            if (!obj.skipRestFlag && messageIsCalled(file, obj.tBoxTrackNo.Text, file.Tag.Track.ToString(), obj))
+            {
+                checkFormMessage(obj);
+            }
+
+            if (!obj.skipRestFlag && messageIsCalled(file, obj.tBoxGenre.Text, file.Tag.Genres, obj))
+            {
+                checkFormMessage(obj);
+            }
+
+            if (obj.formIsCompletedFlag)
+                saveChangesToFile(path, obj, file);
+        }
+
+        private void saveChangesToFile(string path, FormMP3Boss obj, TagLib.File file)
+        {
             if (obj.tBoxTitle.Text != file.Tag.Title)
                 file.Tag.Title = obj.tBoxTitle.Text;
 
@@ -140,7 +228,14 @@ namespace MP3Boss
                 file.Tag.Genres = genre;
             }
 
-            file.Save();
+            try
+            {
+                file.Save();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Important Message");
+            }
 
 
             switch (obj.comboBoxFormat.SelectedIndex)
@@ -152,7 +247,7 @@ namespace MP3Boss
                             file.Tag.Title + " - " +
                             file.Tag.FirstAlbumArtist + ".mp3";
 
-                        renameFiles(path, newFileName, obj);
+                        renameFiles(path, newFileName);
 
                         break;
                     }
@@ -163,7 +258,7 @@ namespace MP3Boss
                             file.Tag.FirstAlbumArtist + " - " +
                             file.Tag.Title + ".mp3";
 
-                        renameFiles(path, newFileName, obj);
+                        renameFiles(path, newFileName);
 
                         break;
                     }
@@ -173,7 +268,7 @@ namespace MP3Boss
                             file.Tag.FirstAlbumArtist + " - " +
                             file.Tag.Title + ".mp3";
 
-                        renameFiles(path, newFileName, obj);
+                        renameFiles(path, newFileName);
 
                         break;
                     }
@@ -183,7 +278,7 @@ namespace MP3Boss
                             file.Tag.Track + ". " +
                             file.Tag.Title + ".mp3";
 
-                        renameFiles(path, newFileName, obj);
+                        renameFiles(path, newFileName);
 
                         break;
                     }
@@ -193,7 +288,7 @@ namespace MP3Boss
                             file.Tag.Title + " - " + 
                             file.Tag.FirstAlbumArtist + ".mp3";
 
-                        renameFiles(path, newFileName, obj);
+                        renameFiles(path, newFileName);
 
                         break;
                     }
