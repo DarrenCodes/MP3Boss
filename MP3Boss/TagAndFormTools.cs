@@ -13,7 +13,7 @@ namespace MP3Boss
 
             if (obj.fileScanIsDeep == false)
                 obj.files = Directory.GetFiles(obj.fBDialogLoadMP3s.SelectedPath, "*.mp3"); //Loads mp3 files from selected path
-            else if(obj.fileScanIsDeep == true)
+            else if (obj.fileScanIsDeep == true)
                 obj.files = Directory.GetFiles(obj.fBDialogLoadMP3s.SelectedPath, "*.mp3", SearchOption.AllDirectories); //Loads all mp3 files from selected path and subdirectories
 
             if (obj.files != null)
@@ -26,10 +26,38 @@ namespace MP3Boss
             }
         }
 
+        //Clear all text from the Main Form textboxs
+        internal void clearFormAttributes(FormMP3Boss obj)
+        {
+            if (obj.cBoxTitle.Checked != true)
+                obj.tBoxTitle.Text = null;
+            if (obj.cBoxAlbumArtist.Checked != true)
+                obj.tBoxAlbumArtist.Text = null;
+            if (obj.cBoxContArtists.Checked != true)
+                obj.tBoxContArtists.Text = null;
+            if (obj.cBoxAlbum.Checked != true)
+                obj.tBoxAlbum.Text = null;
+            if (obj.cBoxYear.Checked != true)
+                obj.tBoxYear.Text = null;
+            if (obj.cBoxTrackNo.Checked != true)
+                obj.tBoxTrackNo.Text = null;
+            if (obj.cBoxGenre.Checked != true)
+                obj.tBoxGenre.Text = null;
+        }
+
         //Set the attributes of the song according to the selected item in its respective Main Form textboxes
         internal void setFormAttributes(string path, FormMP3Boss obj)
         {
-            TagLib.File file = TagLib.File.Create(path);
+            TagLib.File file = null;
+
+            try
+            {
+                file = TagLib.File.Create(path);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error!");
+            }
 
             clearFormAttributes(obj);
 
@@ -71,40 +99,10 @@ namespace MP3Boss
             }
         }
 
-        internal void renameFiles(string originalPath, string newFileName)
-        {
-            try
-            {
-                System.IO.File.Move(originalPath, newFileName);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Important Message");
-            }
-        }
-
-        //Clear all text from the Main Form textboxs
-        internal void clearFormAttributes(FormMP3Boss obj)
-        {
-            if (obj.cBoxTitle.Checked != true)
-                obj.tBoxTitle.Text = null;
-            if (obj.cBoxAlbumArtist.Checked != true)
-                obj.tBoxAlbumArtist.Text = null;
-            if (obj.cBoxContArtists.Checked != true)
-                obj.tBoxContArtists.Text = null;
-            if (obj.cBoxAlbum.Checked != true)
-                obj.tBoxAlbum.Text = null;
-            if (obj.cBoxYear.Checked != true)
-                obj.tBoxYear.Text = null;
-            if (obj.cBoxTrackNo.Checked != true)
-                obj.tBoxTrackNo.Text = null;
-            if (obj.cBoxGenre.Checked != true)
-                obj.tBoxGenre.Text = null;
-        }
-
+        //Prompts the user to check the tags loaded in the form or to ignore
         private void checkFormMessage(FormMP3Boss obj)
         {
-            DialogResult dialogResult = MessageBox.Show("All fields not filled.\nFill now? (Might result in error.)", "Important Message", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("All fields not filled. Fill now? \n(Selecting No will re-format using existing tags.)", "Important Message", MessageBoxButtons.YesNoCancel);
             if (dialogResult == DialogResult.No)
             {
                 obj.formIsCompletedFlag = true;
@@ -112,78 +110,74 @@ namespace MP3Boss
             }
             if (dialogResult == DialogResult.Yes)
             {
+                obj.userFormat = obj.comboBoxFormat.SelectedIndex;
+                obj.comboBoxFormat.SelectedIndex = 0;
+                obj.selectedIndex = obj.interruptedIndex;
+                obj.formIsCompletedFlag = false;
+                obj.skipRestFlag = true;
+            }
+            if (dialogResult == DialogResult.Cancel)
+            {
                 obj.formIsCompletedFlag = false;
                 obj.skipRestFlag = true;
             }
         }
 
-        private bool messageIsCalled(TagLib.File file, string textBox, string fileTag, FormMP3Boss obj)
+        //Checks the textboxes to see if the "checkFormMessage" should be called
+        private void nullTagChecker(string textBox, string fileTag, FormMP3Boss obj)
         {
+            bool isNullTag;
+
             if (fileTag == null)
                 fileTag = "";
 
             if (textBox == fileTag
                 && (fileTag == ""))
-                return true;
+                isNullTag = true;
             else
-                return false;
-        }
+                isNullTag = false;
 
-        private bool messageIsCalled(TagLib.File file, string textBox, string[] fileTag, FormMP3Boss obj)
+            if (!obj.skipRestFlag && isNullTag)
+            {
+                checkFormMessage(obj);
+            }
+        }
+        private void nullTageChecker(string textBox, string[] fileTag, FormMP3Boss obj)
         {
+            bool isNullTag;
+
             string[] contArtistArr = null;
 
             if (textBox != "")
                 contArtistArr = textBox.Split(';'); //Split user entered string into array
 
-            if (fileTag == contArtistArr
-                && (fileTag == null))
-                return true;
+            if (contArtistArr == null
+                && (fileTag == null || fileTag.Length == 0))
+                isNullTag = true;
             else
-                return false;
+                isNullTag = false;
+
+            if (!obj.skipRestFlag && isNullTag)
+            {
+                checkFormMessage(obj);
+            }
         }
 
+        //Calls "nullTagChecker" to verify that the current tags are not null
         internal void formChecker(string path, FormMP3Boss obj)
         {
             obj.formIsCompletedFlag = true;
             obj.skipRestFlag = false;
 
             TagLib.File file = TagLib.File.Create(path);
-            
-            if (!obj.skipRestFlag && messageIsCalled(file, obj.tBoxTitle.Text, file.Tag.Title, obj))
-            {
-                checkFormMessage(obj);
-            }
 
-            if (!obj.skipRestFlag && messageIsCalled(file, obj.tBoxAlbumArtist.Text, file.Tag.FirstAlbumArtist, obj))
-            {
-                checkFormMessage(obj);
-            }
-
-            if (!obj.skipRestFlag && messageIsCalled(file, obj.tBoxContArtists.Text, file.Tag.Performers, obj))
-            {
-                checkFormMessage(obj);
-            }
-
-            if (!obj.skipRestFlag && messageIsCalled(file, obj.tBoxAlbum.Text, file.Tag.Album, obj))
-            {
-                checkFormMessage(obj);
-            }
-
-            if (!obj.skipRestFlag && messageIsCalled(file, obj.tBoxYear.Text, file.Tag.Year.ToString(), obj))
-            {
-                checkFormMessage(obj);
-            }
-
-            if (!obj.skipRestFlag && messageIsCalled(file, obj.tBoxTrackNo.Text, file.Tag.Track.ToString(), obj))
-            {
-                checkFormMessage(obj);
-            }
-
-            if (!obj.skipRestFlag && messageIsCalled(file, obj.tBoxGenre.Text, file.Tag.Genres, obj))
-            {
-                checkFormMessage(obj);
-            }
+            nullTagChecker(obj.tBoxTitle.Text, file.Tag.Title, obj);
+            nullTagChecker(obj.tBoxAlbumArtist.Text, file.Tag.FirstAlbumArtist, obj);
+            nullTageChecker(obj.tBoxContArtists.Text, file.Tag.Performers, obj);
+            nullTagChecker(obj.tBoxAlbum.Text, file.Tag.Album, obj);
+            nullTagChecker(obj.tBoxYear.Text, file.Tag.Year.ToString(), obj);
+            nullTagChecker(obj.tBoxTrackNo.Text, file.Tag.Track.ToString(), obj);
+            nullTageChecker(obj.tBoxGenre.Text, file.Tag.Genres, obj);
 
             if (obj.formIsCompletedFlag)
                 saveChangesToFile(path, obj, file);
@@ -200,8 +194,14 @@ namespace MP3Boss
                 file.Tag.AlbumArtists = new[] { obj.tBoxAlbumArtist.Text };
             }
 
-            string[] contArtistArr = obj.tBoxContArtists.Text.Split(';'); //Split user entered string into array
-            bool contEqual = Enumerable.SequenceEqual(file.Tag.Performers, contArtistArr); //Check if user changed field
+            string[] contArtistArr = null;
+            if (obj.tBoxContArtists.Text != "" && obj.tBoxContArtists.Text != null)
+                contArtistArr = obj.tBoxContArtists.Text.Split(';'); //Split user entered string into array
+
+            bool contEqual = false;
+            if (contArtistArr != null && file.Tag.Performers.Length != 0)
+                contEqual = Enumerable.SequenceEqual(file.Tag.Performers, contArtistArr);
+
             //Copy user's changes to tag
             if (contEqual == false)
             {
@@ -285,7 +285,7 @@ namespace MP3Boss
                 case 5: //Title - Artist      format
                     {
                         string newFileName = path.Substring(0, path.LastIndexOf('\\') + 1) +
-                            file.Tag.Title + " - " + 
+                            file.Tag.Title + " - " +
                             file.Tag.FirstAlbumArtist + ".mp3";
 
                         renameFiles(path, newFileName);
@@ -296,5 +296,27 @@ namespace MP3Boss
                     break;
             }
         }
+        
+        //Renames the files on the storage device
+        private void renameFiles(string originalPath, string newFileName)
+        {
+            try
+            {
+                System.IO.File.Move(originalPath, newFileName);
+            }
+            catch (FileNotFoundException)
+            {
+                MessageBox.Show("The file at:" + originalPath + " was not found.", "Error!");
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error!");
+            }
+        }
+
     }
 }

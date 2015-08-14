@@ -42,14 +42,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="MP3Boss.exe" size="201136">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="AutoMapper.dll" size="188928">
+      <assemblyIdentity name="AutoMapper" version="4.0.4.0" publicKeyToken="BE96CD2C38EF1005" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>Mr65b8J5AXAyJaktUWz6u+uuY/AaJcjzbbyZdck37Ks=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="MP3Boss.exe" size="203184">
       <assemblyIdentity name="MP3Boss" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>JSEdSdxDE5WmbSFpXRjbMvb2ND0pDRHKkaapo7/ET84=</dsig:DigestValue>
+        <dsig:DigestValue>obG1i0QykbmQ8FwdO7ATfd/ZbpebiJC9nu25eYmScQ8=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

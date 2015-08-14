@@ -34,6 +34,7 @@
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileMenuOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.fileMenuOpenDeep = new System.Windows.Forms.ToolStripMenuItem();
             this.tBoxTitle = new System.Windows.Forms.TextBox();
             this.tBoxContArtists = new System.Windows.Forms.TextBox();
             this.tBoxAlbumArtist = new System.Windows.Forms.TextBox();
@@ -56,7 +57,6 @@
             this.comboBoxFormat = new System.Windows.Forms.ComboBox();
             this.lblFormat = new System.Windows.Forms.Label();
             this.btnRefresh = new System.Windows.Forms.Button();
-            this.fileMenuOpenDeep = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -104,6 +104,13 @@
             this.fileMenuOpen.Size = new System.Drawing.Size(181, 22);
             this.fileMenuOpen.Text = "Find files (shallow)...";
             this.fileMenuOpen.Click += new System.EventHandler(this.fileMenuOpen_Click);
+            // 
+            // fileMenuOpenDeep
+            // 
+            this.fileMenuOpenDeep.Name = "fileMenuOpenDeep";
+            this.fileMenuOpenDeep.Size = new System.Drawing.Size(181, 22);
+            this.fileMenuOpenDeep.Text = "Find files (deep)...";
+            this.fileMenuOpenDeep.Click += new System.EventHandler(this.fileMenuOpenDeep_Click);
             // 
             // tBoxTitle
             // 
@@ -181,7 +188,6 @@
             this.listViewMP3s.MinimumSize = new System.Drawing.Size(382, 177);
             this.listViewMP3s.Name = "listViewMP3s";
             this.listViewMP3s.Size = new System.Drawing.Size(382, 177);
-            this.listViewMP3s.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listViewMP3s.TabIndex = 19;
             this.listViewMP3s.UseCompatibleStateImageBehavior = false;
             this.listViewMP3s.View = System.Windows.Forms.View.List;
@@ -301,13 +307,6 @@
             this.btnRefresh.Text = "Refresh";
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-            // 
-            // fileMenuOpenDeep
-            // 
-            this.fileMenuOpenDeep.Name = "fileMenuOpenDeep";
-            this.fileMenuOpenDeep.Size = new System.Drawing.Size(181, 22);
-            this.fileMenuOpenDeep.Text = "Find files (deep)...";
-            this.fileMenuOpenDeep.Click += new System.EventHandler(this.fileMenuOpenDeep_Click);
             // 
             // FormMP3Boss
             // 

@@ -14,11 +14,15 @@ namespace MP3Boss
         TagAndFormTools obj = new TagAndFormTools();
 
         internal string[] files; //Stores all the MP3 files' paths
+
         internal bool fileScanIsDeep; //Used as a flag to indicate if a shallow or deep search was used for MP3 files
         internal bool formIsCompletedFlag = true;
         internal bool skipRestFlag = false;
-        internal int index = 0;
-        internal int selectedIndex = 0;
+        internal bool isInApplyToAll = false; //Used as flag to determine if the user is in an "Apply to All" process.
+
+        internal int selectedIndex = 0, //Stores the index of the item selected in the listview
+                     interruptedIndex = 0; //Stores the index of the listview item that prompts the user to make adjustments to tags
+        internal int userFormat = 0; //Stores the comboBoxFormat selected item index
 
         //Method to get mp3 files to work on
         private void fileMenuOpen_Click(object sender, EventArgs e)
@@ -28,6 +32,18 @@ namespace MP3Boss
             if (result == DialogResult.OK)
             {
                 fileScanIsDeep = false;
+                obj.populateListView(this);
+                if (listViewMP3s.Items.Count != 0)
+                    obj.setFormAttributes(files[0], this);
+            }
+        }
+        private void fileMenuOpenDeep_Click(object sender, EventArgs e)
+        {
+            DialogResult result = fBDialogLoadMP3s.ShowDialog(); //Used to store selected path
+
+            if (result == DialogResult.OK)
+            {
+                fileScanIsDeep = true;
                 obj.populateListView(this);
                 if (listViewMP3s.Items.Count != 0)
                     obj.setFormAttributes(files[0], this);
@@ -62,27 +78,28 @@ namespace MP3Boss
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            index = 0;
             if (cBoxApplyToAll.Checked == true)
             {
                 cBoxApplyToAll.Checked = false;
                 formIsCompletedFlag = true;
+                isInApplyToAll = true;
 
-                foreach (var file in listViewMP3s.Items)
+                for (interruptedIndex = 0; interruptedIndex < files.Length; interruptedIndex++)
                 {
                     if (formIsCompletedFlag)
                     {
-                        obj.setFormAttributes(files[index], this);
-                        obj.formChecker(files[index], this);
-                        index++;
+                        obj.setFormAttributes(files[interruptedIndex], this);
+                        obj.formChecker(files[interruptedIndex], this);
                     }
                     else
                         break;
                 }
-                selectedIndex = index;
+
                 if (formIsCompletedFlag && listViewMP3s.Items.Count != 0)
                 {
                     MessageBox.Show("Operation Completed!", "Happy days :)");
+                    isInApplyToAll = false;
+                    obj.populateListView(this);
                 }
             }
             else if (listViewMP3s.Items.Count != 0)
@@ -90,9 +107,16 @@ namespace MP3Boss
                 try
                 {
                     obj.formChecker(files[selectedIndex], this);
-                    if (formIsCompletedFlag)
+                    if (!isInApplyToAll && listViewMP3s.Items.Count != 0)
                     {
                         MessageBox.Show("Operation Completed!", "Happy days :)");
+                    }
+                    obj.populateListView(this);
+                    if (isInApplyToAll)
+                    {
+                        cBoxApplyToAll.Checked = true;
+                        comboBoxFormat.SelectedIndex = userFormat;
+                        btnSave.PerformClick();
                     }
                 }
                 catch
@@ -130,19 +154,6 @@ namespace MP3Boss
         {
             if (listViewMP3s.Items.Count != 0)
                 obj.populateListView(this);
-        }
-
-        private void fileMenuOpenDeep_Click(object sender, EventArgs e)
-        {
-            DialogResult result = fBDialogLoadMP3s.ShowDialog(); //Used to store selected path
-
-            if (result == DialogResult.OK)
-            {
-                fileScanIsDeep = true;
-                obj.populateListView(this);
-                if (listViewMP3s.Items.Count != 0)
-                    obj.setFormAttributes(files[0], this);
-            }
         }
     }
 }
