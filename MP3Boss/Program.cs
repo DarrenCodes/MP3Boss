@@ -16,7 +16,7 @@ namespace MP3Boss
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMP3Boss());
+            Application.Run(new MainForm());
         }
     }
 }
