@@ -8,6 +8,7 @@ namespace MP3Boss
         void setTextBoxesContent(string[] tBoxContent);
         bool[] getCheckBoxes();
         void setCheckBoxes(bool checkAll, bool[] cBoxes = null);
+        void refreshForm();
 
         string[] MP3Files
         {

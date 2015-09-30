@@ -8,6 +8,7 @@ namespace MP3Boss
         public MainForm()
         {
             InitializeComponent();
+            this.manageFormComponents(false);
         }
 
         #region Get and set form components
@@ -105,6 +106,9 @@ namespace MP3Boss
             this.isDeepScan = false;
 
             manageForm.loadFilesOntoForm(this, isDeepScan);
+
+            if (MP3Files != null && MP3Files.Length != 0)
+                this.manageFormComponents(true);
         }
         private void fileMenuOpenDeep_Click(object sender, EventArgs e)
         {
@@ -114,8 +118,11 @@ namespace MP3Boss
             this.isDeepScan = true;
 
             manageForm.loadFilesOntoForm(this, isDeepScan);
+
+            if (MP3Files != null && MP3Files.Length != 0)
+                this.manageFormComponents(true);
         }
-        
+
         //Changes the index according to the item selected in the listview
         private void listViewMP3s_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -172,11 +179,7 @@ namespace MP3Boss
         //Refreshes the listview and also the textboxes accordingly
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            if (listViewMP3s.Items.Count != 0)
-            {
-                FormManager manageForm = new FormManager();
-                manageForm.loadFilesOntoForm(this, isDeepScan);
-            }
+            refreshForm();
         }
 
         //Deselects the "auto next" checkbox if "apply to all" checkbox is set to "true"
@@ -199,6 +202,83 @@ namespace MP3Boss
             searchForm.Show();
         }
         #endregion
+
+        public void refreshForm()
+        {
+            if (listViewMP3s.Items.Count != 0)
+            {
+                FormManager manageForm = new FormManager();
+                manageForm.loadFilesOntoForm(this, isDeepScan);
+            }
+        }
+
+        private void manageFormComponents(bool directoryIsSet)
+        {
+            if (directoryIsSet)
+            {
+                this.cBoxTitle.Enabled = true;
+                this.cBoxAlbumArtist.Enabled = true;
+                this.cBoxContArtists.Enabled = true;
+                this.cBoxAlbum.Enabled = true;
+                this.cBoxYear.Enabled = true;
+                this.cBoxTrackNo.Enabled = true;
+                this.cBoxGenres.Enabled = true;
+                this.cBoxSelectAll.Enabled = true;
+
+                this.tBoxTitle.Enabled = true;
+                this.tBoxAlbumArtist.Enabled = true;
+                this.tBoxContArtists.Enabled = true;
+                this.tBoxAlbum.Enabled = true;
+                this.tBoxYear.Enabled = true;
+                this.tBoxTrackNo.Enabled = true;
+                this.tBoxGenre.Enabled = true;
+
+                this.btnReset.Enabled = true;
+                this.btnClear.Enabled = true;
+                this.btnRefresh.Enabled = true;
+                this.btnSave.Enabled = true;
+                this.btnSearchReplace.Enabled = true;
+
+                this.comboBoxFormat.Enabled = true;
+
+                this.cBoxApplyToAll.Enabled = true;
+                this.cBoxAutoNext.Enabled = true;
+
+                this.listViewMP3s.Enabled = true;
+            }
+            else
+            {
+                this.cBoxTitle.Enabled = false;
+                this.cBoxAlbumArtist.Enabled = false;
+                this.cBoxContArtists.Enabled = false;
+                this.cBoxAlbum.Enabled = false;
+                this.cBoxYear.Enabled = false;
+                this.cBoxTrackNo.Enabled = false;
+                this.cBoxGenres.Enabled = false;
+                this.cBoxSelectAll.Enabled = false;
+
+                this.tBoxTitle.Enabled = false;
+                this.tBoxAlbumArtist.Enabled = false;
+                this.tBoxContArtists.Enabled = false;
+                this.tBoxAlbum.Enabled = false;
+                this.tBoxYear.Enabled = false;
+                this.tBoxTrackNo.Enabled = false;
+                this.tBoxGenre.Enabled = false;
+
+                this.btnReset.Enabled = false;
+                this.btnClear.Enabled = false;
+                this.btnRefresh.Enabled = false;
+                this.btnSave.Enabled = false;
+                this.btnSearchReplace.Enabled = false;
+
+                this.comboBoxFormat.Enabled = false;
+
+                this.cBoxApplyToAll.Enabled = false;
+                this.cBoxAutoNext.Enabled = false;
+
+                this.listViewMP3s.Enabled = false;
+            }
+        }
 
         #region Variables & Properties
         static string[] mp3Files = null;

@@ -14,17 +14,17 @@ namespace MP3Boss
                 iMainForm.MP3Files = iManageFiles.getMP3Files(iMainForm.DirectoryIsSet, isDeepScan);
 
                 iMainForm.DirectoryIsSet = (iMainForm.MP3Files != null && iMainForm.MP3Files.Length != 0) ? true : false;
-
-                this.populateListView(iMainForm);
-
-                TagLib.File mp3TagContent = null;
-
-                if (iMainForm.MP3Files != null)
-                    mp3TagContent = TagLib.File.Create(iMainForm.MP3Files[iMainForm.CurrentIndex]);
-
-                if (iMainForm.MP3Files != null && iMainForm.MP3Files.Length != 0)
-                    setFormAttributes(mp3TagContent, iMainForm);
             }
+
+            this.populateListView(iMainForm);
+
+            TagLib.File mp3TagContent = null;
+
+            if (iMainForm.MP3Files != null)
+                mp3TagContent = TagLib.File.Create(iMainForm.MP3Files[iMainForm.CurrentIndex]);
+
+            if (iMainForm.MP3Files != null && iMainForm.MP3Files.Length != 0)
+                setFormAttributes(mp3TagContent, iMainForm);
         }
 
         #region loadFilesOntoForm helper methods

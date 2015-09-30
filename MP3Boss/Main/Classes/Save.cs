@@ -106,7 +106,7 @@ namespace MP3Boss
                             originalFileName = iMainForm.MP3Files[index];
 
                             this.saveTagChanges(mp3TagContent, iMainForm.getTextBoxesContent());
-                            newFileName = saveFormatToString(ref iMainForm.MP3Files[index], mp3TagContent, format);
+                            newFileName = saveFormatToString(iMainForm.MP3Files, index, mp3TagContent, format);
                             IFileManager iManageFiles = new FileManager();
                             this.successfullMP3Filesave = iManageFiles.renameMP3File(originalFileName, newFileName);
 
@@ -135,7 +135,7 @@ namespace MP3Boss
                     if (applyToAll == true && (iManageForm.UserDecision == default(DialogResult) || iManageForm.UserDecision == DialogResult.Abort))
                     {
                         iMainForm.CurrentIndex = index;
-                        //iMainForm.btnRefresh.PerformClick();
+                        iMainForm.refreshForm();
                     }
                     else if (applyToAll == false && index < arrayLength && iManageForm.UserDecision != DialogResult.Retry)
                     {
@@ -180,13 +180,13 @@ namespace MP3Boss
         }
 
         //Updates the MP3Files string array according to changes made by the user
-        private string saveFormatToString(ref string path, TagLib.File mp3TagContent, int format)
+        private string saveFormatToString(string[] MP3Files, int index, TagLib.File mp3TagContent, int format)
         {
             switch (format)
             {
                 case 1: //#. Title - Artist     format
                     {
-                        path = path.Substring(0, path.LastIndexOf('\\') + 1) +
+                        MP3Files[index] = MP3Files[index].Substring(0, MP3Files[index].LastIndexOf('\\') + 1) +
                             (mp3TagContent.Tag.Track < 10 ? "0" : "") +
                             mp3TagContent.Tag.Track + ". " +
                             mp3TagContent.Tag.Title + " - " +
@@ -196,7 +196,7 @@ namespace MP3Boss
                     }
                 case 2: //#. Artist - Title     format
                     {
-                        path = path.Substring(0, path.LastIndexOf('\\') + 1) +
+                        MP3Files[index] = MP3Files[index].Substring(0, MP3Files[index].LastIndexOf('\\') + 1) +
                             (mp3TagContent.Tag.Track < 10 ? "0" : "") +
                             mp3TagContent.Tag.Track + ". " +
                             mp3TagContent.Tag.FirstAlbumArtist + " - " +
@@ -206,7 +206,7 @@ namespace MP3Boss
                     }
                 case 3: //Artist - Title    format
                     {
-                        path = path.Substring(0, path.LastIndexOf('\\') + 1) +
+                        MP3Files[index] = MP3Files[index].Substring(0, MP3Files[index].LastIndexOf('\\') + 1) +
                             mp3TagContent.Tag.FirstAlbumArtist + " - " +
                             mp3TagContent.Tag.Title + ".mp3";
 
@@ -214,7 +214,7 @@ namespace MP3Boss
                     }
                 case 4: //#. Title      format
                     {
-                        path = path.Substring(0, path.LastIndexOf('\\') + 1) +
+                        MP3Files[index] = MP3Files[index].Substring(0, MP3Files[index].LastIndexOf('\\') + 1) +
                             (mp3TagContent.Tag.Track < 10 ? "0" : "") +
                             mp3TagContent.Tag.Track + ". " +
                             mp3TagContent.Tag.Title + ".mp3";
@@ -223,7 +223,7 @@ namespace MP3Boss
                     }
                 case 5: //Title - Artist      format
                     {
-                        path = path.Substring(0, path.LastIndexOf('\\') + 1) +
+                        MP3Files[index] = MP3Files[index].Substring(0, MP3Files[index].LastIndexOf('\\') + 1) +
                             mp3TagContent.Tag.Title + " - " +
                             mp3TagContent.Tag.FirstAlbumArtist + ".mp3";
 
@@ -232,7 +232,7 @@ namespace MP3Boss
                 default:
                     break;
             }
-            return path;
+            return MP3Files[index];
         }
         #endregion
 
