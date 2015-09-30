@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Linq;
-using System.Text;
+﻿using System.Windows.Forms;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace MP3Boss
 {
     class FileManager: IFileManager
     {
         static string path = null;
+        static string[] mp3Files = null;
+        //Gets all MP3 files in selected directory(s)
         public string[] getMP3Files(bool directoryIsSet, bool isDeepScan)
         {
-            string[] mp3Files = null;
             DialogResult result = default(DialogResult);
             
-
             if (!directoryIsSet)
             {
                 FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
@@ -50,11 +45,7 @@ namespace MP3Boss
             }
             catch (IOException ex)
             {
-                MessageBox.Show(ex.ToString(), "Error!");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error!");
+                MessageBox.Show("An unexpected error has occured.\n" + ex, "Error!");
             }
 
             if (successfull)

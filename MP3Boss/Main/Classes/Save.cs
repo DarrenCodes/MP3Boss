@@ -1,13 +1,13 @@
-﻿using System.Linq;
-using System.IO;
+﻿using System;
+using System.Linq;
 using System.Windows.Forms;
-using System;
 using System.Text.RegularExpressions;
 
 namespace MP3Boss
 {
-    public class Save: ISave
+    public class Save : ISave
     {
+        #region Save Manager basic helper methods
         //Returns the tag details to be saved by the saveTagChanges() method
         private string getTagToSave(string texboxtContent, string mp3Tags, string sender)
         {
@@ -50,29 +50,15 @@ namespace MP3Boss
             }
         }
 
-        //Saves changes to tags of mp3 files
-        private void saveTagChanges(TagLib.File mp3TagContent, string[] tBoxContents)
+        //Sets status label on form to indicate the status of the selected operation
+        private void statusSet(IMainForm iMainForm)
         {
-            mp3TagContent.Tag.Title = getTagToSave(tBoxContents[0], mp3TagContent.Tag.Title, "Title");
-            mp3TagContent.Tag.AlbumArtists = getTagToSave(tBoxContents[1], mp3TagContent.Tag.AlbumArtists, "Album Artist");
-            mp3TagContent.Tag.Performers = getTagToSave(tBoxContents[2], mp3TagContent.Tag.Performers, "Contributing Artist(s)");
-            mp3TagContent.Tag.Album = getTagToSave(tBoxContents[3], mp3TagContent.Tag.Album, "Album");
-            mp3TagContent.Tag.Year = getTagToSave(tBoxContents[4], mp3TagContent.Tag.Year, "Year");
-            mp3TagContent.Tag.Track = getTagToSave(tBoxContents[5], mp3TagContent.Tag.Track, "TrackNo");
-            mp3TagContent.Tag.Genres = getTagToSave(tBoxContents[6], mp3TagContent.Tag.Genres, "Genre(s)");
-
-            try
-            {
-                mp3TagContent.Save();
-
-                successfullTagSave = true;
-            }
-            catch (Exception ex)
-            {
-                successfullTagSave = false;
-                MessageBox.Show(ex.ToString(), "Important Message");
-            }
+            if (this.successfullTagSave || this.successfullMP3Filesave)
+                iMainForm.StatusLabel = "Done.";
+            else
+                iMainForm.StatusLabel = "Incomplete.";
         }
+        #endregion
 
         //Determines the amount of files affected by the changes and saves the changes
         public void saveManager(bool applyToAll, bool autoNext, int format, IMainForm iMainForm)
@@ -86,18 +72,21 @@ namespace MP3Boss
             //Check if changes should be applied to all MP3 mp3Files
             if (arrayLength != 0)
             {
+                #region Variables
                 int loopEnd = arrayLength;
                 int index = iMainForm.CurrentIndex;
                 int originalIndex = index;
 
                 TagLib.File mp3TagContent = null;
 
-                if (applyToAll == false)
-                    loopEnd = index + 1;
-
                 string originalFileName = null;
                 string newFileName = null;
 
+                if (applyToAll == false)
+                    loopEnd = index + 1;
+                #endregion
+
+                #region Try to save
                 try
                 {
                     //Attempt to save changes to all mp3Files with an interrupt variable to track last file save attempt
@@ -148,7 +137,7 @@ namespace MP3Boss
                         iMainForm.CurrentIndex = index;
                         //iMainForm.btnRefresh.PerformClick();
                     }
-                    else if (applyToAll == false && index < arrayLength)
+                    else if (applyToAll == false && index < arrayLength && iManageForm.UserDecision != DialogResult.Retry)
                     {
                         iManageForm.updateListView(iMainForm, index - 1);
                     }
@@ -156,24 +145,38 @@ namespace MP3Boss
 
                     this.statusSet(iMainForm);
 
-                    if (autoNext == true && index < iMainForm.MP3Files.Length)
+                    #region Go to next file
+                    if ((autoNext == true || iManageForm.UserDecision == DialogResult.Ignore) && index < iMainForm.MP3Files.Length)
                     {
                         iMainForm.CurrentIndex = index;
                         mp3TagContent = TagLib.File.Create(iMainForm.MP3Files[iMainForm.CurrentIndex]);
                         iManageForm.setFormAttributes(mp3TagContent, iMainForm);
                     }
+                    #endregion
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    MessageBox.Show(e.ToString(), "Warning!");
+                    MessageBox.Show("An unexpected error occured while trying to save the changes made.", "Warning!");
                 }
-
-                if (iManageForm.UserDecision == DialogResult.Ignore)
-                {
-                    iMainForm.CurrentIndex = index + 1;
-                    iManageForm.setFormAttributes(mp3TagContent, iMainForm);
-                }
+                #endregion
             }
+        }
+
+        #region Major Save Manager helper methods
+        //Saves changes to tags of mp3 files
+        private void saveTagChanges(TagLib.File mp3TagContent, string[] tBoxContents)
+        {
+            mp3TagContent.Tag.Title = getTagToSave(tBoxContents[0], mp3TagContent.Tag.Title, "Title");
+            mp3TagContent.Tag.AlbumArtists = getTagToSave(tBoxContents[1], mp3TagContent.Tag.AlbumArtists, "Album Artist");
+            mp3TagContent.Tag.Performers = getTagToSave(tBoxContents[2], mp3TagContent.Tag.Performers, "Contributing Artist(s)");
+            mp3TagContent.Tag.Album = getTagToSave(tBoxContents[3], mp3TagContent.Tag.Album, "Album");
+            mp3TagContent.Tag.Year = getTagToSave(tBoxContents[4], mp3TagContent.Tag.Year, "Year");
+            mp3TagContent.Tag.Track = getTagToSave(tBoxContents[5], mp3TagContent.Tag.Track, "TrackNo");
+            mp3TagContent.Tag.Genres = getTagToSave(tBoxContents[6], mp3TagContent.Tag.Genres, "Genre(s)");
+
+            mp3TagContent.Save();
+
+            successfullTagSave = true;
         }
 
         //Updates the MP3Files string array according to changes made by the user
@@ -231,67 +234,63 @@ namespace MP3Boss
             }
             return path;
         }
+        #endregion
 
+        //Finds all strings that matches user's "find" input,  and replaces it with the user's "replace" input
         public void searchAndReplace(string find, string replace, string[] mp3Files, int currentIndex, bool searchAll)
         {
-            int loopEnd = mp3Files.Length;
-            int index = currentIndex;
-
-
-            if (searchAll == false)
-                loopEnd = index + 1;
-            else if (searchAll == true)
-                index = 0;
-
-            for (; index < loopEnd; index++)
+            if (mp3Files != null && mp3Files.Length != 0 && currentIndex >= 0)
             {
-                TagLib.File tagFile = TagLib.File.Create(mp3Files[index]);
+                int loopEnd = mp3Files.Length;
+                int index = currentIndex;
 
-                tagFile.Tag.Title = Regex.Replace(tagFile.Tag.Title, find, replace);
+                if (searchAll == false)
+                    loopEnd = index + 1;
+                else if (searchAll == true)
+                    index = 0;
 
-                string[] tempArray = null;
-
-                foreach (string item in tagFile.Tag.AlbumArtists)
+                for (; index < loopEnd; index++)
                 {
-                    int i = 0;
-                    tempArray = tagFile.Tag.AlbumArtists;
-                    tempArray[i] = Regex.Replace(item, find, replace);
-                    tagFile.Tag.AlbumArtists = tempArray;
-                    ++i;
+                    TagLib.File tagFile = TagLib.File.Create(mp3Files[index]);
+
+                    tagFile.Tag.Title = Regex.Replace(tagFile.Tag.Title, find, replace);
+
+                    string[] tempArray = null;
+
+                    foreach (string item in tagFile.Tag.AlbumArtists)
+                    {
+                        int i = 0;
+                        tempArray = tagFile.Tag.AlbumArtists;
+                        tempArray[i] = Regex.Replace(item, find, replace);
+                        tagFile.Tag.AlbumArtists = tempArray;
+                        ++i;
+                    }
+
+                    foreach (string item in tagFile.Tag.Performers)
+                    {
+                        int i = 0;
+                        tempArray = tagFile.Tag.Performers;
+                        tempArray[i] = Regex.Replace(item, find, replace);
+                        tagFile.Tag.Performers = tempArray;
+                        ++i;
+                    }
+
+                    tagFile.Tag.Album = Regex.Replace(tagFile.Tag.Album, find, replace);
+
+                    foreach (string item in tagFile.Tag.Genres)
+                    {
+                        int i = 0;
+                        tempArray = tagFile.Tag.Genres;
+                        tempArray[i] = Regex.Replace(item, find, replace);
+                        tagFile.Tag.Genres = tempArray;
+                        ++i;
+                    }
+
+                    tagFile.Save();
                 }
-
-                foreach (string item in tagFile.Tag.Performers)
-                {
-                    int i = 0;
-                    tempArray = tagFile.Tag.Performers;
-                    tempArray[i] = Regex.Replace(item, find, replace);
-                    tagFile.Tag.Performers = tempArray;
-                    ++i;
-                }
-
-                tagFile.Tag.Album = Regex.Replace(tagFile.Tag.Album, find, replace);
-
-                foreach (string item in tagFile.Tag.Genres)
-                {
-                    int i = 0;
-                    tempArray = tagFile.Tag.Genres;
-                    tempArray[i] = Regex.Replace(item, find, replace);
-                    tagFile.Tag.Genres = tempArray;
-                    ++i;
-                }
-
-                tagFile.Save();
             }
-
-        }
-
-        //Sets status label on form to indicate the status of the selected operation
-        private void statusSet(IMainForm iMainForm)
-        {
-            if (this.successfullTagSave || this.successfullMP3Filesave)
-                iMainForm.StatusLabel = "Done.";
             else
-                iMainForm.StatusLabel = "Incomplete.";
+                MessageBox.Show("No files found.", "Error!");
         }
 
         private bool successfullTagSave = false;

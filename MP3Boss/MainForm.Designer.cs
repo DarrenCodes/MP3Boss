@@ -35,8 +35,6 @@
             this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileMenuOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.fileMenuOpenDeep = new System.Windows.Forms.ToolStripMenuItem();
-            this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tStripMenuIncorrectTags = new System.Windows.Forms.ToolStripMenuItem();
             this.tBoxTitle = new System.Windows.Forms.TextBox();
             this.tBoxContArtists = new System.Windows.Forms.TextBox();
             this.tBoxAlbumArtist = new System.Windows.Forms.TextBox();
@@ -88,8 +86,7 @@
             // menuStrip
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileMenuItem,
-            this.findToolStripMenuItem});
+            this.fileMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(904, 24);
@@ -117,20 +114,6 @@
             this.fileMenuOpenDeep.Size = new System.Drawing.Size(181, 22);
             this.fileMenuOpenDeep.Text = "Find files (deep)...";
             this.fileMenuOpenDeep.Click += new System.EventHandler(this.fileMenuOpenDeep_Click);
-            // 
-            // findToolStripMenuItem
-            // 
-            this.findToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tStripMenuIncorrectTags});
-            this.findToolStripMenuItem.Name = "findToolStripMenuItem";
-            this.findToolStripMenuItem.Size = new System.Drawing.Size(42, 20);
-            this.findToolStripMenuItem.Text = "Find";
-            // 
-            // tStripMenuIncorrectTags
-            // 
-            this.tStripMenuIncorrectTags.Name = "tStripMenuIncorrectTags";
-            this.tStripMenuIncorrectTags.Size = new System.Drawing.Size(158, 22);
-            this.tStripMenuIncorrectTags.Text = "Incorrect Tags...";
             // 
             // tBoxTitle
             // 
@@ -438,8 +421,6 @@
         private System.Windows.Forms.ToolStripMenuItem fileMenuOpenDeep;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.CheckBox cBoxAutoNext;
-        private System.Windows.Forms.ToolStripMenuItem findToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem tStripMenuIncorrectTags;
         private System.Windows.Forms.Button btnSearchReplace;
     }
 }

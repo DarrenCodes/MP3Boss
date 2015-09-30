@@ -10,6 +10,7 @@ namespace MP3Boss
             InitializeComponent();
         }
 
+        #region Get and set form components
         public string[] getTextBoxesContent()
         {
             string[] tBoxContent = new string[7];
@@ -43,7 +44,6 @@ namespace MP3Boss
             if (cBoxesState[6] != true) //Genre(s)
                 this.tBoxGenre.Text = tBoxContent[6];
         }
-
 
         public bool[] getCheckBoxes()
         {
@@ -93,9 +93,10 @@ namespace MP3Boss
                 this.cBoxGenres.Checked = cBoxes[6];
             }
         }
+        #endregion
 
-
-        //Method to get mp3 files to work on
+        #region Event handlers
+        //Calls a method which opens the folder browser dialog
         private void fileMenuOpen_Click(object sender, EventArgs e)
         {
             FormManager manageForm = new FormManager();
@@ -114,7 +115,8 @@ namespace MP3Boss
 
             manageForm.loadFilesOntoForm(this, isDeepScan);
         }
-
+        
+        //Changes the index according to the item selected in the listview
         private void listViewMP3s_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listViewMP3s.Items.Count != 0)
@@ -130,16 +132,15 @@ namespace MP3Boss
             }
         }
 
+        //Clears the textboxes in the Main Window
         private void btnClear_Click(object sender, EventArgs e)
         {
-            if (listViewMP3s.Items.Count != 0)
-            {
-                FormManager manageForm = new FormManager();
+            FormManager manageForm = new FormManager();
 
-                manageForm.clearFormAttributes(this);
-            }
+            manageForm.clearFormAttributes(this);
         }
 
+        //Resets the textboxes according to currently selected item in the listview
         private void btnReset_Click(object sender, EventArgs e)
         {
             if (listViewMP3s.Items.Count != 0)
@@ -150,6 +151,7 @@ namespace MP3Boss
             }
         }
 
+        //Saves changes to file made by user
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (listViewMP3s.Items.Count != 0)
@@ -161,11 +163,13 @@ namespace MP3Boss
             }
         }
 
+        //Changes all checkboxes next to textboxes
         private void cBoxSelectAll_CheckedChanged(object sender, EventArgs e)
         {
             this.setCheckBoxes(cBoxSelectAll.Checked);
         }
 
+        //Refreshes the listview and also the textboxes accordingly
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             if (listViewMP3s.Items.Count != 0)
@@ -175,6 +179,7 @@ namespace MP3Boss
             }
         }
 
+        //Deselects the "auto next" checkbox if "apply to all" checkbox is set to "true"
         private void cBoxApplyToAll_CheckedChanged(object sender, EventArgs e)
         {
             if (cBoxApplyToAll.Checked)
@@ -186,13 +191,16 @@ namespace MP3Boss
                 cBoxAutoNext.Enabled = true;
         }
 
+        //Opens the Search & Replace window
         private void btnSearchReplace_Click(object sender, EventArgs e)
         {
             FileManager manageFiles = new FileManager();
-            Form search = new SearchAndReplaceForm(manageFiles.getMP3Files(directoryIsSet, isDeepScan), CurrentIndex);
-            search.Show();
+            Form searchForm = new SearchAndReplaceForm(manageFiles.getMP3Files(directoryIsSet, isDeepScan), CurrentIndex);
+            searchForm.Show();
         }
+        #endregion
 
+        #region Variables & Properties
         static string[] mp3Files = null;
         public string[] MP3Files
         {
@@ -204,7 +212,13 @@ namespace MP3Boss
         public int CurrentIndex
         {
             get { return currentIndex; }
-            set { currentIndex = value; }
+            set
+            {
+                if (mp3Files != null && mp3Files.Length > value)
+                    currentIndex = value;
+                else
+                    currentIndex = 0;
+            }
         }
 
         public string StatusLabel
@@ -234,6 +248,6 @@ namespace MP3Boss
             get { return listViewMP3s; }
             set { listViewMP3s = value; }
         }
+        #endregion
     }
 }
-

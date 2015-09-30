@@ -1,31 +1,33 @@
-﻿using System.IO;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using System;
-using System.Linq.Expressions;
-using System.Text;
 
 namespace MP3Boss
 {
-    public class FormManager: IFormManager
+    public class FormManager : IFormManager
     {
         //Public method used to manage the searching and loading of files onto the ListView
         public void loadFilesOntoForm(IMainForm iMainForm, bool isDeepScan)
         {
             IFileManager iManageFiles = new FileManager();
+            if (iMainForm.DirectoryIsSet == false)
+            {
+                iMainForm.MP3Files = iManageFiles.getMP3Files(iMainForm.DirectoryIsSet, isDeepScan);
 
-            iMainForm.MP3Files = iManageFiles.getMP3Files(iMainForm.DirectoryIsSet, isDeepScan);
+                iMainForm.DirectoryIsSet = (iMainForm.MP3Files != null && iMainForm.MP3Files.Length != 0) ? true : false;
 
-            iMainForm.DirectoryIsSet = (iMainForm.MP3Files != null && iMainForm.MP3Files.Length != 0) ? true : false;
+                this.populateListView(iMainForm);
 
-            this.populateListView(iMainForm);
+                TagLib.File mp3TagContent = null;
 
+                if (iMainForm.MP3Files != null)
+                    mp3TagContent = TagLib.File.Create(iMainForm.MP3Files[iMainForm.CurrentIndex]);
 
-            TagLib.File mp3TagContent = TagLib.File.Create(iMainForm.MP3Files[0]);
-
-            if (iMainForm.MP3Files != null && iMainForm.MP3Files.Length != 0)
-                setFormAttributes(mp3TagContent, iMainForm);
+                if (iMainForm.MP3Files != null && iMainForm.MP3Files.Length != 0)
+                    setFormAttributes(mp3TagContent, iMainForm);
+            }
         }
 
+        #region loadFilesOntoForm helper methods
         //Populates ListView with shortened strings from mp3Files string array (file names only)
         private void populateListView(IMainForm iMainForm)
         {
@@ -33,7 +35,6 @@ namespace MP3Boss
 
             if (iMainForm.MP3Files != null)
             {
-                iMainForm.CurrentIndex = 0;
                 //Adds list of files to List View element in GUI
                 foreach (string mp3File in iMainForm.MP3Files)
                 {
@@ -43,7 +44,9 @@ namespace MP3Boss
                 }
             }
         }
+        #endregion
 
+        //Updates each item in the listview where changes were made
         public void updateListView(IMainForm iMainForm, int index)
         {
             int startPosition = iMainForm.MP3Files[index].LastIndexOf('\\') + 1;
@@ -53,7 +56,7 @@ namespace MP3Boss
             iMainForm.ListViewMP3s.Refresh();
         }
 
-        //Public method used to set the form attributes according to a passed index of the mp3Files array
+        //Public method used to set the form attributes according to the TagLib.FIle object passed
         public void setFormAttributes(TagLib.File mp3TagContent, IMainForm iMainForm)
         {
             bool[] cBoxState = iMainForm.getCheckBoxes();
@@ -112,6 +115,7 @@ namespace MP3Boss
             iMainForm.setTextBoxesContent(tBoxContent);
         }
 
+        //Checkes the form of the MainWindow for textboxes that contain null values
         public DialogResult formChecker(TagLib.File mp3TagContent, IMainForm iMainForm)
         {
             IVerify iVerifyForm = new Verify();
@@ -137,11 +141,13 @@ namespace MP3Boss
             return this.UserDecision;
         }
 
+        #region Variables and Properties
         static DialogResult userDecision = default(DialogResult);
         public DialogResult UserDecision
         {
             get { return userDecision; }
             set { userDecision = value; }
         }
+        #endregion
     }
 }
