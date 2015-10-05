@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace MP3Boss
 {
@@ -65,49 +66,52 @@ namespace MP3Boss
         {
             firstSave = true;
             IFormManager iManageForm = new FormManager();
+            IFileManager iManageFiles = null;
+            TagLib.File mp3TagContent = null;
+            int loopEnd = 0;
+            int index = 0;
+            int originalIndex = 0;
 
-            iManageForm.UserDecision = default(DialogResult);
-            int arrayLength = iMainForm.MP3Files.Length;
+            //Variables used for renaming of files
+            string originalFileName = null;
+            string newFileName = null;
+
+            int arrayLength = iMainForm.MP3Files.Count;
 
             //Check if changes should be applied to all MP3 mp3Files
             if (arrayLength != 0)
             {
-                #region Variables
-                int loopEnd = arrayLength;
-                int index = iMainForm.CurrentIndex;
-                int originalIndex = index;
-
-                TagLib.File mp3TagContent = null;
-
-                string originalFileName = null;
-                string newFileName = null;
+                loopEnd = arrayLength;
+                index = iMainForm.CurrentIndex;
+                originalIndex = index;
 
                 if (applyToAll == false)
                     loopEnd = index + 1;
-                #endregion
 
                 #region Try to save
                 try
                 {
-                    //Attempt to save changes to all mp3Files with an interrupt variable to track last file save attempt
                     #region Save Changes
                     for (; index < loopEnd; index++)
                     {
                         mp3TagContent = TagLib.File.Create(iMainForm.MP3Files[index]);
-
+                        
+                        //Sets the forms attributes only if it is not the first save (ie. currently not in loop)
                         if (firstSave == false)
-                            iManageForm.setFormAttributes(mp3TagContent, iMainForm);
+                            iManageForm.setFormAttributes(iMainForm.MP3Files[index], iMainForm);
 
-                        if (iManageForm.UserDecision != DialogResult.Abort)
+                        //Calls the formChecker() only if the user has not selected to "Continue" in the message dialog
+                        if (iManageForm.UserDecision != "Continue")
                             iManageForm.UserDecision = iManageForm.formChecker(mp3TagContent, iMainForm);
 
-                        if (arrayLength != 0 && (iManageForm.UserDecision == default(DialogResult) || iManageForm.UserDecision == DialogResult.Abort))
+                        //Saves all requested changes only if there are items in the listView, and user's decision is "null" or "Continue"
+                        if (arrayLength != 0 && (iManageForm.UserDecision == null|| iManageForm.UserDecision == "Continue"))
                         {
                             originalFileName = iMainForm.MP3Files[index];
 
                             this.saveTagChanges(mp3TagContent, iMainForm.getTextBoxesContent());
                             newFileName = saveFormatToString(iMainForm.MP3Files, index, mp3TagContent, format);
-                            IFileManager iManageFiles = new FileManager();
+                            iManageFiles = new FileManager();
                             this.successfullMP3Filesave = iManageFiles.renameMP3File(originalFileName, newFileName);
 
                             //Check if reached end of mp3Files list
@@ -117,13 +121,13 @@ namespace MP3Boss
                                 loopEnd = originalIndex;
                             }
                         }
-                        else if (iManageForm.UserDecision == DialogResult.Retry)
+                        else if (iManageForm.UserDecision == "Yes")
                         {
                             this.firstSave = true;
                             iMainForm.CurrentIndex = index;
                             break;
                         }
-                        else if (iManageForm.UserDecision == DialogResult.Ignore)
+                        else if (iManageForm.UserDecision == "Skip")
                             this.firstSave = false;
 
                         if (applyToAll == true)
@@ -132,25 +136,24 @@ namespace MP3Boss
                     #endregion
 
                     #region Update ListView
-                    if (applyToAll == true && (iManageForm.UserDecision == default(DialogResult) || iManageForm.UserDecision == DialogResult.Abort))
+                    if (applyToAll == true && (iManageForm.UserDecision == null || iManageForm.UserDecision == "Continue"))
                     {
                         iMainForm.CurrentIndex = index;
-                        iMainForm.refreshForm();
+                        iManageForm.refreshForm(iMainForm);
                     }
-                    else if (applyToAll == false && index < arrayLength && iManageForm.UserDecision != DialogResult.Retry)
+                    else if (applyToAll == false && (iManageForm.UserDecision == null || iManageForm.UserDecision == "Continue"))
                     {
-                        iManageForm.updateListView(iMainForm, index - 1);
+                        iManageForm.refreshForm(iMainForm);
                     }
                     #endregion
 
                     this.statusSet(iMainForm);
 
                     #region Go to next file
-                    if ((autoNext == true || iManageForm.UserDecision == DialogResult.Ignore) && index < iMainForm.MP3Files.Length)
+                    if ((autoNext == true || iManageForm.UserDecision == "Skip") && index < iMainForm.MP3Files.Count)
                     {
                         iMainForm.CurrentIndex = index;
-                        mp3TagContent = TagLib.File.Create(iMainForm.MP3Files[iMainForm.CurrentIndex]);
-                        iManageForm.setFormAttributes(mp3TagContent, iMainForm);
+                        iManageForm.setFormAttributes(iMainForm.MP3Files[iMainForm.CurrentIndex], iMainForm);
                     }
                     #endregion
                 }
@@ -180,7 +183,7 @@ namespace MP3Boss
         }
 
         //Updates the MP3Files string array according to changes made by the user
-        private string saveFormatToString(string[] MP3Files, int index, TagLib.File mp3TagContent, int format)
+        private string saveFormatToString(List<string> MP3Files, int index, TagLib.File mp3TagContent, int format)
         {
             switch (format)
             {
@@ -237,12 +240,16 @@ namespace MP3Boss
         #endregion
 
         //Finds all strings that matches user's "find" input,  and replaces it with the user's "replace" input
-        public void searchAndReplace(string find, string replace, string[] mp3Files, int currentIndex, bool searchAll)
+        public void searchAndReplace(string find, string replace, List<string> mp3Files, int currentIndex, bool searchAll)
         {
-            if (mp3Files != null && mp3Files.Length != 0 && currentIndex >= 0)
+            TagLib.File tagFile = null;
+            int loopEnd = 0;
+            int index = 0;
+
+            if (mp3Files != null && mp3Files.Count != 0 && currentIndex >= 0)
             {
-                int loopEnd = mp3Files.Length;
-                int index = currentIndex;
+                loopEnd = mp3Files.Count;
+                index = currentIndex;
 
                 if (searchAll == false)
                     loopEnd = index + 1;
@@ -251,7 +258,7 @@ namespace MP3Boss
 
                 for (; index < loopEnd; index++)
                 {
-                    TagLib.File tagFile = TagLib.File.Create(mp3Files[index]);
+                    tagFile = TagLib.File.Create(mp3Files[index]);
 
                     tagFile.Tag.Title = Regex.Replace(tagFile.Tag.Title, find, replace);
 

@@ -1,8 +1,9 @@
-﻿namespace MP3Boss
+﻿using System.Collections.Generic;
+namespace MP3Boss
 {
     public interface IFileManager
     {
-        string[] getMP3Files(bool directoryIsSet, bool isDeepScan);
+        List<string> getMP3Files(string[] dropedFiles);
         bool renameMP3File(string originalFile, string newFileName);
     }
 }

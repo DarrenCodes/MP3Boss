@@ -33,8 +33,8 @@
             this.btnClear = new System.Windows.Forms.Button();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fileMenuOpen = new System.Windows.Forms.ToolStripMenuItem();
-            this.fileMenuOpenDeep = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tBoxTitle = new System.Windows.Forms.TextBox();
             this.tBoxContArtists = new System.Windows.Forms.TextBox();
             this.tBoxAlbumArtist = new System.Windows.Forms.TextBox();
@@ -44,7 +44,6 @@
             this.tBoxGenre = new System.Windows.Forms.TextBox();
             this.btnReset = new System.Windows.Forms.Button();
             this.cBoxApplyToAll = new System.Windows.Forms.CheckBox();
-            this.fBDialogLoadMP3s = new System.Windows.Forms.FolderBrowserDialog();
             this.listViewMP3s = new System.Windows.Forms.ListView();
             this.cBoxTitle = new System.Windows.Forms.CheckBox();
             this.cBoxAlbumArtist = new System.Windows.Forms.CheckBox();
@@ -60,6 +59,9 @@
             this.lblStatus = new System.Windows.Forms.Label();
             this.cBoxAutoNext = new System.Windows.Forms.CheckBox();
             this.btnSearchReplace = new System.Windows.Forms.Button();
+            this.lblItemsCount = new System.Windows.Forms.Label();
+            this.lblFileName = new System.Windows.Forms.Label();
+            this.btnCheckFormMsg = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -95,25 +97,25 @@
             // fileMenuItem
             // 
             this.fileMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileMenuOpen,
-            this.fileMenuOpenDeep});
+            this.resetAllMenuItem,
+            this.closeMenuItem});
             this.fileMenuItem.Name = "fileMenuItem";
             this.fileMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileMenuItem.Text = "File";
             // 
-            // fileMenuOpen
+            // resetAllMenuItem
             // 
-            this.fileMenuOpen.Name = "fileMenuOpen";
-            this.fileMenuOpen.Size = new System.Drawing.Size(181, 22);
-            this.fileMenuOpen.Text = "Find files (shallow)...";
-            this.fileMenuOpen.Click += new System.EventHandler(this.fileMenuOpen_Click);
+            this.resetAllMenuItem.Name = "resetAllMenuItem";
+            this.resetAllMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.resetAllMenuItem.Text = "Reset All...";
+            this.resetAllMenuItem.Click += new System.EventHandler(this.resetAllMenuItem_Click);
             // 
-            // fileMenuOpenDeep
+            // closeMenuItem
             // 
-            this.fileMenuOpenDeep.Name = "fileMenuOpenDeep";
-            this.fileMenuOpenDeep.Size = new System.Drawing.Size(181, 22);
-            this.fileMenuOpenDeep.Text = "Find files (deep)...";
-            this.fileMenuOpenDeep.Click += new System.EventHandler(this.fileMenuOpenDeep_Click);
+            this.closeMenuItem.Name = "closeMenuItem";
+            this.closeMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.closeMenuItem.Text = "Close...";
+            this.closeMenuItem.Click += new System.EventHandler(this.closeMenuItem_Click);
             // 
             // tBoxTitle
             // 
@@ -187,6 +189,7 @@
             // 
             // listViewMP3s
             // 
+            this.listViewMP3s.AllowDrop = true;
             this.listViewMP3s.Location = new System.Drawing.Point(504, 35);
             this.listViewMP3s.MaximumSize = new System.Drawing.Size(500, 600);
             this.listViewMP3s.MinimumSize = new System.Drawing.Size(382, 100);
@@ -196,6 +199,8 @@
             this.listViewMP3s.UseCompatibleStateImageBehavior = false;
             this.listViewMP3s.View = System.Windows.Forms.View.List;
             this.listViewMP3s.SelectedIndexChanged += new System.EventHandler(this.listViewMP3s_SelectedIndexChanged);
+            this.listViewMP3s.DragDrop += new System.Windows.Forms.DragEventHandler(this.listViewMP3s_DragDrop);
+            this.listViewMP3s.DragEnter += new System.Windows.Forms.DragEventHandler(this.listViewMP3s_DragEnter);
             // 
             // cBoxTitle
             // 
@@ -288,7 +293,7 @@
             "3: Artist - Title",
             "4: #. Title",
             "5: Title - Artist"});
-            this.comboBoxFormat.Location = new System.Drawing.Point(549, 215);
+            this.comboBoxFormat.Location = new System.Drawing.Point(630, 215);
             this.comboBoxFormat.Name = "comboBoxFormat";
             this.comboBoxFormat.Size = new System.Drawing.Size(92, 21);
             this.comboBoxFormat.TabIndex = 18;
@@ -296,7 +301,7 @@
             // lblFormat
             // 
             this.lblFormat.AutoSize = true;
-            this.lblFormat.Location = new System.Drawing.Point(501, 218);
+            this.lblFormat.Location = new System.Drawing.Point(582, 218);
             this.lblFormat.Name = "lblFormat";
             this.lblFormat.Size = new System.Drawing.Size(42, 13);
             this.lblFormat.TabIndex = 22;
@@ -304,7 +309,7 @@
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(647, 215);
+            this.btnRefresh.Location = new System.Drawing.Point(504, 227);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(75, 23);
             this.btnRefresh.TabIndex = 19;
@@ -342,11 +347,45 @@
             this.btnSearchReplace.UseVisualStyleBackColor = true;
             this.btnSearchReplace.Click += new System.EventHandler(this.btnSearchReplace_Click);
             // 
+            // lblItemsCount
+            // 
+            this.lblItemsCount.AutoSize = true;
+            this.lblItemsCount.ForeColor = System.Drawing.Color.Green;
+            this.lblItemsCount.Location = new System.Drawing.Point(504, 208);
+            this.lblItemsCount.Name = "lblItemsCount";
+            this.lblItemsCount.Size = new System.Drawing.Size(38, 13);
+            this.lblItemsCount.TabIndex = 26;
+            this.lblItemsCount.Text = "Count:";
+            // 
+            // lblFileName
+            // 
+            this.lblFileName.AutoSize = true;
+            this.lblFileName.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.lblFileName.Location = new System.Drawing.Point(148, 9);
+            this.lblFileName.Name = "lblFileName";
+            this.lblFileName.Size = new System.Drawing.Size(63, 13);
+            this.lblFileName.TabIndex = 27;
+            this.lblFileName.Text = "Current File:";
+            // 
+            // btnCheckFormMsg
+            // 
+            this.btnCheckFormMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCheckFormMsg.Location = new System.Drawing.Point(888, 73);
+            this.btnCheckFormMsg.Name = "btnCheckFormMsg";
+            this.btnCheckFormMsg.Size = new System.Drawing.Size(14, 33);
+            this.btnCheckFormMsg.TabIndex = 28;
+            this.btnCheckFormMsg.Text = "C";
+            this.btnCheckFormMsg.UseVisualStyleBackColor = true;
+            this.btnCheckFormMsg.Click += new System.EventHandler(this.btnCheckFormMsg_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(904, 253);
+            this.Controls.Add(this.btnCheckFormMsg);
+            this.Controls.Add(this.lblFileName);
+            this.Controls.Add(this.lblItemsCount);
             this.Controls.Add(this.btnSearchReplace);
             this.Controls.Add(this.cBoxAutoNext);
             this.Controls.Add(this.lblStatus);
@@ -395,8 +434,6 @@
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fileMenuOpen;
-        private System.Windows.Forms.FolderBrowserDialog fBDialogLoadMP3s;
         private System.Windows.Forms.TextBox tBoxTitle;
         private System.Windows.Forms.TextBox tBoxContArtists;
         private System.Windows.Forms.TextBox tBoxAlbumArtist;
@@ -418,10 +455,14 @@
         private System.Windows.Forms.ComboBox comboBoxFormat;
         private System.Windows.Forms.Label lblFormat;
         internal System.Windows.Forms.Button btnRefresh;
-        private System.Windows.Forms.ToolStripMenuItem fileMenuOpenDeep;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.CheckBox cBoxAutoNext;
         private System.Windows.Forms.Button btnSearchReplace;
+        private System.Windows.Forms.Label lblItemsCount;
+        private System.Windows.Forms.ToolStripMenuItem resetAllMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem closeMenuItem;
+        private System.Windows.Forms.Label lblFileName;
+        private System.Windows.Forms.Button btnCheckFormMsg;
     }
 }
 

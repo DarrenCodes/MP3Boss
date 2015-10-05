@@ -5,35 +5,40 @@ namespace MP3Boss
     class Verify: IVerify
     {
         //Checks if any null tags exist in the mp3 file as well as the form
-        public DialogResult nullTagChecker(string textboxContent, string fileTag)
+        public string nullTagChecker(string textboxContent, string fileTag)
         {
-            DialogResult messageInput = default(DialogResult);
+            string msgBoxResult = null;
+
             if (fileTag == null)
                 fileTag = "";
 
             if (textboxContent.Length == 0 && fileTag.Length == 0)
-                messageInput = checkFormMessage();
+                msgBoxResult = checkFormMessage();
 
-            return messageInput;
+            return msgBoxResult;
         }
-        public DialogResult nullTagChecker(string textboxContent, string[] fileTag)
+        public string nullTagChecker(string textboxContent, string[] fileTag)
         {
-            DialogResult messageInput = default(DialogResult);
+            string msgBoxResult = null;
 
             if (textboxContent.Length == 0 && fileTag.Length == 0)
-                messageInput = checkFormMessage();
+                msgBoxResult = checkFormMessage();
 
-            return messageInput;
+            return msgBoxResult;
         }
-        //Prompts the user to check the tags loaded in the form or to ignore
-        DialogResult checkFormMessage()
-        {
-            DialogResult dialogResult = MessageBox.Show("All fields not filled. Fill now?"
-                + "\nSelecting Abort will re-format using existing tags."
-                + "\nSelecting Retry will allow you to edit the problem tag."
-                + "\nSelecting Ignore will skip the problem file.", "Important Message", MessageBoxButtons.AbortRetryIgnore);
 
-            return dialogResult;
+        //Prompts the user to check the tags loaded in the form or to ignore
+        public string checkFormMessage(bool reset = false)
+        {
+            CheckMessageForm checkForm = new CheckMessageForm();
+
+            if (reset)
+                checkForm.ApplyToAll = false;
+
+            if (!checkForm.ApplyToAll)
+                checkForm.ShowDialog();
+
+            return checkForm.MsgBoxResult;
         }
     }
 }

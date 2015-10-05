@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace MP3Boss
 {
@@ -8,9 +9,10 @@ namespace MP3Boss
         void setTextBoxesContent(string[] tBoxContent);
         bool[] getCheckBoxes();
         void setCheckBoxes(bool checkAll, bool[] cBoxes = null);
-        void refreshForm();
+        void manageFormComponents(bool directoryIsSet);
+        void refresh(bool applyToAll = true);
 
-        string[] MP3Files
+        List<string> MP3Files
         {
             get;
             set;
@@ -25,12 +27,22 @@ namespace MP3Boss
             get;
             set;
         }
-        bool DirectoryIsSet
+        string ItemsCountLabel
         {
             get;
             set;
         }
-        bool SearchAndReplaceMode
+        string FilePathLabel
+        {
+            get;
+            set;
+        }
+        bool ComponentsAreEnabled
+        {
+            get;
+            set;
+        }
+        bool FormAttributesAreSet
         {
             get;
             set;
@@ -40,6 +52,5 @@ namespace MP3Boss
             get;
             set;
         }
-
     }
 }

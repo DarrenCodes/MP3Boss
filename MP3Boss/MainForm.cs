@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace MP3Boss
 {
@@ -44,6 +47,8 @@ namespace MP3Boss
                 this.tBoxTrackNo.Text = tBoxContent[5];
             if (cBoxesState[6] != true) //Genre(s)
                 this.tBoxGenre.Text = tBoxContent[6];
+
+            this.FormAttributesAreSet = true;
         }
 
         public bool[] getCheckBoxes()
@@ -97,30 +102,32 @@ namespace MP3Boss
         #endregion
 
         #region Event handlers
-        //Calls a method which opens the folder browser dialog
-        private void fileMenuOpen_Click(object sender, EventArgs e)
+        //Drage & Drop in ListView
+        private void listViewMP3s_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
         {
-            FormManager manageForm = new FormManager();
-
-            this.directoryIsSet = false;
-            this.isDeepScan = false;
-
-            manageForm.loadFilesOntoForm(this, isDeepScan);
-
-            if (MP3Files != null && MP3Files.Length != 0)
-                this.manageFormComponents(true);
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.All;
+            else
+                e.Effect = DragDropEffects.None;
         }
-        private void fileMenuOpenDeep_Click(object sender, EventArgs e)
+        private void listViewMP3s_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
         {
-            FormManager manageForm = new FormManager();
+            string[] dropedFiles = (string[])e.Data.GetData(DataFormats.FileDrop, false);
 
-            this.directoryIsSet = false;
-            this.isDeepScan = true;
+            IFileManager manageFiles = new FileManager();
+            this.MP3Files = manageFiles.getMP3Files(dropedFiles);
 
-            manageForm.loadFilesOntoForm(this, isDeepScan);
+            this.refresh();
+        }
 
-            if (MP3Files != null && MP3Files.Length != 0)
-                this.manageFormComponents(true);
+        private void resetAllMenuItem_Click(object sender, EventArgs e)
+        {
+            this.resetForm();
+        }
+
+        private void closeMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         //Changes the index according to the item selected in the listview
@@ -128,21 +135,21 @@ namespace MP3Boss
         {
             if (listViewMP3s.Items.Count != 0)
             {
-                FormManager manageForm = new FormManager();
+                IFormManager manageForm = new FormManager();
                 if (listViewMP3s.FocusedItem.Index >= 0)
-                    this.CurrentIndex = listViewMP3s.FocusedItem.Index;
+                    this.CurrentIndex = this.listViewMP3s.FocusedItem.Index;
                 else
                     this.CurrentIndex = 0;
+
                 this.StatusLabel = "";
-                TagLib.File mp3TagContent = TagLib.File.Create(MP3Files[this.CurrentIndex]);
-                manageForm.setFormAttributes(mp3TagContent, this);
+                manageForm.setFormAttributes(this.MP3Files[this.CurrentIndex], this);
             }
         }
 
         //Clears the textboxes in the Main Window
         private void btnClear_Click(object sender, EventArgs e)
         {
-            FormManager manageForm = new FormManager();
+            IFormManager manageForm = new FormManager();
 
             manageForm.clearFormAttributes(this);
         }
@@ -152,9 +159,8 @@ namespace MP3Boss
         {
             if (listViewMP3s.Items.Count != 0)
             {
-                FormManager manageForm = new FormManager();
-                TagLib.File mp3TagContent = TagLib.File.Create(MP3Files[this.CurrentIndex]);
-                manageForm.setFormAttributes(mp3TagContent, this);
+                IFormManager manageForm = new FormManager();
+                manageForm.setFormAttributes(MP3Files[this.CurrentIndex], this);
             }
         }
 
@@ -163,9 +169,8 @@ namespace MP3Boss
         {
             if (listViewMP3s.Items.Count != 0)
             {
-                FileManager manageFiles = new FileManager();
+                IFileManager manageFiles = new FileManager();
                 Save save = new Save();
-                string[] mp3Files = manageFiles.getMP3Files(directoryIsSet, isDeepScan);
                 save.saveManager(cBoxApplyToAll.Checked, cBoxAutoNext.Checked, comboBoxFormat.SelectedIndex, this);
             }
         }
@@ -173,13 +178,13 @@ namespace MP3Boss
         //Changes all checkboxes next to textboxes
         private void cBoxSelectAll_CheckedChanged(object sender, EventArgs e)
         {
-            this.setCheckBoxes(cBoxSelectAll.Checked);
+            this.setCheckBoxes(this.cBoxSelectAll.Checked);
         }
 
         //Refreshes the listview and also the textboxes accordingly
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            refreshForm();
+            this.refresh();
         }
 
         //Deselects the "auto next" checkbox if "apply to all" checkbox is set to "true"
@@ -197,22 +202,18 @@ namespace MP3Boss
         //Opens the Search & Replace window
         private void btnSearchReplace_Click(object sender, EventArgs e)
         {
-            FileManager manageFiles = new FileManager();
-            Form searchForm = new SearchAndReplaceForm(manageFiles.getMP3Files(directoryIsSet, isDeepScan), CurrentIndex);
+            IFileManager manageFiles = new FileManager();
+            Form searchForm = new SearchAndReplaceForm(this);
             searchForm.Show();
         }
         #endregion
 
-        public void refreshForm()
+        public void refresh(bool applyToAll = true)
         {
-            if (listViewMP3s.Items.Count != 0)
-            {
-                FormManager manageForm = new FormManager();
-                manageForm.loadFilesOntoForm(this, isDeepScan);
-            }
+            IFormManager manageForm = new FormManager();
+            manageForm.refreshForm(this, applyToAll);
         }
-
-        private void manageFormComponents(bool directoryIsSet)
+        public void manageFormComponents(bool directoryIsSet)
         {
             if (directoryIsSet)
             {
@@ -237,14 +238,16 @@ namespace MP3Boss
                 this.btnClear.Enabled = true;
                 this.btnRefresh.Enabled = true;
                 this.btnSave.Enabled = true;
+
                 this.btnSearchReplace.Enabled = true;
+                this.btnCheckFormMsg.Enabled = true;
 
                 this.comboBoxFormat.Enabled = true;
 
                 this.cBoxApplyToAll.Enabled = true;
                 this.cBoxAutoNext.Enabled = true;
 
-                this.listViewMP3s.Enabled = true;
+                this.ComponentsAreEnabled = true;
             }
             else
             {
@@ -269,20 +272,35 @@ namespace MP3Boss
                 this.btnClear.Enabled = false;
                 this.btnRefresh.Enabled = false;
                 this.btnSave.Enabled = false;
+
                 this.btnSearchReplace.Enabled = false;
+                this.btnCheckFormMsg.Enabled = false;
 
                 this.comboBoxFormat.Enabled = false;
 
                 this.cBoxApplyToAll.Enabled = false;
                 this.cBoxAutoNext.Enabled = false;
 
-                this.listViewMP3s.Enabled = false;
+                this.ComponentsAreEnabled = false;
             }
+        }
+        public void resetForm()
+        {
+            this.btnClear.PerformClick();
+            this.listViewMP3s.Items.Clear();
+            this.MP3Files = new List<string>();
+            this.FilePathLabel = "";
+            this.StatusLabel = "";
+            this.ItemsCountLabel = "";
+            this.cBoxSelectAll.Checked = false;
+            this.setCheckBoxes(this.cBoxSelectAll.Checked);
+            this.cBoxApplyToAll.Checked = false;
+            this.cBoxAutoNext.Checked = false;
         }
 
         #region Variables & Properties
-        static string[] mp3Files = null;
-        public string[] MP3Files
+        static List<string> mp3Files = new List<string>();
+        public List<string> MP3Files
         {
             get { return mp3Files; }
             set { mp3Files = value; }
@@ -294,7 +312,7 @@ namespace MP3Boss
             get { return currentIndex; }
             set
             {
-                if (mp3Files != null && mp3Files.Length > value)
+                if (mp3Files != null && MP3Files.Count > value)
                     currentIndex = value;
                 else
                     currentIndex = 0;
@@ -306,21 +324,29 @@ namespace MP3Boss
             get { return this.lblStatus.Text; }
             set { this.lblStatus.Text = "Status: " + value; }
         }
-
-        private bool directoryIsSet = false;
-        public bool DirectoryIsSet
+        public string ItemsCountLabel
         {
-            get { return this.directoryIsSet; }
-            set { this.directoryIsSet = value; }
+            get { return this.lblItemsCount.Text; }
+            set { this.lblItemsCount.Text = "Count: " + value; }
+        }
+        public string FilePathLabel
+        {
+            get { return this.lblFileName.Text; }
+            set { this.lblFileName.Text = "Current File: " + value; }
         }
 
-        private bool isDeepScan = false;
-
-        private bool searchAndReplaceMode = false;
-        public bool SearchAndReplaceMode
+        private bool componentsAreEnabled = false;
+        public bool ComponentsAreEnabled
         {
-            get { return this.searchAndReplaceMode; }
-            set { this.searchAndReplaceMode = value; }
+            get { return this.componentsAreEnabled; }
+            set { this.componentsAreEnabled = value; }
+        }
+
+        private bool formAttributesAreSet = false;
+        public bool FormAttributesAreSet
+        {
+            get { return this.formAttributesAreSet; }
+            set { this.formAttributesAreSet = value; }
         }
 
         public ListView ListViewMP3s
@@ -329,5 +355,11 @@ namespace MP3Boss
             set { listViewMP3s = value; }
         }
         #endregion
+
+        private void btnCheckFormMsg_Click(object sender, EventArgs e)
+        {
+            IVerify verify = new Verify();
+            verify.checkFormMessage(true);
+        }
     }
 }
