@@ -12,22 +12,21 @@ namespace MP3Boss
 {
     public partial class SearchAndReplaceForm : Form
     {
-        string[] mp3Files = null;
-        int currentIndex = 0;
+        IMainForm iMainForm = null;
 
-        public SearchAndReplaceForm(string[] paths, int index)
+        public SearchAndReplaceForm(IMainForm mainFormObj)
         {
-            mp3Files = paths;
-            currentIndex = index;
+            iMainForm = mainFormObj;
 
             InitializeComponent();
         }
 
         private void btnChange_Click(object sender, EventArgs e)
         {
-            Save saveChanges = new Save();
-            saveChanges.searchAndReplace(this.tBoxFind.Text, this.tBoxReplace.Text, mp3Files, this.currentIndex, this.cBoxSearchAll.Checked);
-            Close();
+            ISave saveChanges = new Save();
+            saveChanges.searchAndReplace(this.tBoxFind.Text, this.tBoxReplace.Text, iMainForm.MP3Files, iMainForm.CurrentIndex, this.cBoxSearchAll.Checked);
+            iMainForm.refresh();
+            this.Close();
         }
     }
 }

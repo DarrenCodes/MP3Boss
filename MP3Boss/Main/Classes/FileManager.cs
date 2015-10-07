@@ -12,31 +12,45 @@ namespace MP3Boss
         //Gets all MP3 files in selected directory(s)
         public List<string> getMP3Files(string[] dropedFiles)
         {
+            string path = null;
+            //List of all items dropped in the list view that are folders
             List<string> subdirectories = dropedFiles.Where(item => !item.Contains(".mp3")).ToList();
 
-            DialogResult userSelection = default(DialogResult);
+            //Message prompt asking the user if subdirectories should be searched for MP3 files and included as well
+            DialogResult subDirectorySelection = default(DialogResult);
             if (subdirectories != null && subdirectories.Count > 0)
-                userSelection = MessageBox.Show("Include subdirectories?", "Please select...", MessageBoxButtons.YesNo);
+                subDirectorySelection = MessageBox.Show("Include subdirectories?", "Please select...", MessageBoxButtons.YesNo);
 
-            List<string> extractedMP3Files = null;
-            foreach (string item in subdirectories)
+            //This section of code will search and extract all MP3 files from the given directories
+            try
             {
-                if (userSelection == DialogResult.Yes)
-                    extractedMP3Files = (Directory.GetFiles(item, "*.mp3", SearchOption.AllDirectories)).ToList();
-                else if (userSelection == DialogResult.No)
-                    extractedMP3Files = (Directory.GetFiles(item, "*.mp3")).ToList();
-
-                foreach (string file in extractedMP3Files)
+                List<string> extractedMP3Files = null;
+                foreach (string item in subdirectories)
                 {
-                    MP3Files.Add(file);
+                    path = item;
+                    if (subDirectorySelection == DialogResult.Yes)
+                        extractedMP3Files = (Directory.GetFiles(item, "*.mp3", SearchOption.AllDirectories)).ToList();
+                    else if (subDirectorySelection == DialogResult.No)
+                        extractedMP3Files = (Directory.GetFiles(item, "*.mp3")).ToList();
+
+                    foreach (string file in extractedMP3Files)
+                    {
+                        MP3Files.Add(file);
+                    }
                 }
             }
+            catch(IOException ex)
+            {
+                MessageBox.Show("Unsupported file(s) added: " 
+                    + path + 
+                    "\nOnly folders and MP3 files are supported.", "Error!");
+            }
 
+            //This list contains the MP3 files which were dropped directly onto the list view
             List<string> selectedMP3Files = dropedFiles.Where(item => item.Contains(".mp3")).ToList();
 
+            //This will add the selectedMP3Files to the MP3Files list
             MP3Files = (MP3Files.Concat(selectedMP3Files)).ToList();
-
-            IFormManager manageForm = new FormManager();
 
             return MP3Files;
         }
@@ -48,7 +62,9 @@ namespace MP3Boss
 
             try
             {
-                System.IO.File.Move(originalFile, newFileName);
+                if (originalFile != newFileName)
+                    System.IO.File.Move(originalFile, newFileName);
+
                 successfull = true;
             }
             catch (FileNotFoundException)

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SearchAndReplaceForm));
             this.tBoxFind = new System.Windows.Forms.TextBox();
             this.tBoxReplace = new System.Windows.Forms.TextBox();
             this.btnChange = new System.Windows.Forms.Button();
@@ -110,6 +111,7 @@
             this.Controls.Add(this.btnChange);
             this.Controls.Add(this.tBoxReplace);
             this.Controls.Add(this.tBoxFind);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(285, 172);
             this.MinimumSize = new System.Drawing.Size(285, 172);
             this.Name = "SearchAndReplaceForm";

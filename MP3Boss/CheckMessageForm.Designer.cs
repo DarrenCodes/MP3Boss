@@ -101,6 +101,8 @@
             this.Controls.Add(this.btnMsgBoxYes);
             this.Controls.Add(this.label1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximumSize = new System.Drawing.Size(294, 174);
+            this.MinimumSize = new System.Drawing.Size(294, 174);
             this.Name = "CheckMessageForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Important!";

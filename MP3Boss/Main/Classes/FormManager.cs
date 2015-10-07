@@ -10,36 +10,39 @@ namespace MP3Boss
         public void refreshForm(IMainForm iMainForm, bool applyToAll = false)
         {
             List<string> mp3Files = iMainForm.MP3Files;
-            int currentIndex = iMainForm.CurrentIndex;
-            ListView listViewMP3s = iMainForm.ListViewMP3s;
-            int startPosition = 0;
-            int length = 0;
-
-            if (applyToAll == true && (mp3Files != null && mp3Files.Count != 0))
+            if (mp3Files != null && mp3Files.Count != 0)
             {
-                listViewMP3s.Items.Clear();
-                //Adds list of files to List View element in GUI
-                foreach (string mp3File in mp3Files)
+                int currentIndex = iMainForm.CurrentIndex;
+                ListView listViewMP3s = iMainForm.ListViewMP3s;
+                int startPosition = 0;
+                int length = 0;
+
+                if (applyToAll == true)
                 {
-                    startPosition = mp3File.LastIndexOf('\\') + 1;
-                    length = mp3File.LastIndexOf('.') - startPosition;
-                    listViewMP3s.Items.Add(mp3File.Substring(startPosition, length));
+                    listViewMP3s.Items.Clear();
+                    //Adds list of files to List View element in GUI
+                    foreach (string mp3File in mp3Files)
+                    {
+                        startPosition = mp3File.LastIndexOf('\\') + 1;
+                        length = mp3File.LastIndexOf('.') - startPosition;
+                        listViewMP3s.Items.Add(mp3File.Substring(startPosition, length));
+                    }
                 }
+                else if (applyToAll == false && (mp3Files != null && mp3Files.Count != 0))
+                {
+                    startPosition = mp3Files[currentIndex].LastIndexOf('\\') + 1;
+                    length = mp3Files[currentIndex].LastIndexOf('.') - startPosition;
+                    listViewMP3s.Items[currentIndex].Text = mp3Files[currentIndex].Substring(startPosition, length);
+                }
+
+                if (iMainForm.FormAttributesAreSet == false)
+                    this.setFormAttributes(iMainForm.MP3Files[currentIndex], iMainForm);
+
+                if (iMainForm.ComponentsAreEnabled == false)
+                    iMainForm.manageFormComponents(true);
+
+                iMainForm.ItemsCountLabel = mp3Files.Count.ToString();
             }
-            else if (applyToAll == false && (mp3Files != null && mp3Files.Count != 0))
-            {
-                startPosition = mp3Files[currentIndex].LastIndexOf('\\') + 1;
-                length = mp3Files[currentIndex].LastIndexOf('.') - startPosition;
-                listViewMP3s.Items[currentIndex].Text = mp3Files[currentIndex].Substring(startPosition, length);
-            }
-
-            if (iMainForm.FormAttributesAreSet == false)
-                this.setFormAttributes(iMainForm.MP3Files[currentIndex], iMainForm);
-
-            if (iMainForm.ComponentsAreEnabled == false)
-                iMainForm.manageFormComponents(true);
-
-            iMainForm.ItemsCountLabel = mp3Files.Count.ToString();
         }
 
         //Public method used to set the form attributes according to the TagLib.FIle object passed

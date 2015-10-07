@@ -8,7 +8,7 @@ namespace MP3Boss
 {
     public class Save : ISave
     {
-        #region Save Manager basic helper methods
+        #region Save Manager helper methods
         //Returns the tag details to be saved by the saveTagChanges() method
         private string getTagToSave(string texboxtContent, string mp3Tags, string sender)
         {
@@ -138,8 +138,8 @@ namespace MP3Boss
                     #region Update ListView
                     if (applyToAll == true && (iManageForm.UserDecision == null || iManageForm.UserDecision == "Continue"))
                     {
-                        iMainForm.CurrentIndex = index;
-                        iManageForm.refreshForm(iMainForm);
+                        iMainForm.CurrentIndex = index - 1;
+                        iManageForm.refreshForm(iMainForm, true);
                     }
                     else if (applyToAll == false && (iManageForm.UserDecision == null || iManageForm.UserDecision == "Continue"))
                     {
@@ -160,6 +160,7 @@ namespace MP3Boss
                 catch (Exception ex)
                 {
                     MessageBox.Show("An unexpected error occured while trying to save the changes made.", "Warning!");
+                    throw ex;
                 }
                 #endregion
             }

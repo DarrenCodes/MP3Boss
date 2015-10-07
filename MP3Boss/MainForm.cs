@@ -206,8 +206,17 @@ namespace MP3Boss
             Form searchForm = new SearchAndReplaceForm(this);
             searchForm.Show();
         }
+
+        //Calls the check form message box to change the current settings of the message box
+        //Usually called when "apply to all" was selected before and the user would like to change that
+        private void btnCheckFormMsg_Click(object sender, EventArgs e)
+        {
+            IVerify verify = new Verify();
+            verify.checkFormMessage(true);
+        }
         #endregion
 
+        #region Other helper methods
         public void refresh(bool applyToAll = true)
         {
             IFormManager manageForm = new FormManager();
@@ -297,6 +306,7 @@ namespace MP3Boss
             this.cBoxApplyToAll.Checked = false;
             this.cBoxAutoNext.Checked = false;
         }
+        #endregion
 
         #region Variables & Properties
         static List<string> mp3Files = new List<string>();
@@ -356,10 +366,5 @@ namespace MP3Boss
         }
         #endregion
 
-        private void btnCheckFormMsg_Click(object sender, EventArgs e)
-        {
-            IVerify verify = new Verify();
-            verify.checkFormMessage(true);
-        }
     }
 }
