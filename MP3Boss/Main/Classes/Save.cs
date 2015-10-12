@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
 namespace MP3Boss
@@ -194,7 +193,8 @@ namespace MP3Boss
                             (mp3TagContent.Tag.Track < 10 ? "0" : "") +
                             mp3TagContent.Tag.Track + ". " +
                             mp3TagContent.Tag.Title + " - " +
-                            mp3TagContent.Tag.FirstAlbumArtist + ".mp3";
+                            mp3TagContent.Tag.FirstAlbumArtist + 
+                            System.IO.Path.GetExtension(MP3Files[index]);
 
                         break;
                     }
@@ -204,7 +204,8 @@ namespace MP3Boss
                             (mp3TagContent.Tag.Track < 10 ? "0" : "") +
                             mp3TagContent.Tag.Track + ". " +
                             mp3TagContent.Tag.FirstAlbumArtist + " - " +
-                            mp3TagContent.Tag.Title + ".mp3";
+                            mp3TagContent.Tag.Title + 
+                            System.IO.Path.GetExtension(MP3Files[index]);
 
                         break;
                     }
@@ -212,7 +213,8 @@ namespace MP3Boss
                     {
                         MP3Files[index] = MP3Files[index].Substring(0, MP3Files[index].LastIndexOf('\\') + 1) +
                             mp3TagContent.Tag.FirstAlbumArtist + " - " +
-                            mp3TagContent.Tag.Title + ".mp3";
+                            mp3TagContent.Tag.Title + 
+                            System.IO.Path.GetExtension(MP3Files[index]);
 
                         break;
                     }
@@ -221,7 +223,8 @@ namespace MP3Boss
                         MP3Files[index] = MP3Files[index].Substring(0, MP3Files[index].LastIndexOf('\\') + 1) +
                             (mp3TagContent.Tag.Track < 10 ? "0" : "") +
                             mp3TagContent.Tag.Track + ". " +
-                            mp3TagContent.Tag.Title + ".mp3";
+                            mp3TagContent.Tag.Title + 
+                            System.IO.Path.GetExtension(MP3Files[index]);
 
                         break;
                     }
@@ -229,7 +232,8 @@ namespace MP3Boss
                     {
                         MP3Files[index] = MP3Files[index].Substring(0, MP3Files[index].LastIndexOf('\\') + 1) +
                             mp3TagContent.Tag.Title + " - " +
-                            mp3TagContent.Tag.FirstAlbumArtist + ".mp3";
+                            mp3TagContent.Tag.FirstAlbumArtist + 
+                            System.IO.Path.GetExtension(MP3Files[index]);
 
                         break;
                     }
@@ -261,39 +265,45 @@ namespace MP3Boss
                 {
                     tagFile = TagLib.File.Create(mp3Files[index]);
 
-                    tagFile.Tag.Title = Regex.Replace(tagFile.Tag.Title, find, replace);
+                    //Search and replace in the title of the song
+                    tagFile.Tag.Title = tagFile.Tag.Title.Replace(find, replace);
 
                     string[] tempArray = null;
 
+                    //Search and replace in the Album Artist tag of the song
                     foreach (string item in tagFile.Tag.AlbumArtists)
                     {
                         int i = 0;
                         tempArray = tagFile.Tag.AlbumArtists;
-                        tempArray[i] = Regex.Replace(item, find, replace);
+                        tempArray[i] = item.Replace(find, replace);
                         tagFile.Tag.AlbumArtists = tempArray;
                         ++i;
                     }
 
+                    //Search and replace in the Contributing Artists tag of the song
                     foreach (string item in tagFile.Tag.Performers)
                     {
                         int i = 0;
                         tempArray = tagFile.Tag.Performers;
-                        tempArray[i] = Regex.Replace(item, find, replace);
+                        tempArray[i] = item.Replace(find, replace);
                         tagFile.Tag.Performers = tempArray;
                         ++i;
                     }
 
-                    tagFile.Tag.Album = Regex.Replace(tagFile.Tag.Album, find, replace);
+                    //Search and replace in the Album tag of the song
+                    tagFile.Tag.Album = tagFile.Tag.Album.Replace(find, replace);
 
+                    //Search and replace in the Genre tag of the song
                     foreach (string item in tagFile.Tag.Genres)
                     {
                         int i = 0;
                         tempArray = tagFile.Tag.Genres;
-                        tempArray[i] = Regex.Replace(item, find, replace);
+                        tempArray[i] = item.Replace(find, replace);
                         tagFile.Tag.Genres = tempArray;
                         ++i;
                     }
 
+                    //Save changes to the audio file
                     tagFile.Save();
                 }
             }

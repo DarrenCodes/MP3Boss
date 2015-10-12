@@ -34,7 +34,6 @@ namespace MP3Boss
                     length = mp3Files[currentIndex].LastIndexOf('.') - startPosition;
                     listViewMP3s.Items[currentIndex].Text = mp3Files[currentIndex].Substring(startPosition, length);
                 }
-
                 if (iMainForm.FormAttributesAreSet == false)
                     this.setFormAttributes(iMainForm.MP3Files[currentIndex], iMainForm);
 
@@ -48,51 +47,64 @@ namespace MP3Boss
         //Public method used to set the form attributes according to the TagLib.FIle object passed
         public void setFormAttributes(string path, IMainForm iMainForm)
         {
-            TagLib.File mp3TagContent = null;
-            bool[] cBoxState = null;
-            string[] tBoxContent = null;
-
-            if (path != null && path.Length != 0)
+            try
             {
-                mp3TagContent = TagLib.File.Create(path);
-                if (mp3TagContent != null)
+                TagLib.File mp3TagContent = null;
+                bool[] cBoxState = null;
+                string[] tBoxContent = null;
+
+                if (path != null && path.Length != 0)
                 {
-                    cBoxState = iMainForm.getCheckBoxes();
-                    tBoxContent = new string[7];
+                    mp3TagContent = TagLib.File.Create(path);
+                    if (mp3TagContent != null)
+                    {
+                        cBoxState = iMainForm.getCheckBoxes();
+                        tBoxContent = new string[7];
 
-                    //Assigning tag properties to designated textboxes
-                    if (cBoxState[0] != true)
-                        tBoxContent[0] = mp3TagContent.Tag.Title;
-                    if (cBoxState[1] != true)
-                        tBoxContent[1] = mp3TagContent.Tag.FirstAlbumArtist;
-                    //Loop for finding & displaying all contributing artists from MP3 file (array)
-                    if (cBoxState[2] != true)
-                    {
-                        foreach (string performers in mp3TagContent.Tag.Performers)
+                        //Assigning tag properties to designated textboxes
+                        if (cBoxState[0] != true)
+                            tBoxContent[0] = mp3TagContent.Tag.Title;
+                        if (cBoxState[1] != true)
+                            tBoxContent[1] = mp3TagContent.Tag.FirstAlbumArtist;
+                        //Loop for finding & displaying all contributing artists from MP3 file (array)
+                        if (cBoxState[2] != true)
                         {
-                            tBoxContent[2] += performers + ";";
+                            foreach (string performers in mp3TagContent.Tag.Performers)
+                            {
+                                tBoxContent[2] += performers + ";";
+                            }
                         }
-                    }
-                    if (cBoxState[3] != true)
-                        tBoxContent[3] = mp3TagContent.Tag.Album;
-                    if (cBoxState[4] != true)
-                        tBoxContent[4] = mp3TagContent.Tag.Year.ToString();
-                    if (cBoxState[5] != true)
-                        tBoxContent[5] = mp3TagContent.Tag.Track.ToString();
-                    if (cBoxState[6] != true)
-                    {
-                        foreach (string genre in mp3TagContent.Tag.Genres)
+                        if (cBoxState[3] != true)
+                            tBoxContent[3] = mp3TagContent.Tag.Album;
+                        if (cBoxState[4] != true)
+                            tBoxContent[4] = mp3TagContent.Tag.Year.ToString();
+                        if (cBoxState[5] != true)
+                            tBoxContent[5] = mp3TagContent.Tag.Track.ToString();
+                        if (cBoxState[6] != true)
                         {
-                            tBoxContent[6] += genre + ";";
+                            foreach (string genre in mp3TagContent.Tag.Genres)
+                            {
+                                tBoxContent[6] += genre + ";";
+                            }
                         }
+                        iMainForm.setTextBoxesContent(tBoxContent);
                     }
-                    iMainForm.setTextBoxesContent(tBoxContent);
                 }
+                else
+                    MessageBox.Show("No path selected!", "Error!");
             }
-            else
-                MessageBox.Show("No path selected!", "Error!");
-
-            iMainForm.FilePathLabel = path;
+            catch (TagLib.CorruptFileException)
+            {
+                MessageBox.Show("Error" +
+                    "\nFile: " + path + " is either not a correct " + System.IO.Path.GetExtension(path) + " file, or it is corrupt.", 
+                    "Error!", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+            }
+            finally
+            {
+                iMainForm.FilePathLabel = path;
+            }
         }
 
         //Clears all text from the Main Form textboxs that are unchecked

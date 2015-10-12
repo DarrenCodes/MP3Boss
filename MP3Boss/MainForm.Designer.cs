@@ -62,6 +62,8 @@
             this.lblItemsCount = new System.Windows.Forms.Label();
             this.lblFileName = new System.Windows.Forms.Label();
             this.btnCheckFormMsg = new System.Windows.Forms.Button();
+            this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.howToMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -88,7 +90,8 @@
             // menuStrip
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileMenuItem});
+            this.fileMenuItem,
+            this.helpMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(904, 24);
@@ -106,14 +109,14 @@
             // resetAllMenuItem
             // 
             this.resetAllMenuItem.Name = "resetAllMenuItem";
-            this.resetAllMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.resetAllMenuItem.Size = new System.Drawing.Size(152, 22);
             this.resetAllMenuItem.Text = "Reset All...";
             this.resetAllMenuItem.Click += new System.EventHandler(this.resetAllMenuItem_Click);
             // 
             // closeMenuItem
             // 
             this.closeMenuItem.Name = "closeMenuItem";
-            this.closeMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.closeMenuItem.Size = new System.Drawing.Size(152, 22);
             this.closeMenuItem.Text = "Close...";
             this.closeMenuItem.Click += new System.EventHandler(this.closeMenuItem_Click);
             // 
@@ -379,6 +382,21 @@
             this.btnCheckFormMsg.UseVisualStyleBackColor = true;
             this.btnCheckFormMsg.Click += new System.EventHandler(this.btnCheckFormMsg_Click);
             // 
+            // helpMenuItem
+            // 
+            this.helpMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.howToMenuItem});
+            this.helpMenuItem.Name = "helpMenuItem";
+            this.helpMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpMenuItem.Text = "Help";
+            // 
+            // howToMenuItem
+            // 
+            this.howToMenuItem.Name = "howToMenuItem";
+            this.howToMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.howToMenuItem.Text = "How to...";
+            this.howToMenuItem.Click += new System.EventHandler(this.howToMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -464,6 +482,8 @@
         private System.Windows.Forms.ToolStripMenuItem closeMenuItem;
         private System.Windows.Forms.Label lblFileName;
         private System.Windows.Forms.Button btnCheckFormMsg;
+        private System.Windows.Forms.ToolStripMenuItem helpMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem howToMenuItem;
     }
 }
 
