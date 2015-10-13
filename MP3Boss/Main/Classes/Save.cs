@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace MP3Boss
 {
@@ -94,7 +95,7 @@ namespace MP3Boss
                     for (; index < loopEnd; index++)
                     {
                         mp3TagContent = TagLib.File.Create(iMainForm.MP3Files[index]);
-                        
+
                         //Sets the forms attributes only if it is not the first save (ie. currently not in loop)
                         if (firstSave == false)
                             iManageForm.setFormAttributes(iMainForm.MP3Files[index], iMainForm);
@@ -104,7 +105,7 @@ namespace MP3Boss
                             iManageForm.UserDecision = iManageForm.formChecker(mp3TagContent, iMainForm);
 
                         //Saves all requested changes only if there are items in the listView, and user's decision is "null" or "Continue"
-                        if (arrayLength != 0 && (iManageForm.UserDecision == null|| iManageForm.UserDecision == "Continue"))
+                        if (arrayLength != 0 && (iManageForm.UserDecision == null || iManageForm.UserDecision == "Continue"))
                         {
                             originalFileName = iMainForm.MP3Files[index];
 
@@ -183,64 +184,87 @@ namespace MP3Boss
         }
 
         //Updates the MP3Files string array according to changes made by the user
-        private string saveFormatToString(List<string> MP3Files, int index, TagLib.File mp3TagContent, int format)
+        private string saveFormatToString(List<string> audioFiles, int index, TagLib.File audioTagContent, int format)
         {
+            string title = audioTagContent.Tag.Title;
+            uint track = audioTagContent.Tag.Track;
+            string artist = audioTagContent.Tag.FirstAlbumArtist;
+
+            string filePath = audioFiles[index];
+            string fileDirectoryPath = audioFiles[index].Substring(0, audioFiles[index].LastIndexOf('\\') + 1);
+
+            string validFilenameFormat = @"^[\w\-.\(\)\[\]\s]+$";
+            string invalidFilenameChars = @"[^\w\-.\(\)\s]+";
+
+            string formattedFileName = null;
+
             switch (format)
             {
                 case 1: //#. Title - Artist     format
                     {
-                        MP3Files[index] = MP3Files[index].Substring(0, MP3Files[index].LastIndexOf('\\') + 1) +
-                            (mp3TagContent.Tag.Track < 10 ? "0" : "") +
-                            mp3TagContent.Tag.Track + ". " +
-                            mp3TagContent.Tag.Title + " - " +
-                            mp3TagContent.Tag.FirstAlbumArtist + 
-                            System.IO.Path.GetExtension(MP3Files[index]);
+                        formattedFileName =
+                            (track < 10 ? "0" : "") + track + ". " +
+                            title + " - " + artist +
+                            System.IO.Path.GetExtension(filePath);
 
                         break;
                     }
                 case 2: //#. Artist - Title     format
                     {
-                        MP3Files[index] = MP3Files[index].Substring(0, MP3Files[index].LastIndexOf('\\') + 1) +
-                            (mp3TagContent.Tag.Track < 10 ? "0" : "") +
-                            mp3TagContent.Tag.Track + ". " +
-                            mp3TagContent.Tag.FirstAlbumArtist + " - " +
-                            mp3TagContent.Tag.Title + 
-                            System.IO.Path.GetExtension(MP3Files[index]);
+                        formattedFileName =
+                            (track < 10 ? "0" : "") + track + ". " +
+                            artist + " - " + title +
+                            System.IO.Path.GetExtension(filePath);
 
                         break;
                     }
                 case 3: //Artist - Title    format
                     {
-                        MP3Files[index] = MP3Files[index].Substring(0, MP3Files[index].LastIndexOf('\\') + 1) +
-                            mp3TagContent.Tag.FirstAlbumArtist + " - " +
-                            mp3TagContent.Tag.Title + 
-                            System.IO.Path.GetExtension(MP3Files[index]);
+                        formattedFileName =
+                            artist + " - " + title +
+                            System.IO.Path.GetExtension(filePath);
 
                         break;
                     }
                 case 4: //#. Title      format
                     {
-                        MP3Files[index] = MP3Files[index].Substring(0, MP3Files[index].LastIndexOf('\\') + 1) +
-                            (mp3TagContent.Tag.Track < 10 ? "0" : "") +
-                            mp3TagContent.Tag.Track + ". " +
-                            mp3TagContent.Tag.Title + 
-                            System.IO.Path.GetExtension(MP3Files[index]);
+                        formattedFileName =
+                            (track < 10 ? "0" : "") + track + ". " +
+                            title + System.IO.Path.GetExtension(filePath);
 
                         break;
                     }
                 case 5: //Title - Artist      format
                     {
-                        MP3Files[index] = MP3Files[index].Substring(0, MP3Files[index].LastIndexOf('\\') + 1) +
-                            mp3TagContent.Tag.Title + " - " +
-                            mp3TagContent.Tag.FirstAlbumArtist + 
-                            System.IO.Path.GetExtension(MP3Files[index]);
+                        formattedFileName =
+                            title + " - " +
+                            artist + System.IO.Path.GetExtension(filePath);
 
                         break;
                     }
                 default:
                     break;
             }
-            return MP3Files[index];
+
+            DialogResult result = default(DialogResult);
+            if (formattedFileName != null)
+            {
+                if (Regex.IsMatch(formattedFileName, validFilenameFormat))
+                    audioFiles[index] = fileDirectoryPath + formattedFileName;
+                else
+                {
+                    result = MessageBox.Show("Invalid charachters in potential filename: " + formattedFileName +
+                        "\nRemove invalid characters?",
+                        "Error!", MessageBoxButtons.YesNo);
+                    if (result == DialogResult.Yes)
+                    {
+                        formattedFileName = Regex.Replace(formattedFileName, invalidFilenameChars, "");
+
+                        audioFiles[index] = fileDirectoryPath + formattedFileName;
+                    }
+                }
+            }
+            return audioFiles[index];
         }
         #endregion
 

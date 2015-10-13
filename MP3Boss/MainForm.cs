@@ -130,6 +130,25 @@ namespace MP3Boss
             this.Close();
         }
 
+        private void howToMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(
+                "Drag & drop files and/or folders onto the big white box (list view component) to get started." +
+            "\n\n" +
+            "Select the item you want to work on by clicking on the item in the list view component." +
+            "\n" +
+            "Set all tags to the same value by ticking the checkbox next to the corresponding textbox." +
+            "\n" +
+            "Click on the S button to open the Search & Replace window." +
+            "\n" +
+            "Click on the C button to change the preselected options in the Check Form Message window." +
+            "\n\n" +
+            "Enjoy!",
+                "Welcome",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+
         //Changes the index according to the item selected in the listview
         private void listViewMP3s_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -365,25 +384,5 @@ namespace MP3Boss
             set { listViewMP3s = value; }
         }
         #endregion
-
-        private void howToMenuItem_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(
-                "Drag & drop files and/or folders onto the big white box (list view component) to get started." +
-            "\n\n" +
-            "Select the item you want to work on by clicking on the item in the list view component." +
-            "\n" +
-            "Set all tags to the same value by ticking the checkbox next to the corresponding textbox." +
-            "\n" +
-            "Click on the S button to open the Search & Replace window." +
-            "\n" +
-            "Click on the C button to change the preselected options in the Check Form Message window." +
-            "\n\n" +
-            "Enjoy!",
-                "Welcome",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
-        }
-
     }
 }
