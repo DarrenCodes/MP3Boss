@@ -103,19 +103,19 @@ namespace MP3Boss
 
         #region Event handlers
         //Drage & Drop in ListView
-        private void listViewMP3s_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
+        private void listViewAudioFiles_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 e.Effect = DragDropEffects.All;
             else
                 e.Effect = DragDropEffects.None;
         }
-        private void listViewMP3s_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
+        private void listViewAudioFiles_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
         {
             string[] dropedFiles = (string[])e.Data.GetData(DataFormats.FileDrop, false);
 
             IFileManager manageFiles = new FileManager();
-            this.MP3Files = (MP3Files.Concat(manageFiles.getMP3Files(dropedFiles))).ToList();
+            this.AudioFiles = (AudioFiles.Concat(manageFiles.getAudioFiles(dropedFiles))).ToList();
 
             this.refresh();
         }
@@ -150,18 +150,18 @@ namespace MP3Boss
         }
 
         //Changes the index according to the item selected in the listview
-        private void listViewMP3s_SelectedIndexChanged(object sender, EventArgs e)
+        private void listViewAudioFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listViewMP3s.Items.Count != 0)
+            if (listViewAudioFiles.Items.Count != 0)
             {
                 IFormManager manageForm = new FormManager();
-                if (listViewMP3s.FocusedItem.Index >= 0)
-                    this.CurrentIndex = this.listViewMP3s.FocusedItem.Index;
+                if (listViewAudioFiles.FocusedItem.Index >= 0)
+                    this.CurrentIndex = this.listViewAudioFiles.FocusedItem.Index;
                 else
                     this.CurrentIndex = 0;
 
                 this.StatusLabel = "";
-                manageForm.setFormAttributes(this.MP3Files[this.CurrentIndex], this);
+                manageForm.setFormAttributes(this.AudioFiles[this.CurrentIndex], this);
             }
         }
 
@@ -176,17 +176,17 @@ namespace MP3Boss
         //Resets the textboxes according to currently selected item in the listview
         private void btnReset_Click(object sender, EventArgs e)
         {
-            if (listViewMP3s.Items.Count != 0)
+            if (listViewAudioFiles.Items.Count != 0)
             {
                 IFormManager manageForm = new FormManager();
-                manageForm.setFormAttributes(MP3Files[this.CurrentIndex], this);
+                manageForm.setFormAttributes(AudioFiles[this.CurrentIndex], this);
             }
         }
 
         //Saves changes to file made by user
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (listViewMP3s.Items.Count != 0)
+            if (listViewAudioFiles.Items.Count != 0)
             {
                 IFileManager manageFiles = new FileManager();
                 Save save = new Save();
@@ -315,8 +315,8 @@ namespace MP3Boss
         public void resetForm()
         {
             this.btnClear.PerformClick();
-            this.listViewMP3s.Items.Clear();
-            this.MP3Files = new List<string>();
+            this.listViewAudioFiles.Items.Clear();
+            this.AudioFiles = new List<string>();
             this.FilePathLabel = "";
             this.StatusLabel = "";
             this.ItemsCountLabel = "";
@@ -328,11 +328,11 @@ namespace MP3Boss
         #endregion
 
         #region Variables & Properties
-        static List<string> mp3Files = new List<string>();
-        public List<string> MP3Files
+        static List<string> audioFiles = new List<string>();
+        public List<string> AudioFiles
         {
-            get { return mp3Files; }
-            set { mp3Files = value; }
+            get { return audioFiles; }
+            set { audioFiles = value; }
         }
 
         private int currentIndex = 0;
@@ -341,7 +341,7 @@ namespace MP3Boss
             get { return currentIndex; }
             set
             {
-                if (mp3Files != null && MP3Files.Count > value)
+                if (audioFiles != null && AudioFiles.Count > value)
                     currentIndex = value;
                 else
                     currentIndex = 0;
@@ -378,10 +378,10 @@ namespace MP3Boss
             set { this.formAttributesAreSet = value; }
         }
 
-        public ListView ListViewMP3s
+        public ListView ListViewAudioFiles
         {
-            get { return listViewMP3s; }
-            set { listViewMP3s = value; }
+            get { return listViewAudioFiles; }
+            set { listViewAudioFiles = value; }
         }
         #endregion
     }

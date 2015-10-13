@@ -24,7 +24,7 @@ namespace MP3Boss
         private void btnChange_Click(object sender, EventArgs e)
         {
             ISave saveChanges = new Save();
-            saveChanges.searchAndReplace(this.tBoxFind.Text, this.tBoxReplace.Text, iMainForm.MP3Files, iMainForm.CurrentIndex, this.cBoxSearchAll.Checked);
+            saveChanges.searchAndReplace(this.tBoxFind.Text, this.tBoxReplace.Text, iMainForm.AudioFiles, iMainForm.CurrentIndex, this.cBoxSearchAll.Checked);
             iMainForm.refresh();
             this.Close();
         }

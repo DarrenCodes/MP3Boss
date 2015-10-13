@@ -35,6 +35,8 @@
             this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.howToMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tBoxTitle = new System.Windows.Forms.TextBox();
             this.tBoxContArtists = new System.Windows.Forms.TextBox();
             this.tBoxAlbumArtist = new System.Windows.Forms.TextBox();
@@ -44,7 +46,7 @@
             this.tBoxGenre = new System.Windows.Forms.TextBox();
             this.btnReset = new System.Windows.Forms.Button();
             this.cBoxApplyToAll = new System.Windows.Forms.CheckBox();
-            this.listViewMP3s = new System.Windows.Forms.ListView();
+            this.listViewAudioFiles = new System.Windows.Forms.ListView();
             this.cBoxTitle = new System.Windows.Forms.CheckBox();
             this.cBoxAlbumArtist = new System.Windows.Forms.CheckBox();
             this.cBoxContArtists = new System.Windows.Forms.CheckBox();
@@ -62,8 +64,6 @@
             this.lblItemsCount = new System.Windows.Forms.Label();
             this.lblFileName = new System.Windows.Forms.Label();
             this.btnCheckFormMsg = new System.Windows.Forms.Button();
-            this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.howToMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -109,16 +109,31 @@
             // resetAllMenuItem
             // 
             this.resetAllMenuItem.Name = "resetAllMenuItem";
-            this.resetAllMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.resetAllMenuItem.Size = new System.Drawing.Size(128, 22);
             this.resetAllMenuItem.Text = "Reset All...";
             this.resetAllMenuItem.Click += new System.EventHandler(this.resetAllMenuItem_Click);
             // 
             // closeMenuItem
             // 
             this.closeMenuItem.Name = "closeMenuItem";
-            this.closeMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.closeMenuItem.Size = new System.Drawing.Size(128, 22);
             this.closeMenuItem.Text = "Close...";
             this.closeMenuItem.Click += new System.EventHandler(this.closeMenuItem_Click);
+            // 
+            // helpMenuItem
+            // 
+            this.helpMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.howToMenuItem});
+            this.helpMenuItem.Name = "helpMenuItem";
+            this.helpMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpMenuItem.Text = "Help";
+            // 
+            // howToMenuItem
+            // 
+            this.howToMenuItem.Name = "howToMenuItem";
+            this.howToMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.howToMenuItem.Text = "How to...";
+            this.howToMenuItem.Click += new System.EventHandler(this.howToMenuItem_Click);
             // 
             // tBoxTitle
             // 
@@ -190,20 +205,20 @@
             this.cBoxApplyToAll.UseVisualStyleBackColor = true;
             this.cBoxApplyToAll.CheckedChanged += new System.EventHandler(this.cBoxApplyToAll_CheckedChanged);
             // 
-            // listViewMP3s
+            // listViewAudioFiles
             // 
-            this.listViewMP3s.AllowDrop = true;
-            this.listViewMP3s.Location = new System.Drawing.Point(504, 35);
-            this.listViewMP3s.MaximumSize = new System.Drawing.Size(500, 600);
-            this.listViewMP3s.MinimumSize = new System.Drawing.Size(382, 100);
-            this.listViewMP3s.Name = "listViewMP3s";
-            this.listViewMP3s.Size = new System.Drawing.Size(382, 167);
-            this.listViewMP3s.TabIndex = 23;
-            this.listViewMP3s.UseCompatibleStateImageBehavior = false;
-            this.listViewMP3s.View = System.Windows.Forms.View.List;
-            this.listViewMP3s.SelectedIndexChanged += new System.EventHandler(this.listViewMP3s_SelectedIndexChanged);
-            this.listViewMP3s.DragDrop += new System.Windows.Forms.DragEventHandler(this.listViewMP3s_DragDrop);
-            this.listViewMP3s.DragEnter += new System.Windows.Forms.DragEventHandler(this.listViewMP3s_DragEnter);
+            this.listViewAudioFiles.AllowDrop = true;
+            this.listViewAudioFiles.Location = new System.Drawing.Point(504, 35);
+            this.listViewAudioFiles.MaximumSize = new System.Drawing.Size(500, 600);
+            this.listViewAudioFiles.MinimumSize = new System.Drawing.Size(382, 100);
+            this.listViewAudioFiles.Name = "listViewAudioFiles";
+            this.listViewAudioFiles.Size = new System.Drawing.Size(382, 167);
+            this.listViewAudioFiles.TabIndex = 23;
+            this.listViewAudioFiles.UseCompatibleStateImageBehavior = false;
+            this.listViewAudioFiles.View = System.Windows.Forms.View.List;
+            this.listViewAudioFiles.SelectedIndexChanged += new System.EventHandler(this.listViewAudioFiles_SelectedIndexChanged);
+            this.listViewAudioFiles.DragDrop += new System.Windows.Forms.DragEventHandler(this.listViewAudioFiles_DragDrop);
+            this.listViewAudioFiles.DragEnter += new System.Windows.Forms.DragEventHandler(this.listViewAudioFiles_DragEnter);
             // 
             // cBoxTitle
             // 
@@ -382,21 +397,6 @@
             this.btnCheckFormMsg.UseVisualStyleBackColor = true;
             this.btnCheckFormMsg.Click += new System.EventHandler(this.btnCheckFormMsg_Click);
             // 
-            // helpMenuItem
-            // 
-            this.helpMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.howToMenuItem});
-            this.helpMenuItem.Name = "helpMenuItem";
-            this.helpMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpMenuItem.Text = "Help";
-            // 
-            // howToMenuItem
-            // 
-            this.howToMenuItem.Name = "howToMenuItem";
-            this.howToMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.howToMenuItem.Text = "How to...";
-            this.howToMenuItem.Click += new System.EventHandler(this.howToMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -420,7 +420,7 @@
             this.Controls.Add(this.cBoxContArtists);
             this.Controls.Add(this.cBoxAlbumArtist);
             this.Controls.Add(this.cBoxTitle);
-            this.Controls.Add(this.listViewMP3s);
+            this.Controls.Add(this.listViewAudioFiles);
             this.Controls.Add(this.cBoxApplyToAll);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.tBoxGenre);
@@ -462,7 +462,7 @@
         private System.Windows.Forms.TextBox tBoxGenre;
         private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.CheckBox cBoxApplyToAll;
-        internal System.Windows.Forms.ListView listViewMP3s;
+        internal System.Windows.Forms.ListView listViewAudioFiles;
         private System.Windows.Forms.CheckBox cBoxTitle;
         private System.Windows.Forms.CheckBox cBoxAlbumArtist;
         private System.Windows.Forms.CheckBox cBoxContArtists;

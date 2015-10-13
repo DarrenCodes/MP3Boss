@@ -12,7 +12,7 @@ namespace MP3Boss
         void manageFormComponents(bool directoryIsSet);
         void refresh(bool applyToAll = true);
 
-        List<string> MP3Files
+        List<string> AudioFiles
         {
             get;
             set;
@@ -47,7 +47,7 @@ namespace MP3Boss
             get;
             set;
         }
-        ListView ListViewMP3s
+        ListView ListViewAudioFiles
         {
             get;
             set;

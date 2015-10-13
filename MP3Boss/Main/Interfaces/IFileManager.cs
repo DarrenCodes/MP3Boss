@@ -3,7 +3,7 @@ namespace MP3Boss
 {
     public interface IFileManager
     {
-        List<string> getMP3Files(string[] dropedFiles);
-        bool renameMP3File(string originalFile, string newFileName);
+        List<string> getAudioFiles(string[] dropedFiles);
+        bool renameAudioFile(string originalFile, string newFileName);
     }
 }

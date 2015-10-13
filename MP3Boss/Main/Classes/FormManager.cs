@@ -6,41 +6,36 @@ namespace MP3Boss
 {
     public class FormManager : IFormManager
     {
-        //Populates ListView with shortened strings from mp3Files string array (file names only)
+        //Populates ListView with shortened strings from audioFiles string array (file names only)
         public void refreshForm(IMainForm iMainForm, bool applyToAll = false)
         {
-            List<string> mp3Files = iMainForm.MP3Files;
-            if (mp3Files != null && mp3Files.Count != 0)
+            List<string> audioFiles = iMainForm.AudioFiles;
+            if (audioFiles != null && audioFiles.Count != 0)
             {
                 int currentIndex = iMainForm.CurrentIndex;
-                ListView listViewMP3s = iMainForm.ListViewMP3s;
-                int startPosition = 0;
-                int length = 0;
+                ListView listViewAudioFiles = iMainForm.ListViewAudioFiles;
 
                 if (applyToAll == true)
                 {
-                    listViewMP3s.Items.Clear();
+                    listViewAudioFiles.Items.Clear();
                     //Adds list of files to List View element in GUI
-                    foreach (string mp3File in mp3Files)
+                    foreach (string audioFile in audioFiles)
                     {
-                        startPosition = mp3File.LastIndexOf('\\') + 1;
-                        length = mp3File.LastIndexOf('.') - startPosition;
-                        listViewMP3s.Items.Add(mp3File.Substring(startPosition, length));
+                        listViewAudioFiles.Items.Add(System.IO.Path.GetFileNameWithoutExtension(audioFile));
                     }
                 }
-                else if (applyToAll == false && (mp3Files != null && mp3Files.Count != 0))
+                else if (applyToAll == false && (audioFiles != null && audioFiles.Count != 0))
                 {
-                    startPosition = mp3Files[currentIndex].LastIndexOf('\\') + 1;
-                    length = mp3Files[currentIndex].LastIndexOf('.') - startPosition;
-                    listViewMP3s.Items[currentIndex].Text = mp3Files[currentIndex].Substring(startPosition, length);
+                    listViewAudioFiles.Items[currentIndex].Text = System.IO.Path.GetFileNameWithoutExtension(audioFiles[currentIndex]);
                 }
+
                 if (iMainForm.FormAttributesAreSet == false)
-                    this.setFormAttributes(iMainForm.MP3Files[currentIndex], iMainForm);
+                    this.setFormAttributes(iMainForm.AudioFiles[currentIndex], iMainForm);
 
                 if (iMainForm.ComponentsAreEnabled == false)
                     iMainForm.manageFormComponents(true);
 
-                iMainForm.ItemsCountLabel = mp3Files.Count.ToString();
+                iMainForm.ItemsCountLabel = audioFiles.Count.ToString();
             }
         }
 
@@ -49,40 +44,40 @@ namespace MP3Boss
         {
             try
             {
-                TagLib.File mp3TagContent = null;
+                TagLib.File audioFileTagContent = null;
                 bool[] cBoxState = null;
                 string[] tBoxContent = null;
 
                 if (path != null && path.Length != 0)
                 {
-                    mp3TagContent = TagLib.File.Create(path);
-                    if (mp3TagContent != null)
+                    audioFileTagContent = TagLib.File.Create(path);
+                    if (audioFileTagContent != null)
                     {
                         cBoxState = iMainForm.getCheckBoxes();
                         tBoxContent = new string[7];
 
                         //Assigning tag properties to designated textboxes
                         if (cBoxState[0] != true)
-                            tBoxContent[0] = mp3TagContent.Tag.Title;
+                            tBoxContent[0] = audioFileTagContent.Tag.Title;
                         if (cBoxState[1] != true)
-                            tBoxContent[1] = mp3TagContent.Tag.FirstAlbumArtist;
+                            tBoxContent[1] = audioFileTagContent.Tag.FirstAlbumArtist;
                         //Loop for finding & displaying all contributing artists from MP3 file (array)
                         if (cBoxState[2] != true)
                         {
-                            foreach (string performers in mp3TagContent.Tag.Performers)
+                            foreach (string performers in audioFileTagContent.Tag.Performers)
                             {
                                 tBoxContent[2] += performers + ";";
                             }
                         }
                         if (cBoxState[3] != true)
-                            tBoxContent[3] = mp3TagContent.Tag.Album;
+                            tBoxContent[3] = audioFileTagContent.Tag.Album;
                         if (cBoxState[4] != true)
-                            tBoxContent[4] = mp3TagContent.Tag.Year.ToString();
+                            tBoxContent[4] = audioFileTagContent.Tag.Year.ToString();
                         if (cBoxState[5] != true)
-                            tBoxContent[5] = mp3TagContent.Tag.Track.ToString();
+                            tBoxContent[5] = audioFileTagContent.Tag.Track.ToString();
                         if (cBoxState[6] != true)
                         {
-                            foreach (string genre in mp3TagContent.Tag.Genres)
+                            foreach (string genre in audioFileTagContent.Tag.Genres)
                             {
                                 tBoxContent[6] += genre + ";";
                             }
@@ -132,7 +127,7 @@ namespace MP3Boss
         }
 
         //Checkes the form of the MainWindow for textboxes that contain null values
-        public string formChecker(TagLib.File mp3TagContent, IMainForm iMainForm)
+        public string formChecker(TagLib.File audioFileTagContent, IMainForm iMainForm)
         {
             IVerify iVerifyForm = new Verify();
             string[] tBoxContent = iMainForm.getTextBoxesContent();
@@ -140,19 +135,19 @@ namespace MP3Boss
             this.UserDecision = null;
 
             if (this.UserDecision == null)
-                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[0], mp3TagContent.Tag.Title);
+                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[0], audioFileTagContent.Tag.Title);
             if (this.UserDecision == null)
-                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[1], mp3TagContent.Tag.AlbumArtists);
+                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[1], audioFileTagContent.Tag.AlbumArtists);
             if (this.UserDecision == null)
-                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[2], mp3TagContent.Tag.Performers);
+                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[2], audioFileTagContent.Tag.Performers);
             if (this.UserDecision == null)
-                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[3], mp3TagContent.Tag.Album);
+                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[3], audioFileTagContent.Tag.Album);
             if (this.UserDecision == null)
-                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[4], mp3TagContent.Tag.Year.ToString());
+                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[4], audioFileTagContent.Tag.Year.ToString());
             if (this.UserDecision == null)
-                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[5], mp3TagContent.Tag.Track.ToString());
+                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[5], audioFileTagContent.Tag.Track.ToString());
             if (this.UserDecision == null)
-                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[6], mp3TagContent.Tag.Genres);
+                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[6], audioFileTagContent.Tag.Genres);
 
             return this.UserDecision;
         }
