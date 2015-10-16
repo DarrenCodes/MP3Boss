@@ -5,10 +5,10 @@ namespace MP3Boss
 {
     public interface IMainForm
     {
-        string[] getTextBoxesContent();
-        void setTextBoxesContent(string[] tBoxContent);
-        bool[] getCheckBoxes();
-        void setCheckBoxes(bool checkAll, bool[] cBoxes = null);
+        formComboBoxes getComboBoxesContent();
+        void setComboBoxesContent(formComboBoxes tBoxContent);
+        void setComboBoxesContent(List<formComboBoxes> tBoxContent);
+        formCheckBoxes getCheckBoxes();
         void manageFormComponents(bool directoryIsSet);
         void refresh(bool applyToAll = true);
 

@@ -45,8 +45,8 @@ namespace MP3Boss
             try
             {
                 TagLib.File audioFileTagContent = null;
-                bool[] cBoxState = null;
-                string[] tBoxContent = null;
+                formCheckBoxes cBoxState = new formCheckBoxes();
+                formComboBoxes tBoxContent = new formComboBoxes();
 
                 if (path != null && path.Length != 0)
                 {
@@ -54,35 +54,38 @@ namespace MP3Boss
                     if (audioFileTagContent != null)
                     {
                         cBoxState = iMainForm.getCheckBoxes();
-                        tBoxContent = new string[7];
 
                         //Assigning tag properties to designated textboxes
-                        if (cBoxState[0] != true)
-                            tBoxContent[0] = audioFileTagContent.Tag.Title;
-                        if (cBoxState[1] != true)
-                            tBoxContent[1] = audioFileTagContent.Tag.FirstAlbumArtist;
+                        if (cBoxState.Title != true)
+                            tBoxContent.title = audioFileTagContent.Tag.Title;
+                        if (cBoxState.Artist != true)
+                            tBoxContent.artistName = audioFileTagContent.Tag.FirstAlbumArtist;
                         //Loop for finding & displaying all contributing artists from MP3 file (array)
-                        if (cBoxState[2] != true)
+                        if (cBoxState.ContArtists != true)
                         {
+                            tBoxContent.contributingArtists = new List<string>();
+
                             foreach (string performers in audioFileTagContent.Tag.Performers)
                             {
-                                tBoxContent[2] += performers + ";";
+                                tBoxContent.contributingArtists.Add(performers);
                             }
                         }
-                        if (cBoxState[3] != true)
-                            tBoxContent[3] = audioFileTagContent.Tag.Album;
-                        if (cBoxState[4] != true)
-                            tBoxContent[4] = audioFileTagContent.Tag.Year.ToString();
-                        if (cBoxState[5] != true)
-                            tBoxContent[5] = audioFileTagContent.Tag.Track.ToString();
-                        if (cBoxState[6] != true)
+                        if (cBoxState.Album != true)
+                            tBoxContent.albumName = audioFileTagContent.Tag.Album;
+                        if (cBoxState.Year != true)
+                            tBoxContent.songYear = audioFileTagContent.Tag.Year.ToString();
+                        if (cBoxState.TrackNo != true)
+                            tBoxContent.trackNo = audioFileTagContent.Tag.Track.ToString();
+                        if (cBoxState.Genres != true)
                         {
+                            tBoxContent.songGenre = new List<string>();
+
                             foreach (string genre in audioFileTagContent.Tag.Genres)
                             {
-                                tBoxContent[6] += genre + ";";
+                                tBoxContent.songGenre.Add(genre);
                             }
                         }
-                        iMainForm.setTextBoxesContent(tBoxContent);
+                        iMainForm.setComboBoxesContent(tBoxContent);
                     }
                 }
                 else
@@ -91,9 +94,9 @@ namespace MP3Boss
             catch (TagLib.CorruptFileException)
             {
                 MessageBox.Show("Error" +
-                    "\nFile: " + path + " is either not a correct " + System.IO.Path.GetExtension(path) + " file, or it is corrupt.", 
-                    "Error!", 
-                    MessageBoxButtons.OK, 
+                    "\nFile: " + path + " is either not a correct " + System.IO.Path.GetExtension(path) + " file, or it is corrupt.",
+                    "Error!",
+                    MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
             finally
@@ -102,54 +105,41 @@ namespace MP3Boss
             }
         }
 
-        //Clears all text from the Main Form textboxs that are unchecked
-        public void clearFormAttributes(IMainForm iMainForm)
-        {
-            bool[] cBoxesState = iMainForm.getCheckBoxes();
-            string[] tBoxContent = iMainForm.getTextBoxesContent();
-
-            if (cBoxesState[0] != true) //Title
-                tBoxContent[0] = "";
-            if (cBoxesState[1] != true) //Album Artist
-                tBoxContent[1] = "";
-            if (cBoxesState[2] != true) //Contributing Artitst(s)
-                tBoxContent[2] = "";
-            if (cBoxesState[3] != true) //Album name
-                tBoxContent[3] = "";
-            if (cBoxesState[4] != true) //Year
-                tBoxContent[4] = "";
-            if (cBoxesState[5] != true) //Track number
-                tBoxContent[5] = "";
-            if (cBoxesState[6] != true) //Genre(s)
-                tBoxContent[6] = "";
-
-            iMainForm.setTextBoxesContent(tBoxContent);
-        }
-
         //Checkes the form of the MainWindow for textboxes that contain null values
         public string formChecker(TagLib.File audioFileTagContent, IMainForm iMainForm)
         {
             IVerify iVerifyForm = new Verify();
-            string[] tBoxContent = iMainForm.getTextBoxesContent();
+            formComboBoxes tBoxContent = iMainForm.getComboBoxesContent();
 
             this.UserDecision = null;
 
             if (this.UserDecision == null)
-                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[0], audioFileTagContent.Tag.Title);
+                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent.title, audioFileTagContent.Tag.Title);
             if (this.UserDecision == null)
-                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[1], audioFileTagContent.Tag.AlbumArtists);
+                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent.artistName, audioFileTagContent.Tag.AlbumArtists[0]);
             if (this.UserDecision == null)
-                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[2], audioFileTagContent.Tag.Performers);
+                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent.contributingArtists, audioFileTagContent.Tag.Performers);
             if (this.UserDecision == null)
-                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[3], audioFileTagContent.Tag.Album);
+                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent.albumName, audioFileTagContent.Tag.Album);
             if (this.UserDecision == null)
-                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[4], audioFileTagContent.Tag.Year.ToString());
+                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent.songYear, audioFileTagContent.Tag.Year.ToString());
             if (this.UserDecision == null)
-                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[5], audioFileTagContent.Tag.Track.ToString());
+                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent.trackNo, audioFileTagContent.Tag.Track.ToString());
             if (this.UserDecision == null)
-                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent[6], audioFileTagContent.Tag.Genres);
+                this.UserDecision = iVerifyForm.nullTagChecker(tBoxContent.songGenre, audioFileTagContent.Tag.Genres);
 
             return this.UserDecision;
+        }
+
+        public void manageSuggestions(IMainForm iMainForm)
+        {
+            TagSuggest suggestions = new TagSuggest();
+            formComboBoxes currentComboBoxContent = iMainForm.getComboBoxesContent();
+
+            List<formComboBoxes> suggestionResults = suggestions.getSuggestions(currentComboBoxContent);
+
+            if (suggestionResults.Count != 0)
+                iMainForm.setComboBoxesContent(suggestionResults);
         }
 
         #region Variables and Properties

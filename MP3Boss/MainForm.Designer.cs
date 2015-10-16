@@ -37,13 +37,6 @@
             this.closeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.howToMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tBoxTitle = new System.Windows.Forms.TextBox();
-            this.tBoxContArtists = new System.Windows.Forms.TextBox();
-            this.tBoxAlbumArtist = new System.Windows.Forms.TextBox();
-            this.tBoxAlbum = new System.Windows.Forms.TextBox();
-            this.tBoxYear = new System.Windows.Forms.TextBox();
-            this.tBoxTrackNo = new System.Windows.Forms.TextBox();
-            this.tBoxGenre = new System.Windows.Forms.TextBox();
             this.btnReset = new System.Windows.Forms.Button();
             this.cBoxApplyToAll = new System.Windows.Forms.CheckBox();
             this.listViewAudioFiles = new System.Windows.Forms.ListView();
@@ -64,6 +57,14 @@
             this.lblItemsCount = new System.Windows.Forms.Label();
             this.lblFileName = new System.Windows.Forms.Label();
             this.btnCheckFormMsg = new System.Windows.Forms.Button();
+            this.comboBoxTitle = new System.Windows.Forms.ComboBox();
+            this.comboBoxAlbum = new System.Windows.Forms.ComboBox();
+            this.comboBoxYear = new System.Windows.Forms.ComboBox();
+            this.comboBoxTrackNo = new System.Windows.Forms.ComboBox();
+            this.comboBoxGenre = new System.Windows.Forms.ComboBox();
+            this.comboBoxContArtists = new System.Windows.Forms.ComboBox();
+            this.comboBoxAlbumArtist = new System.Windows.Forms.ComboBox();
+            this.btnSuggest = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -134,55 +135,6 @@
             this.howToMenuItem.Size = new System.Drawing.Size(122, 22);
             this.howToMenuItem.Text = "How to...";
             this.howToMenuItem.Click += new System.EventHandler(this.howToMenuItem_Click);
-            // 
-            // tBoxTitle
-            // 
-            this.tBoxTitle.Location = new System.Drawing.Point(151, 34);
-            this.tBoxTitle.Name = "tBoxTitle";
-            this.tBoxTitle.Size = new System.Drawing.Size(347, 20);
-            this.tBoxTitle.TabIndex = 2;
-            // 
-            // tBoxContArtists
-            // 
-            this.tBoxContArtists.Location = new System.Drawing.Point(151, 88);
-            this.tBoxContArtists.Name = "tBoxContArtists";
-            this.tBoxContArtists.Size = new System.Drawing.Size(347, 20);
-            this.tBoxContArtists.TabIndex = 6;
-            // 
-            // tBoxAlbumArtist
-            // 
-            this.tBoxAlbumArtist.Location = new System.Drawing.Point(151, 62);
-            this.tBoxAlbumArtist.Name = "tBoxAlbumArtist";
-            this.tBoxAlbumArtist.Size = new System.Drawing.Size(347, 20);
-            this.tBoxAlbumArtist.TabIndex = 4;
-            // 
-            // tBoxAlbum
-            // 
-            this.tBoxAlbum.Location = new System.Drawing.Point(151, 114);
-            this.tBoxAlbum.Name = "tBoxAlbum";
-            this.tBoxAlbum.Size = new System.Drawing.Size(347, 20);
-            this.tBoxAlbum.TabIndex = 8;
-            // 
-            // tBoxYear
-            // 
-            this.tBoxYear.Location = new System.Drawing.Point(151, 140);
-            this.tBoxYear.Name = "tBoxYear";
-            this.tBoxYear.Size = new System.Drawing.Size(347, 20);
-            this.tBoxYear.TabIndex = 10;
-            // 
-            // tBoxTrackNo
-            // 
-            this.tBoxTrackNo.Location = new System.Drawing.Point(151, 166);
-            this.tBoxTrackNo.Name = "tBoxTrackNo";
-            this.tBoxTrackNo.Size = new System.Drawing.Size(347, 20);
-            this.tBoxTrackNo.TabIndex = 12;
-            // 
-            // tBoxGenre
-            // 
-            this.tBoxGenre.Location = new System.Drawing.Point(151, 192);
-            this.tBoxGenre.Name = "tBoxGenre";
-            this.tBoxGenre.Size = new System.Drawing.Size(347, 20);
-            this.tBoxGenre.TabIndex = 14;
             // 
             // btnReset
             // 
@@ -397,11 +349,85 @@
             this.btnCheckFormMsg.UseVisualStyleBackColor = true;
             this.btnCheckFormMsg.Click += new System.EventHandler(this.btnCheckFormMsg_Click);
             // 
+            // comboBoxTitle
+            // 
+            this.comboBoxTitle.FormattingEnabled = true;
+            this.comboBoxTitle.Location = new System.Drawing.Point(151, 35);
+            this.comboBoxTitle.Name = "comboBoxTitle";
+            this.comboBoxTitle.Size = new System.Drawing.Size(347, 21);
+            this.comboBoxTitle.TabIndex = 29;
+            // 
+            // comboBoxAlbum
+            // 
+            this.comboBoxAlbum.FormattingEnabled = true;
+            this.comboBoxAlbum.Location = new System.Drawing.Point(151, 115);
+            this.comboBoxAlbum.Name = "comboBoxAlbum";
+            this.comboBoxAlbum.Size = new System.Drawing.Size(347, 21);
+            this.comboBoxAlbum.TabIndex = 30;
+            // 
+            // comboBoxYear
+            // 
+            this.comboBoxYear.FormattingEnabled = true;
+            this.comboBoxYear.Location = new System.Drawing.Point(151, 141);
+            this.comboBoxYear.Name = "comboBoxYear";
+            this.comboBoxYear.Size = new System.Drawing.Size(347, 21);
+            this.comboBoxYear.TabIndex = 31;
+            // 
+            // comboBoxTrackNo
+            // 
+            this.comboBoxTrackNo.FormattingEnabled = true;
+            this.comboBoxTrackNo.Location = new System.Drawing.Point(151, 167);
+            this.comboBoxTrackNo.Name = "comboBoxTrackNo";
+            this.comboBoxTrackNo.Size = new System.Drawing.Size(347, 21);
+            this.comboBoxTrackNo.TabIndex = 32;
+            // 
+            // comboBoxGenre
+            // 
+            this.comboBoxGenre.FormattingEnabled = true;
+            this.comboBoxGenre.Location = new System.Drawing.Point(151, 193);
+            this.comboBoxGenre.Name = "comboBoxGenre";
+            this.comboBoxGenre.Size = new System.Drawing.Size(347, 21);
+            this.comboBoxGenre.TabIndex = 33;
+            // 
+            // comboBoxContArtists
+            // 
+            this.comboBoxContArtists.FormattingEnabled = true;
+            this.comboBoxContArtists.Location = new System.Drawing.Point(151, 89);
+            this.comboBoxContArtists.Name = "comboBoxContArtists";
+            this.comboBoxContArtists.Size = new System.Drawing.Size(347, 21);
+            this.comboBoxContArtists.TabIndex = 34;
+            // 
+            // comboBoxAlbumArtist
+            // 
+            this.comboBoxAlbumArtist.FormattingEnabled = true;
+            this.comboBoxAlbumArtist.Location = new System.Drawing.Point(151, 63);
+            this.comboBoxAlbumArtist.Name = "comboBoxAlbumArtist";
+            this.comboBoxAlbumArtist.Size = new System.Drawing.Size(347, 21);
+            this.comboBoxAlbumArtist.TabIndex = 35;
+            // 
+            // btnSuggest
+            // 
+            this.btnSuggest.Location = new System.Drawing.Point(423, 220);
+            this.btnSuggest.Name = "btnSuggest";
+            this.btnSuggest.Size = new System.Drawing.Size(75, 23);
+            this.btnSuggest.TabIndex = 36;
+            this.btnSuggest.Text = "Suggest...";
+            this.btnSuggest.UseVisualStyleBackColor = true;
+            this.btnSuggest.Click += new System.EventHandler(this.btnSuggest_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(904, 253);
+            this.Controls.Add(this.btnSuggest);
+            this.Controls.Add(this.comboBoxAlbumArtist);
+            this.Controls.Add(this.comboBoxContArtists);
+            this.Controls.Add(this.comboBoxGenre);
+            this.Controls.Add(this.comboBoxTrackNo);
+            this.Controls.Add(this.comboBoxYear);
+            this.Controls.Add(this.comboBoxAlbum);
+            this.Controls.Add(this.comboBoxTitle);
             this.Controls.Add(this.btnCheckFormMsg);
             this.Controls.Add(this.lblFileName);
             this.Controls.Add(this.lblItemsCount);
@@ -423,13 +449,6 @@
             this.Controls.Add(this.listViewAudioFiles);
             this.Controls.Add(this.cBoxApplyToAll);
             this.Controls.Add(this.btnReset);
-            this.Controls.Add(this.tBoxGenre);
-            this.Controls.Add(this.tBoxTrackNo);
-            this.Controls.Add(this.tBoxYear);
-            this.Controls.Add(this.tBoxAlbum);
-            this.Controls.Add(this.tBoxAlbumArtist);
-            this.Controls.Add(this.tBoxContArtists);
-            this.Controls.Add(this.tBoxTitle);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.menuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -453,13 +472,6 @@
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileMenuItem;
-        private System.Windows.Forms.TextBox tBoxTitle;
-        private System.Windows.Forms.TextBox tBoxContArtists;
-        private System.Windows.Forms.TextBox tBoxAlbumArtist;
-        private System.Windows.Forms.TextBox tBoxAlbum;
-        private System.Windows.Forms.TextBox tBoxYear;
-        private System.Windows.Forms.TextBox tBoxTrackNo;
-        private System.Windows.Forms.TextBox tBoxGenre;
         private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.CheckBox cBoxApplyToAll;
         internal System.Windows.Forms.ListView listViewAudioFiles;
@@ -484,6 +496,14 @@
         private System.Windows.Forms.Button btnCheckFormMsg;
         private System.Windows.Forms.ToolStripMenuItem helpMenuItem;
         private System.Windows.Forms.ToolStripMenuItem howToMenuItem;
+        private System.Windows.Forms.ComboBox comboBoxTitle;
+        private System.Windows.Forms.ComboBox comboBoxAlbum;
+        private System.Windows.Forms.ComboBox comboBoxYear;
+        private System.Windows.Forms.ComboBox comboBoxTrackNo;
+        private System.Windows.Forms.ComboBox comboBoxGenre;
+        private System.Windows.Forms.ComboBox comboBoxContArtists;
+        private System.Windows.Forms.ComboBox comboBoxAlbumArtist;
+        private System.Windows.Forms.Button btnSuggest;
     }
 }
 

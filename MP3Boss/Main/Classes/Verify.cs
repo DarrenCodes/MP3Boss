@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace MP3Boss
 {
@@ -17,11 +18,11 @@ namespace MP3Boss
 
             return msgBoxResult;
         }
-        public string nullTagChecker(string textboxContent, string[] fileTag)
+        public string nullTagChecker(List<string> textboxContent, string[] fileTag)
         {
             string msgBoxResult = null;
 
-            if (textboxContent.Length == 0 && fileTag.Length == 0)
+            if (textboxContent.Count == 0 && fileTag.Length == 0)
                 msgBoxResult = checkFormMessage();
 
             return msgBoxResult;

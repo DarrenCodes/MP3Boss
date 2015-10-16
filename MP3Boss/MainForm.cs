@@ -6,6 +6,28 @@ using System.Collections.Generic;
 
 namespace MP3Boss
 {
+    public struct formComboBoxes
+    {
+        public string title;
+        public string artistName;
+        public List<string> contributingArtists;
+        public string albumName;
+        public string songYear;
+        public string trackNo;
+        public List<string> songGenre;
+    }
+
+    public struct formCheckBoxes
+    {
+        public bool Title;
+        public bool Artist;
+        public bool ContArtists;
+        public bool Album;
+        public bool Year;
+        public bool TrackNo;
+        public bool Genres;
+    }
+
     public partial class MainForm : Form, IMainForm
     {
         public MainForm()
@@ -14,58 +36,240 @@ namespace MP3Boss
             this.manageFormComponents(false);
         }
 
-        #region Get and set form components
-        public string[] getTextBoxesContent()
+        //Clears all text from the Main Form textboxs that are unchecked
+        public void clearFormAttributes()
         {
-            string[] tBoxContent = new string[7];
-            tBoxContent[0] = this.tBoxTitle.Text;
-            tBoxContent[1] = this.tBoxAlbumArtist.Text;
-            tBoxContent[2] = this.tBoxContArtists.Text;
-            tBoxContent[3] = this.tBoxAlbum.Text;
-            tBoxContent[4] = this.tBoxYear.Text;
-            tBoxContent[5] = this.tBoxTrackNo.Text;
-            tBoxContent[6] = this.tBoxGenre.Text;
+            formCheckBoxes cBoxesState = this.getCheckBoxes();
+
+            if (cBoxesState.Title != true) //Title
+            {
+                this.comboBoxTitle.Text = "";
+                this.comboBoxTitle.Items.Clear();
+            }
+            if (cBoxesState.Artist != true) //Album Artist
+            {
+                this.comboBoxAlbumArtist.Text = "";
+                this.comboBoxAlbumArtist.Items.Clear();
+            }
+            if (cBoxesState.ContArtists != true) //Contributing Artitst(s)
+            {
+                this.comboBoxContArtists.Text = "";
+                this.comboBoxContArtists.Items.Clear();
+            }
+            if (cBoxesState.Album != true) //Album name
+            {
+                this.comboBoxAlbum.Text = "";
+                this.comboBoxAlbum.Items.Clear();
+            }
+            if (cBoxesState.Year != true) //Year
+            {
+                this.comboBoxYear.Text = "";
+                this.comboBoxYear.Items.Clear();
+            }
+            if (cBoxesState.TrackNo != true) //Track number
+            {
+                this.comboBoxTrackNo.Text = "";
+                this.comboBoxTrackNo.Items.Clear();
+            }
+            if (cBoxesState.Genres != true) //Genre(s)
+            {
+                this.comboBoxGenre.Text = "";
+                this.comboBoxGenre.Items.Clear();
+            }
+        }
+
+        #region Get and set form components
+        public formComboBoxes getComboBoxesContent()
+        {
+            formComboBoxes tBoxContent = new formComboBoxes();
+            tBoxContent.title = this.comboBoxTitle.Text;
+            tBoxContent.artistName = this.comboBoxAlbumArtist.Text;
+            tBoxContent.contributingArtists = this.comboBoxContArtists.Text.Split(';').Where(x => !string.IsNullOrEmpty(x)).ToList();
+            tBoxContent.albumName = this.comboBoxAlbum.Text;
+            tBoxContent.songYear = this.comboBoxYear.Text;
+            tBoxContent.trackNo = this.comboBoxTrackNo.Text;
+            tBoxContent.songGenre = this.comboBoxGenre.Text.Split(';').Where(x => !string.IsNullOrEmpty(x)).ToList();
 
             return tBoxContent;
         }
 
-        public void setTextBoxesContent(string[] tBoxContent)
+        public void setComboBoxesContent(formComboBoxes comboBoxContent)
         {
-            bool[] cBoxesState = getCheckBoxes();
+            formCheckBoxes cBoxesState = getCheckBoxes();
 
-            if (cBoxesState[0] != true) //Title
-                this.tBoxTitle.Text = tBoxContent[0];
-            if (cBoxesState[1] != true) //Album Artist
-                this.tBoxAlbumArtist.Text = tBoxContent[1];
-            if (cBoxesState[2] != true) //Contributing Artitst(s)
-                this.tBoxContArtists.Text = tBoxContent[2];
-            if (cBoxesState[3] != true) //Album name
-                this.tBoxAlbum.Text = tBoxContent[3];
-            if (cBoxesState[4] != true) //Year
-                this.tBoxYear.Text = tBoxContent[4];
-            if (cBoxesState[5] != true) //Track number
-                this.tBoxTrackNo.Text = tBoxContent[5];
-            if (cBoxesState[6] != true) //Genre(s)
-                this.tBoxGenre.Text = tBoxContent[6];
+            if (cBoxesState.Title != true && comboBoxContent.title != null) //Title
+                this.comboBoxTitle.Text = comboBoxContent.title;
+            if (cBoxesState.Artist != true && comboBoxContent.artistName != null) //Album Artist
+                this.comboBoxAlbumArtist.Text = comboBoxContent.artistName;
+            if (cBoxesState.ContArtists != true && comboBoxContent.contributingArtists != null) //Contributing Artitst(s)
+            {
+                foreach (string item in comboBoxContent.contributingArtists)
+                {
+                    this.comboBoxContArtists.Text += item + ";";
+                }
+            }
+            if (cBoxesState.Album != true && comboBoxContent.albumName != null) //Album name
+                this.comboBoxAlbum.Text = comboBoxContent.albumName;
+            if (cBoxesState.Year != true && comboBoxContent.songYear != null) //Year
+                this.comboBoxYear.Text = comboBoxContent.songYear;
+            if (cBoxesState.TrackNo != true && comboBoxContent.trackNo != null) //Track number
+                this.comboBoxTrackNo.Text = comboBoxContent.trackNo;
+            if (cBoxesState.Genres != true && comboBoxContent.songGenre != null) //Genre(s)
+            {
+                foreach (string item in comboBoxContent.songGenre)
+                {
+                    this.comboBoxGenre.Text += item + ";";
+                }
+            }
 
             this.FormAttributesAreSet = true;
         }
 
-        public bool[] getCheckBoxes()
+        public void setComboBoxesContent(List<formComboBoxes> tBoxContent)
         {
-            bool[] cBoxState = new bool[7];
-            cBoxState[0] = this.cBoxTitle.Checked;
-            cBoxState[1] = this.cBoxAlbumArtist.Checked;
-            cBoxState[2] = this.cBoxContArtists.Checked;
-            cBoxState[3] = this.cBoxAlbum.Checked;
-            cBoxState[4] = this.cBoxYear.Checked;
-            cBoxState[5] = this.cBoxTrackNo.Checked;
-            cBoxState[6] = this.cBoxGenres.Checked;
+            formCheckBoxes cBoxesState = getCheckBoxes();
 
-            return cBoxState;
+            if (cBoxesState.Title != true && tBoxContent != null && tBoxContent.Count != 0) //Title
+            {
+                string temp = "";
+                comboBoxTitle.Items.Clear();
+                this.comboBoxTitle.Text = tBoxContent[0].title;
+                foreach (formComboBoxes song in tBoxContent)
+                {
+                    if (song.title != temp)
+                    {
+                        temp = song.title;
+                        this.comboBoxTitle.Items.Add(song.title);
+                    }
+                }
+            }
+            if (cBoxesState.Artist != true && tBoxContent != null && tBoxContent.Count != 0) //Album Artist
+            {
+                string temp = "";
+                comboBoxAlbumArtist.Items.Clear();
+                this.comboBoxAlbumArtist.Text = tBoxContent[0].artistName;
+                foreach (formComboBoxes song in tBoxContent)
+                {
+                    if (song.artistName != temp)
+                    {
+                        temp = song.artistName;
+                        this.comboBoxAlbumArtist.Items.Add(song.artistName);
+                    }
+                }
+            }
+            if (cBoxesState.ContArtists != true && tBoxContent != null && tBoxContent.Count != 0) //Contributing Artitst(s)
+            {
+                string temp = "";
+                comboBoxContArtists.Items.Clear();
+                foreach (string item in tBoxContent[0].contributingArtists)
+                {
+                    if (item != temp)
+                    {
+                        temp = item;
+                        if (this.comboBoxContArtists.Text != item)
+                            this.comboBoxContArtists.Text += item + ";";
+                    }
+                }
+                temp = "";
+                foreach (formComboBoxes song in tBoxContent)
+                {
+                    foreach (string item in song.contributingArtists)
+                    {
+                        if (item != temp)
+                        {
+                            temp = item;
+                            this.comboBoxContArtists.Items.Add(item);
+                        }
+                    }
+                }
+            }
+            if (cBoxesState.Album != true && tBoxContent != null && tBoxContent.Count != 0) //Album name
+            {
+                string temp = "";
+                comboBoxAlbum.Items.Clear();
+                this.comboBoxAlbum.Text = tBoxContent[0].albumName;
+                foreach (formComboBoxes song in tBoxContent)
+                {
+                    if (song.albumName != temp)
+                    {
+                        temp = song.albumName;
+                        this.comboBoxAlbum.Items.Add(song.albumName);
+                    }
+                }
+            }
+            if (cBoxesState.Year != true && tBoxContent != null && tBoxContent.Count != 0) //Year
+            {
+                string temp = "";
+                comboBoxYear.Items.Clear();
+                this.comboBoxYear.Text = tBoxContent[0].songYear;
+                foreach (formComboBoxes song in tBoxContent)
+                {
+                    if (song.songYear != temp)
+                    {
+                        temp = song.songYear;
+                        this.comboBoxYear.Items.Add(song.songYear);
+                    }
+                }
+            }
+            if (cBoxesState.TrackNo != true && tBoxContent != null && tBoxContent.Count != 0) //Track number
+            {
+                string temp = "";
+                comboBoxTrackNo.Items.Clear();
+                this.comboBoxTrackNo.Text = tBoxContent[0].trackNo;
+                foreach (formComboBoxes song in tBoxContent)
+                {
+                    if (song.trackNo != temp)
+                    {
+                        temp = song.trackNo;
+                        this.comboBoxTrackNo.Items.Add(song.trackNo);
+                    }
+                }
+            }
+            if (cBoxesState.Genres != true && tBoxContent != null && tBoxContent.Count != 0) //Genre(s)
+            {
+                string temp = "";
+                comboBoxGenre.Items.Clear();
+                foreach (string item in tBoxContent[0].songGenre)
+                {
+                    if (item != temp)
+                    {
+                        temp = item;
+                        if (this.comboBoxGenre.Text != item)
+                            this.comboBoxGenre.Text += item + ";";
+                    }
+                }
+                temp = "";
+                foreach (formComboBoxes song in tBoxContent)
+                {
+                    foreach (string item in song.songGenre)
+                    {
+                        if (item != temp)
+                        {
+                            temp = item;
+                            this.comboBoxGenre.Items.Add(item);
+                        }
+                    }
+                }
+            }
+
+            this.FormAttributesAreSet = true;
         }
 
-        public void setCheckBoxes(bool checkAll, bool[] cBoxes = null)
+        public formCheckBoxes getCheckBoxes()
+        {
+            formCheckBoxes checkboxes = new formCheckBoxes();
+            checkboxes.Title = this.cBoxTitle.Checked;
+            checkboxes.Artist = this.cBoxAlbumArtist.Checked;
+            checkboxes.ContArtists = this.cBoxContArtists.Checked;
+            checkboxes.Album = this.cBoxAlbum.Checked;
+            checkboxes.Year = this.cBoxYear.Checked;
+            checkboxes.TrackNo = this.cBoxTrackNo.Checked;
+            checkboxes.Genres = this.cBoxGenres.Checked;
+
+            return checkboxes;
+        }
+
+        private void setCheckBoxes(bool checkAll)
         {
             if (checkAll == true)
             {
@@ -86,17 +290,6 @@ namespace MP3Boss
                 this.cBoxYear.Checked = false;
                 this.cBoxTrackNo.Checked = false;
                 this.cBoxGenres.Checked = false;
-            }
-
-            if (cBoxes != null)
-            {
-                this.cBoxTitle.Checked = cBoxes[0];
-                this.cBoxAlbumArtist.Checked = cBoxes[1];
-                this.cBoxContArtists.Checked = cBoxes[2];
-                this.cBoxAlbum.Checked = cBoxes[3];
-                this.cBoxYear.Checked = cBoxes[4];
-                this.cBoxTrackNo.Checked = cBoxes[5];
-                this.cBoxGenres.Checked = cBoxes[6];
             }
         }
         #endregion
@@ -161,6 +354,7 @@ namespace MP3Boss
                     this.CurrentIndex = 0;
 
                 this.StatusLabel = "";
+                this.clearFormAttributes();
                 manageForm.setFormAttributes(this.AudioFiles[this.CurrentIndex], this);
             }
         }
@@ -170,7 +364,7 @@ namespace MP3Boss
         {
             IFormManager manageForm = new FormManager();
 
-            manageForm.clearFormAttributes(this);
+            this.clearFormAttributes();
         }
 
         //Resets the textboxes according to currently selected item in the listview
@@ -233,6 +427,12 @@ namespace MP3Boss
             IVerify verify = new Verify();
             verify.checkFormMessage(true);
         }
+
+        private void btnSuggest_Click(object sender, EventArgs e)
+        {
+            IFormManager manageForm = new FormManager();
+            manageForm.manageSuggestions(this);
+        }
         #endregion
 
         #region Other helper methods
@@ -254,13 +454,13 @@ namespace MP3Boss
                 this.cBoxGenres.Enabled = true;
                 this.cBoxSelectAll.Enabled = true;
 
-                this.tBoxTitle.Enabled = true;
-                this.tBoxAlbumArtist.Enabled = true;
-                this.tBoxContArtists.Enabled = true;
-                this.tBoxAlbum.Enabled = true;
-                this.tBoxYear.Enabled = true;
-                this.tBoxTrackNo.Enabled = true;
-                this.tBoxGenre.Enabled = true;
+                this.comboBoxTitle.Enabled = true;
+                this.comboBoxAlbumArtist.Enabled = true;
+                this.comboBoxContArtists.Enabled = true;
+                this.comboBoxAlbum.Enabled = true;
+                this.comboBoxYear.Enabled = true;
+                this.comboBoxTrackNo.Enabled = true;
+                this.comboBoxGenre.Enabled = true;
 
                 this.btnReset.Enabled = true;
                 this.btnClear.Enabled = true;
@@ -288,13 +488,13 @@ namespace MP3Boss
                 this.cBoxGenres.Enabled = false;
                 this.cBoxSelectAll.Enabled = false;
 
-                this.tBoxTitle.Enabled = false;
-                this.tBoxAlbumArtist.Enabled = false;
-                this.tBoxContArtists.Enabled = false;
-                this.tBoxAlbum.Enabled = false;
-                this.tBoxYear.Enabled = false;
-                this.tBoxTrackNo.Enabled = false;
-                this.tBoxGenre.Enabled = false;
+                this.comboBoxTitle.Enabled = false;
+                this.comboBoxAlbumArtist.Enabled = false;
+                this.comboBoxContArtists.Enabled = false;
+                this.comboBoxAlbum.Enabled = false;
+                this.comboBoxYear.Enabled = false;
+                this.comboBoxTrackNo.Enabled = false;
+                this.comboBoxGenre.Enabled = false;
 
                 this.btnReset.Enabled = false;
                 this.btnClear.Enabled = false;
@@ -384,5 +584,6 @@ namespace MP3Boss
             set { listViewAudioFiles = value; }
         }
         #endregion
+
     }
 }

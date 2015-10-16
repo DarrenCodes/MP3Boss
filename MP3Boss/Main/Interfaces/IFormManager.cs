@@ -6,8 +6,8 @@ namespace MP3Boss
     {
         void refreshForm(IMainForm iMainForm, bool applyToAll = false);
         void setFormAttributes(string path, IMainForm iMainForm);
-        void clearFormAttributes(IMainForm iMainForm);
         string formChecker(TagLib.File mp3TagContent, IMainForm iMainForm);
+        void manageSuggestions(IMainForm iMainForm);
         
         string UserDecision
         {

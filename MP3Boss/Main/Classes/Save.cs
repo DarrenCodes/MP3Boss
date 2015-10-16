@@ -17,21 +17,20 @@ namespace MP3Boss
             else
                 return mp3Tags;
         }
-        private string[] getTagToSave(string textboxContent, string[] mp3Tags, string sender)
+        private string[] getTagToSave(List<string> textboxContent, string[] mp3Tags, string sender)
         {
-            string[] array = null;
+            //List<string> list = new List<string>();
             bool equalStrings = false;
 
-            if (textboxContent != "")
-            {
-                array = (textboxContent.Split(';')).Where(x => !string.IsNullOrEmpty(x)).ToArray(); //Split user entered string into array
-            }
-            if (array != null && mp3Tags.Length != 0)
-                equalStrings = Enumerable.SequenceEqual(mp3Tags, array);
+            if ((textboxContent == null || textboxContent.Count == 0) && mp3Tags != null)
+                return textboxContent.ToArray();
+
+            if ((textboxContent != null && textboxContent.Count != 0) && (mp3Tags != null && mp3Tags.Length != 0))
+                equalStrings = Enumerable.SequenceEqual(mp3Tags, textboxContent);
 
             //Copy user's changes to tag
             if (equalStrings == false)
-                return array;
+                return textboxContent.ToArray();
             else
                 return mp3Tags;
         }
@@ -109,7 +108,7 @@ namespace MP3Boss
                         {
                             originalFileName = iMainForm.AudioFiles[index];
 
-                            this.saveTagChanges(mp3TagContent, iMainForm.getTextBoxesContent());
+                            this.saveTagChanges(mp3TagContent, iMainForm.getComboBoxesContent());
                             newFileName = saveFormatToString(iMainForm.AudioFiles, index, mp3TagContent, format);
                             iManageFiles = new FileManager();
                             this.successfullMP3Filesave = iManageFiles.renameAudioFile(originalFileName, newFileName);
@@ -168,15 +167,15 @@ namespace MP3Boss
 
         #region Major Save Manager helper methods
         //Saves changes to tags of mp3 files
-        private void saveTagChanges(TagLib.File mp3TagContent, string[] tBoxContents)
+        private void saveTagChanges(TagLib.File mp3TagContent, formComboBoxes tBoxContents)
         {
-            mp3TagContent.Tag.Title = getTagToSave(tBoxContents[0], mp3TagContent.Tag.Title, "Title");
-            mp3TagContent.Tag.AlbumArtists = getTagToSave(tBoxContents[1], mp3TagContent.Tag.AlbumArtists, "Album Artist");
-            mp3TagContent.Tag.Performers = getTagToSave(tBoxContents[2], mp3TagContent.Tag.Performers, "Contributing Artist(s)");
-            mp3TagContent.Tag.Album = getTagToSave(tBoxContents[3], mp3TagContent.Tag.Album, "Album");
-            mp3TagContent.Tag.Year = getTagToSave(tBoxContents[4], mp3TagContent.Tag.Year, "Year");
-            mp3TagContent.Tag.Track = getTagToSave(tBoxContents[5], mp3TagContent.Tag.Track, "TrackNo");
-            mp3TagContent.Tag.Genres = getTagToSave(tBoxContents[6], mp3TagContent.Tag.Genres, "Genre(s)");
+            mp3TagContent.Tag.Title = getTagToSave(tBoxContents.title, mp3TagContent.Tag.Title, "Title");
+            mp3TagContent.Tag.AlbumArtists[0] = getTagToSave(tBoxContents.artistName, mp3TagContent.Tag.AlbumArtists[0], "Album Artist");
+            mp3TagContent.Tag.Performers = (getTagToSave(tBoxContents.contributingArtists, mp3TagContent.Tag.Performers, "Contributing Artist(s)")).ToArray();
+            mp3TagContent.Tag.Album = getTagToSave(tBoxContents.albumName, mp3TagContent.Tag.Album, "Album");
+            mp3TagContent.Tag.Year = getTagToSave(tBoxContents.songYear, mp3TagContent.Tag.Year, "Year");
+            mp3TagContent.Tag.Track = getTagToSave(tBoxContents.trackNo, mp3TagContent.Tag.Track, "TrackNo");
+            mp3TagContent.Tag.Genres = getTagToSave(tBoxContents.songGenre, mp3TagContent.Tag.Genres, "Genre(s)");
 
             mp3TagContent.Save();
 
