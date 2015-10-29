@@ -1,2 +1,2 @@
 # MP3Boss
-MP3 tag manager.
+This application can load multiple mp3/m4a audio files via drag & drop, and display their tags (if any) inside editable textboxes. The user can then edit the tags as they see fit. The audio files' filenames can be formatted according to the tags of the file by choosing from a list of five formats. Changes can be made to all files or just one at a time. There is also a built in database which will return tag suggestions for the remaining empty tags when only a few tags are filled.
