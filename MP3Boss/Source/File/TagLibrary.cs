@@ -19,7 +19,7 @@ namespace MP3Boss.Source.File
         }
         public string ArtistName
         {
-            get { return audioFile.Tag.AlbumArtists[0]; }
+            get { return audioFile.Tag.FirstAlbumArtist; }
             set { audioFile.Tag.AlbumArtists = new string[1] { value }; }
         }
         public Iterate ContributingArtistName

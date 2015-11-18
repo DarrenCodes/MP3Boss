@@ -64,14 +64,17 @@ namespace MP3Boss.Source.Objects
             return new AudioFile();
         }
 
-        public static IDatabaseSuggest GetDatabaseSuggestor()
-        {
-            return new TagSuggest();
-        }
-
         public static IQuery GetQuerier(string database_path)
         {
             return new Query(database_path);
+        }
+        public static IDatabaseSuggest GetDatabaseSuggestor(IQuery tagDB)
+        {
+            return new TagSuggest(tagDB);
+        }
+        public static IDatabaseAdd GetDatabaseAdd(IQuery tagDB)
+        {
+            return new TagAdd(tagDB);
         }
     }
 }

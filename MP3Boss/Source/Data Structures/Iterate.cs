@@ -20,5 +20,6 @@ namespace MP3Boss.Source.Datastructures
         void Add(string value);
         void Remove(string value);
         int Count();
+        string FirstEntry();
     }
 }

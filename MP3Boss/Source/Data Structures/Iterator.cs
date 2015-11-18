@@ -26,6 +26,17 @@ namespace MP3Boss.Source.Datastructures
                 Add(obj);
         }
 
+        public string FirstEntry()
+        {
+            string firstItem = string.Empty;
+            foreach (string item in dictionary.Values)
+            {
+                firstItem = item;
+                break;
+            }
+            return firstItem;
+        }
+
         public void Add(string value)
         {
             if (!dictionary.ContainsKey(value.GetHashCode()))

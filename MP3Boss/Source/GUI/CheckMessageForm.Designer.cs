@@ -41,16 +41,14 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(252, 52);
+            this.label1.Size = new System.Drawing.Size(247, 65);
             this.label1.TabIndex = 0;
-            this.label1.Text = "All fields not filled. Fill now? \r\nSelecting Yes will allow you to edit the probl" +
-    "em tag.\r\nSelecting Continue will re-format using existing tags. \r\nSelecting Skip" +
-    " will skip the problem file.";
+            this.label1.Text = resources.GetString("label1.Text");
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // btnMsgBoxYes
             // 
-            this.btnMsgBoxYes.Location = new System.Drawing.Point(22, 75);
+            this.btnMsgBoxYes.Location = new System.Drawing.Point(21, 77);
             this.btnMsgBoxYes.Name = "btnMsgBoxYes";
             this.btnMsgBoxYes.Size = new System.Drawing.Size(75, 23);
             this.btnMsgBoxYes.TabIndex = 1;
@@ -60,7 +58,7 @@
             // 
             // btnMsgBoxSkip
             // 
-            this.btnMsgBoxSkip.Location = new System.Drawing.Point(182, 75);
+            this.btnMsgBoxSkip.Location = new System.Drawing.Point(181, 77);
             this.btnMsgBoxSkip.Name = "btnMsgBoxSkip";
             this.btnMsgBoxSkip.Size = new System.Drawing.Size(75, 23);
             this.btnMsgBoxSkip.TabIndex = 3;
@@ -70,10 +68,10 @@
             // 
             // btnMsgBoxContinue
             // 
-            this.btnMsgBoxContinue.Location = new System.Drawing.Point(103, 75);
+            this.btnMsgBoxContinue.Location = new System.Drawing.Point(102, 77);
             this.btnMsgBoxContinue.Name = "btnMsgBoxContinue";
             this.btnMsgBoxContinue.Size = new System.Drawing.Size(75, 23);
-            this.btnMsgBoxContinue.TabIndex = 4;
+            this.btnMsgBoxContinue.TabIndex = 2;
             this.btnMsgBoxContinue.Text = "Continue";
             this.btnMsgBoxContinue.UseVisualStyleBackColor = true;
             this.btnMsgBoxContinue.Click += new System.EventHandler(this.btnMsgBoxContinue_Click);
@@ -81,10 +79,10 @@
             // cMsgBoxApplyToAll
             // 
             this.cMsgBoxApplyToAll.AutoSize = true;
-            this.cMsgBoxApplyToAll.Location = new System.Drawing.Point(96, 107);
+            this.cMsgBoxApplyToAll.Location = new System.Drawing.Point(95, 109);
             this.cMsgBoxApplyToAll.Name = "cMsgBoxApplyToAll";
             this.cMsgBoxApplyToAll.Size = new System.Drawing.Size(82, 17);
-            this.cMsgBoxApplyToAll.TabIndex = 5;
+            this.cMsgBoxApplyToAll.TabIndex = 4;
             this.cMsgBoxApplyToAll.Text = "Apply To All";
             this.cMsgBoxApplyToAll.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.cMsgBoxApplyToAll.UseVisualStyleBackColor = true;

@@ -71,6 +71,7 @@
             this.mainTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.extraButtonsPanel = new System.Windows.Forms.Panel();
+            this.btnAddToDB = new System.Windows.Forms.Button();
             this.fileSpecificDisplayTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.tagArtPictureBox = new System.Windows.Forms.PictureBox();
             this.menuStrip.SuspendLayout();
@@ -92,7 +93,7 @@
             this.btnSave.Name = "btnSave";
             this.saveAndFormatTabelPanel.SetRowSpan(this.btnSave, 2);
             this.btnSave.Size = new System.Drawing.Size(103, 42);
-            this.btnSave.TabIndex = 22;
+            this.btnSave.TabIndex = 23;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -177,7 +178,7 @@
             this.cBoxApplyToAll.MinimumSize = new System.Drawing.Size(76, 22);
             this.cBoxApplyToAll.Name = "cBoxApplyToAll";
             this.cBoxApplyToAll.Size = new System.Drawing.Size(80, 22);
-            this.cBoxApplyToAll.TabIndex = 20;
+            this.cBoxApplyToAll.TabIndex = 21;
             this.cBoxApplyToAll.Text = "Apply to All";
             this.cBoxApplyToAll.UseVisualStyleBackColor = true;
             this.cBoxApplyToAll.CheckedChanged += new System.EventHandler(this.cBoxApplyToAll_CheckedChanged);
@@ -224,7 +225,7 @@
             this.comboBoxFormat.MinimumSize = new System.Drawing.Size(76, 0);
             this.comboBoxFormat.Name = "comboBoxFormat";
             this.comboBoxFormat.Size = new System.Drawing.Size(113, 21);
-            this.comboBoxFormat.TabIndex = 18;
+            this.comboBoxFormat.TabIndex = 20;
             // 
             // lblFormat
             // 
@@ -270,7 +271,7 @@
             this.cBoxAutoNext.MinimumSize = new System.Drawing.Size(76, 22);
             this.cBoxAutoNext.Name = "cBoxAutoNext";
             this.cBoxAutoNext.Size = new System.Drawing.Size(80, 22);
-            this.cBoxAutoNext.TabIndex = 21;
+            this.cBoxAutoNext.TabIndex = 22;
             this.cBoxAutoNext.Text = "Auto Next";
             this.cBoxAutoNext.UseVisualStyleBackColor = true;
             // 
@@ -316,7 +317,7 @@
             this.btnCheckFormMsg.Location = new System.Drawing.Point(0, 0);
             this.btnCheckFormMsg.Name = "btnCheckFormMsg";
             this.btnCheckFormMsg.Size = new System.Drawing.Size(16, 33);
-            this.btnCheckFormMsg.TabIndex = 28;
+            this.btnCheckFormMsg.TabIndex = 24;
             this.btnCheckFormMsg.Text = "C";
             this.btnCheckFormMsg.UseVisualStyleBackColor = true;
             this.btnCheckFormMsg.Click += new System.EventHandler(this.btnCheckFormMsg_Click);
@@ -328,10 +329,9 @@
             this.btnSuggest.MinimumSize = new System.Drawing.Size(0, 22);
             this.btnSuggest.Name = "btnSuggest";
             this.btnSuggest.Size = new System.Drawing.Size(70, 22);
-            this.btnSuggest.TabIndex = 36;
+            this.btnSuggest.TabIndex = 18;
             this.btnSuggest.Text = "Suggest...";
             this.btnSuggest.UseVisualStyleBackColor = true;
-            this.btnSuggest.Click += new System.EventHandler(this.btnSuggest_Click);
             this.btnSuggest.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnSuggest_Hold);
             this.btnSuggest.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnSuggest_Release);
             // 
@@ -343,7 +343,7 @@
             this.comboBoxGenre.Margin = new System.Windows.Forms.Padding(3, 7, 3, 3);
             this.comboBoxGenre.Name = "comboBoxGenre";
             this.comboBoxGenre.Size = new System.Drawing.Size(300, 21);
-            this.comboBoxGenre.TabIndex = 33;
+            this.comboBoxGenre.TabIndex = 14;
             // 
             // cBoxGenres
             // 
@@ -365,7 +365,7 @@
             this.comboBoxTrackNo.Margin = new System.Windows.Forms.Padding(3, 7, 3, 3);
             this.comboBoxTrackNo.Name = "comboBoxTrackNo";
             this.comboBoxTrackNo.Size = new System.Drawing.Size(300, 21);
-            this.comboBoxTrackNo.TabIndex = 32;
+            this.comboBoxTrackNo.TabIndex = 12;
             // 
             // cBoxTrackNo
             // 
@@ -387,7 +387,7 @@
             this.comboBoxYear.Margin = new System.Windows.Forms.Padding(3, 7, 3, 3);
             this.comboBoxYear.Name = "comboBoxYear";
             this.comboBoxYear.Size = new System.Drawing.Size(300, 21);
-            this.comboBoxYear.TabIndex = 31;
+            this.comboBoxYear.TabIndex = 10;
             // 
             // cBoxYear
             // 
@@ -409,7 +409,7 @@
             this.comboBoxAlbum.Margin = new System.Windows.Forms.Padding(3, 7, 3, 3);
             this.comboBoxAlbum.Name = "comboBoxAlbum";
             this.comboBoxAlbum.Size = new System.Drawing.Size(300, 21);
-            this.comboBoxAlbum.TabIndex = 30;
+            this.comboBoxAlbum.TabIndex = 8;
             // 
             // cBoxAlbum
             // 
@@ -431,7 +431,7 @@
             this.comboBoxContArtists.Margin = new System.Windows.Forms.Padding(3, 7, 3, 3);
             this.comboBoxContArtists.Name = "comboBoxContArtists";
             this.comboBoxContArtists.Size = new System.Drawing.Size(300, 21);
-            this.comboBoxContArtists.TabIndex = 34;
+            this.comboBoxContArtists.TabIndex = 6;
             // 
             // cBoxContArtists
             // 
@@ -453,7 +453,7 @@
             this.comboBoxAlbumArtist.Margin = new System.Windows.Forms.Padding(3, 7, 3, 3);
             this.comboBoxAlbumArtist.Name = "comboBoxAlbumArtist";
             this.comboBoxAlbumArtist.Size = new System.Drawing.Size(300, 21);
-            this.comboBoxAlbumArtist.TabIndex = 35;
+            this.comboBoxAlbumArtist.TabIndex = 4;
             // 
             // cBoxAlbumArtist
             // 
@@ -475,7 +475,7 @@
             this.comboBoxTitle.Margin = new System.Windows.Forms.Padding(3, 7, 3, 3);
             this.comboBoxTitle.Name = "comboBoxTitle";
             this.comboBoxTitle.Size = new System.Drawing.Size(300, 21);
-            this.comboBoxTitle.TabIndex = 29;
+            this.comboBoxTitle.TabIndex = 2;
             // 
             // cBoxTitle
             // 
@@ -582,7 +582,7 @@
             this.mainTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 58.35889F));
             this.mainTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 18F));
             this.mainTablePanel.Controls.Add(this.tableLayoutPanel1, 1, 0);
-            this.mainTablePanel.Controls.Add(this.extraButtonsPanel, 2, 0);
+            this.mainTablePanel.Controls.Add(this.extraButtonsPanel, 3, 0);
             this.mainTablePanel.Controls.Add(this.fileSpecificDisplayTablePanel, 0, 0);
             this.mainTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTablePanel.Location = new System.Drawing.Point(0, 24);
@@ -611,6 +611,7 @@
             // 
             // extraButtonsPanel
             // 
+            this.extraButtonsPanel.Controls.Add(this.btnAddToDB);
             this.extraButtonsPanel.Controls.Add(this.btnSearchReplace);
             this.extraButtonsPanel.Controls.Add(this.btnCheckFormMsg);
             this.extraButtonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -619,6 +620,18 @@
             this.extraButtonsPanel.Name = "extraButtonsPanel";
             this.extraButtonsPanel.Size = new System.Drawing.Size(16, 506);
             this.extraButtonsPanel.TabIndex = 41;
+            // 
+            // btnAddToDB
+            // 
+            this.btnAddToDB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddToDB.Location = new System.Drawing.Point(0, 66);
+            this.btnAddToDB.Name = "btnAddToDB";
+            this.btnAddToDB.Size = new System.Drawing.Size(16, 33);
+            this.btnAddToDB.TabIndex = 26;
+            this.btnAddToDB.Text = "A";
+            this.btnAddToDB.UseVisualStyleBackColor = true;
+            this.btnAddToDB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnAddToDB_Down);
+            this.btnAddToDB.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnAddToDB_Up);
             // 
             // fileSpecificDisplayTablePanel
             // 
@@ -730,6 +743,7 @@
         private System.Windows.Forms.PictureBox tagArtPictureBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel extraButtonsPanel;
+        private System.Windows.Forms.Button btnAddToDB;
     }
 }
 

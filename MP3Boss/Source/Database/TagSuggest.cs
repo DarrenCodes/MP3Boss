@@ -7,6 +7,13 @@ namespace MP3Boss.Source.Database
 {
     public class TagSuggest : IDatabaseSuggest
     {
+        IQuery tagDB;
+
+        public TagSuggest(IQuery tagDB)
+        {
+            this.tagDB = tagDB;
+        }
+
         private IFormComboBoxContainer FillFormComboBoxesStruct(IFormComboBoxContainer singleResult, IQuery queryResult, bool firstIteration)
         {
             return ObjectFactory.GetNewComboBoxContainer(queryResult);
@@ -104,8 +111,7 @@ namespace MP3Boss.Source.Database
 
         public List<IFormComboBoxContainer> GetSuggestions(IFormComboBoxContainer currentValues)
         {
-            IQuery query = ObjectFactory.GetQuerier(Properties.Settings.Default.DatabasePath);
-            query.ExecuteSQLQuery(this.GetSQLQuery(currentValues));
+            tagDB.ExecuteSQLQuery(this.GetSQLQuery(currentValues));
 
             IFormComboBoxContainer singleResult = ObjectFactory.GetNewComboBoxContainer();
             List<IFormComboBoxContainer> allResults = new List<IFormComboBoxContainer>();
@@ -114,26 +120,26 @@ namespace MP3Boss.Source.Database
             string newTitle = "";
             bool first_db_result = true;
             //Populate list with all relevant records from database
-            while (query.Read())
+            while (tagDB.Read())
             {
                 oldTitle = newTitle;
-                newTitle = query.Title;
+                newTitle = tagDB.Title;
 
                 if (first_db_result)
                 {
-                    query.IsNewSong = true;
-                    singleResult = ObjectFactory.GetNewComboBoxContainer(query);
+                    tagDB.IsNewSong = true;
+                    singleResult = ObjectFactory.GetNewComboBoxContainer(tagDB);
                 }
                 else if (newTitle != oldTitle)
                 {
                     allResults.Add(singleResult);
-                    query.IsNewSong = true;
-                    singleResult = ObjectFactory.GetNewComboBoxContainer(query);
+                    tagDB.IsNewSong = true;
+                    singleResult = ObjectFactory.GetNewComboBoxContainer(tagDB);
                 }
                 else if (newTitle == oldTitle)
                 {
-                    query.IsNewSong = false;
-                    singleResult = ObjectFactory.GetNewComboBoxContainer(query);
+                    tagDB.IsNewSong = false;
+                    singleResult = ObjectFactory.GetNewComboBoxContainer(tagDB);
                 }
 
                 first_db_result = false;

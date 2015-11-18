@@ -13,6 +13,7 @@ namespace MP3Boss.Source.GUI.Backend
             ListView listViewAudioFiles);
         void LoadFileTags(int index);
         void ManageSuggestions();
+        bool ManageAdditionsToDB();
         void SearchAndReplace(string find, string replace, bool applyToAll);
         bool CheckDBFileAndSave(bool resetPath);
 

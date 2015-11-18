@@ -7,6 +7,7 @@ using MP3Boss.Source.GUI.Backend;
 using MP3Boss.Source.Objects;
 using MP3Boss.Source.Datastructures;
 using MP3Boss.Source.Validation;
+using System.Threading;
 
 namespace MP3Boss.Source.GUI
 {
@@ -20,7 +21,7 @@ namespace MP3Boss.Source.GUI
             manageForm = ObjectFactory.GetFormManager(this);
             this.ManageFormComponents(false);
         }
-        
+
         #region Get and set form components
         public IFormComboBoxContainer GetComboBoxesContent()
         {
@@ -31,7 +32,7 @@ namespace MP3Boss.Source.GUI
             IEnumerable<string> ContributingArtists = this.comboBoxContArtists.Text.Split(';').Where(x => !string.IsNullOrEmpty(x));
             foreach (string artist in ContributingArtists)
             {
-                tBoxContent.ContributingArtists.Add(artist);
+                tBoxContent.ContributingArtists.Add(artist.Trim(' '));
             }
 
             tBoxContent.Album = this.comboBoxAlbum.Text;
@@ -55,7 +56,7 @@ namespace MP3Boss.Source.GUI
             IEnumerable<string> Genre = this.comboBoxGenre.Text.Split(';').Where(x => !string.IsNullOrEmpty(x));
             foreach (string genre in Genre)
             {
-                tBoxContent.Genre.Add(genre);
+                tBoxContent.Genre.Add(genre.Trim(' '));
             }
 
             return tBoxContent;
@@ -95,6 +96,15 @@ namespace MP3Boss.Source.GUI
 
         public void SetComboBoxesContent(List<IFormComboBoxContainer> tBoxContent)
         {
+            //Used to avoid multiple entries of the same values
+            Dictionary<int, string> titleCheck = new Dictionary<int, string>();
+            Dictionary<int, string> artistCheck = new Dictionary<int, string>();
+            Dictionary<int, string> contributingArtistCheck = new Dictionary<int, string>();
+            Dictionary<int, string> albumCheck = new Dictionary<int, string>();
+            Dictionary<int, string> YearCheck = new Dictionary<int, string>();
+            Dictionary<int, string> TrackNoCheck = new Dictionary<int, string>();
+            Dictionary<int, string> genreCheck = new Dictionary<int, string>();
+
             this.SetComboBoxesContent(tBoxContent[0]);
 
             bool listIsEligible = (tBoxContent != null && tBoxContent.Count >= 1);
@@ -105,38 +115,51 @@ namespace MP3Boss.Source.GUI
 
                 foreach (IFormComboBoxContainer song in tBoxContent)
                 {
-                    if (this.cBoxTitle.Checked != true)
+                    if (this.cBoxTitle.Checked != true && !titleCheck.Values.Contains(song.Title))
                     {
+                        titleCheck.Add(song.Title.GetHashCode(), song.Title);
                         this.comboBoxTitle.Items.Add(song.Title);
                     }
-                    if (this.cBoxAlbumArtist.Checked != true)
+                    if (this.cBoxAlbumArtist.Checked != true && !artistCheck.Values.Contains(song.Artist))
                     {
+                        artistCheck.Add(song.Artist.GetHashCode(), song.Artist);
                         this.comboBoxAlbumArtist.Items.Add(song.Artist);
                     }
                     if (this.cBoxContArtists.Checked != true)
                     {
                         foreach (string artist in song.ContributingArtists)
                         {
-                            this.comboBoxContArtists.Items.Add(artist);
+                            if (!contributingArtistCheck.Values.Contains(artist))
+                            {
+                                contributingArtistCheck.Add(artist.GetHashCode(), artist);
+                                this.comboBoxContArtists.Items.Add(artist);
+                            }
                         }
                     }
-                    if (this.cBoxAlbum.Checked != true)
+                    if (this.cBoxAlbum.Checked != true && !albumCheck.Values.Contains(song.Album))
                     {
+                        albumCheck.Add(song.Album.GetHashCode(), song.Album);
                         this.comboBoxAlbum.Items.Add(song.Album);
                     }
-                    if (this.cBoxYear.Checked != true)
+                    if (this.cBoxYear.Checked != true && !YearCheck.Values.Contains(song.Year.ToString()))
                     {
+                        YearCheck.Add(song.Year.GetHashCode(), song.Year.ToString());
                         this.comboBoxYear.Items.Add(song.Year);
                     }
-                    if (this.cBoxTrackNo.Checked != true)
+                    if (this.cBoxTrackNo.Checked != true && !TrackNoCheck.Values.Contains(song.TrackNo.ToString()))
                     {
+                        TrackNoCheck.Add(song.TrackNo.GetHashCode(), song.TrackNo.ToString());
                         this.comboBoxTrackNo.Items.Add(song.TrackNo);
                     }
-                    if (this.cBoxGenres.Checked != true)
+                    if (this.cBoxGenres.Checked != true && !genreCheck.Values.Contains(song.Title))
                     {
                         foreach (string genre in song.Genre)
                         {
-                            this.comboBoxGenre.Items.Add(genre);
+                            if (!genreCheck.Values.Contains(genre))
+                            {
+                                genreCheck.Add(genre.GetHashCode(), genre);
+                                this.comboBoxGenre.Items.Add(genre);
+                            }
                         }
                     }
                 }
@@ -285,11 +308,6 @@ namespace MP3Boss.Source.GUI
             verify.checkFormMessage(true);
         }
 
-        private void btnSuggest_Click(object sender, EventArgs e)
-        {
-            manageForm.ManageSuggestions();
-        }
-
         Stopwatch timeElapsed = new Stopwatch();
         private void btnSuggest_Hold(object sender, MouseEventArgs e)
         {
@@ -300,9 +318,40 @@ namespace MP3Boss.Source.GUI
         private void BtnSuggest_Release(object sender, MouseEventArgs e)
         {
             timeElapsed.Stop();
-            if (timeElapsed.ElapsedMilliseconds >= 1000)
+            if (timeElapsed.ElapsedMilliseconds <= 500)
+            {
+                manageForm.ManageSuggestions();
+            }
+            else if (timeElapsed.ElapsedMilliseconds >= 1000)
             {
                 manageForm.CheckDBFileAndSave(true);
+            }
+        }
+
+        private void btnAddToDB_Down(object sender, MouseEventArgs e)
+        {
+            timeElapsed.Reset();
+            timeElapsed.Start();
+        }
+
+        private void btnAddToDB_Up(object sender, MouseEventArgs e)
+        {
+            bool isSuccessful = true;
+            timeElapsed.Stop();
+
+            if (timeElapsed.ElapsedMilliseconds <= 500)
+            {
+                isSuccessful = manageForm.ManageAdditionsToDB();
+                if (isSuccessful)
+                    StatusLabel = "Done.";
+            }
+            else if (timeElapsed.ElapsedMilliseconds >= 1000)
+            {
+                for (int i = 0; (i < listViewAudioFiles.Items.Count) && isSuccessful; i++)
+                    isSuccessful = manageForm.ManageAdditionsToDB();
+
+                if (isSuccessful)
+                    StatusLabel = "Done.";
             }
         }
         #endregion
@@ -341,6 +390,7 @@ namespace MP3Boss.Source.GUI
             this.cBoxAutoNext.Enabled = directoryIsSet;
 
             this.btnSuggest.Enabled = directoryIsSet;
+            this.btnAddToDB.Enabled = directoryIsSet;
         }
         public void ResetForm()
         {
@@ -417,7 +467,7 @@ namespace MP3Boss.Source.GUI
             get { return currentIndex; }
             set
             {
-                if (this.listViewAudioFiles.FocusedItem != null && this.listViewAudioFiles.FocusedItem.Index > -1)
+                if (this.listViewAudioFiles.FocusedItem != null && this.listViewAudioFiles.FocusedItem.Index > -1 && value < this.listViewAudioFiles.Items.Count)
                     currentIndex = value;
                 else
                     currentIndex = 0;

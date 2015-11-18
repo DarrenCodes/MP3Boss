@@ -59,7 +59,7 @@ namespace MP3Boss.Source.Database
         public string Title
         {
             get { return readerResult["SongTitle"].ToString(); }
-            set{ throw new NotSupportedException(); }
+            set { throw new NotSupportedException(); }
         }
         public string ArtistName
         {

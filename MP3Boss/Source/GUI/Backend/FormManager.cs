@@ -252,17 +252,52 @@ namespace MP3Boss.Source.GUI.Backend
             return userDecision;
         }
 
+        IQuery tagDB;
+        IDatabaseSuggest suggestions;
+        IDatabaseAdd add;
+        string userDecision = null;
         public void ManageSuggestions()
         {
             this.CheckDBFileAndSave();
 
-            IDatabaseSuggest suggestions = ObjectFactory.GetDatabaseSuggestor();
+            if (tagDB == null)
+                tagDB = ObjectFactory.GetQuerier(Properties.Settings.Default.DatabasePath);
+
+            if (suggestions == null)
+                suggestions = ObjectFactory.GetDatabaseSuggestor(tagDB);
             IFormComboBoxContainer currentComboBoxContent = guiMain.GetComboBoxesContent();
 
             List<IFormComboBoxContainer> suggestionResults = suggestions.GetSuggestions(currentComboBoxContent);
 
             if (suggestionResults.Count != 0)
                 guiMain.SetComboBoxesContent(suggestionResults);
+        }
+        public bool ManageAdditionsToDB()
+        {
+            IFormComboBoxContainer tags = guiMain.GetComboBoxesContent();
+
+            if (tagDB == null)
+                tagDB = ObjectFactory.GetQuerier(Properties.Settings.Default.DatabasePath);
+
+            if (add == null)
+                add = ObjectFactory.GetDatabaseAdd(tagDB);
+
+            userDecision = this.FormChecker(tags);
+            if (userDecision == null || userDecision == "Continue")
+            {
+                add.AddToDatabase(guiMain.GetComboBoxesContent());
+                guiMain.CurrentIndex += 1;
+                this.setFormAttributes(this.audioFilesList[guiMain.CurrentIndex]);
+                return true;
+            }
+            else if (userDecision == "Skip")
+            {
+                guiMain.CurrentIndex += 1;
+                this.setFormAttributes(this.audioFilesList[guiMain.CurrentIndex]);
+                return true;
+            }
+            else
+                return false;
         }
 
         public void SearchAndReplace(string find, string replace, bool applyToAll)
