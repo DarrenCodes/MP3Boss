@@ -1,30 +1,30 @@
-﻿using System;
+﻿using System.Windows;
 
 namespace MP3Boss.Source.GUI
 {
-    public partial class CheckMessageForm : System.Windows.Forms.Form
+    public partial class CheckMessageWindow : Window
     {
-        public CheckMessageForm()
+        public CheckMessageWindow()
         {
             InitializeComponent();
         }
-
-        private void btnMsgBoxYes_Click(object sender, EventArgs e)
+        
+        private void btnYes_Click(object sender, RoutedEventArgs e)
         {
             msgBoxResult = "Yes";
-            this.Close();
+            Close();
         }
 
-        private void btnMsgBoxContinue_Click(object sender, EventArgs e)
+        private void btnContinue_Click(object sender, RoutedEventArgs e)
         {
             msgBoxResult = "Continue";
-            this.Close();
+            Close();
         }
 
-        private void btnMsgBoxSkip_Click(object sender, EventArgs e)
+        private void btnSkip_Click(object sender, RoutedEventArgs e)
         {
             msgBoxResult = "Skip";
-            this.Close();
+            Close();
         }
 
         private static string msgBoxResult = null;
@@ -38,11 +38,6 @@ namespace MP3Boss.Source.GUI
         {
             get { return applyToAll; }
             set { applyToAll = value; }
-        }
-
-        private void cMsgBoxApplyToAll_CheckedChanged(object sender, EventArgs e)
-        {
-            this.ApplyToAll = cMsgBoxApplyToAll.Checked;
         }
     }
 }

@@ -1,15 +1,13 @@
-﻿using MP3Boss.Source.Datastructures;
-
-namespace MP3Boss.Source.Objects.Requirements
+﻿namespace MP3Boss.Source.Objects.Requirements
 {
-    public interface IReadAndWriteable
+    public interface IReadAndWriteable<T>
     {
-        string Title { get; set; }
-        string ArtistName { get; set; }
-        Iterate ContributingArtistName { get; set; }
-        string AlbumName { get; set; }
-        uint SongYear { get; set; }
-        uint TrackNo { get; set; }
-        Iterate Genre { get; set; }
+        T Title { get; set; }
+        T Artist { get; set; }
+        T ContributingArtists { get; set; }
+        T Album { get; set; }
+        T Year { get; set; }
+        T TrackNo { get; set; }
+        T Genre { get; set; }
     }
 }

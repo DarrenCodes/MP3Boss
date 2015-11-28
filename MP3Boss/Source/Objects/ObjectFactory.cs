@@ -1,8 +1,7 @@
 ﻿using MP3Boss.Source.Database;
-using MP3Boss.Source.Datastructures;
+using MP3Boss.Source.DataStructures;
 using MP3Boss.Source.File;
 using MP3Boss.Source.GUI.Backend;
-using MP3Boss.Source.Objects.Requirements;
 using MP3Boss.Source.Validation;
 
 namespace MP3Boss.Source.Objects
@@ -10,34 +9,19 @@ namespace MP3Boss.Source.Objects
     public abstract class ObjectFactory
     {
         #region Form manager factories
-        public static IFormManager GetFormManager(IView gui)
+        public static IFormManager GetFormManager(IWindowProperties formPropertiesObject)
         {
-            return new FormManager(gui);
+            return new FormManager(formPropertiesObject);
         }
         #endregion
 
-        #region ComboBox Container factories
-        public static IFormComboBoxContainer GetNewComboBoxContainer()
+        #region Binding Object Factory
+        public static IWindowProperties GetBindingObject()
         {
-            return new ComboBoxesContent();
-        }
-        public static IFormComboBoxContainer GetNewComboBoxContainer(IFormComboBoxContainer obj)
-        {
-            return new ComboBoxesContent(obj);
-        }
-        public static IFormComboBoxContainer GetNewComboBoxContainer(IReadAndWriteable obj)
-        {
-            return new ComboBoxesContent(obj);
+            return new WindowProperties();
         }
         #endregion
-
-        #region Checkbox container factories
-        public static IFormCheckBoxContainer GetNewCheckBoxContainer()
-        {
-            return new CheckBoxesContent();
-        }
-        #endregion
-
+        
         #region Tag library factories
         public static IFileTagTools GetTagLibrary(string file_path)
         {
@@ -51,22 +35,7 @@ namespace MP3Boss.Source.Objects
             return new Verify();
         }
         #endregion
-
-        #region Iterator factories
-        public static Iterate GetIterator()
-        {
-            return new Iterator();
-        }
-        public static Iterate GetIterator(Iterate obj)
-        {
-            return new Iterator((Iterator)obj);
-        }
-        public static Iterate GetIterator(string obj)
-        {
-            return new Iterator(obj);
-        }
-        #endregion
-
+        
         #region Audio file manager factories
         public static IAudioFile GetAudioFileManager()
         {

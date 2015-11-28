@@ -1,7 +1,7 @@
-﻿using MP3Boss.Source.Datastructures;
+﻿using MP3Boss.Source.DataStructures;
 using MP3Boss.Source.Objects;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace MP3Boss.Source.Database
 {
@@ -14,15 +14,11 @@ namespace MP3Boss.Source.Database
             this.tagDB = ObjectFactory.GetQuerier(db_path);
         }
 
-        private IFormComboBoxContainer FillFormComboBoxesStruct(IFormComboBoxContainer singleResult, IQuery queryResult, bool firstIteration)
-        {
-            return ObjectFactory.GetNewComboBoxContainer(queryResult);
-        }
-
-        private string GetSQLQuery(IFormComboBoxContainer currentValues)
+        private string GetSQLQuery(IWindowProperties currentValues)
         {
             string sqlQuery = null;
             bool isFirstCondition = true;
+
 
             string sqlSELECTQuery = "SELECT Songs.SongTitle, "
                                     + "art.ArtistName AS Artist_Name, "
@@ -38,114 +34,50 @@ namespace MP3Boss.Source.Database
                                 + "INNER JOIN Artists AS contArt ON contArt.ID = ContributingArtists.ArtistID ";
             string sqlWHEREQuery = "";
 
-            if (currentValues.Title != "")
+            Action<ObservableCollection<string>, string, bool> generateQuery = (property, columnName, loop) =>
             {
-                sqlWHEREQuery += String.Format("WHERE UPPER(Songs.SongTitle) LIKE UPPER('{0}') ", currentValues.Title);
-                isFirstCondition = false;
-            }
-            if (currentValues.Artist != "")
-            {
-                if (isFirstCondition)
-                    sqlWHEREQuery += String.Format("WHERE UPPER(art.ArtistName) LIKE UPPER('{0}') ", currentValues.Artist);
-                else
-                    sqlWHEREQuery += String.Format("AND UPPER(art.ArtistName) LIKE UPPER('{0}') ", currentValues.Artist);
-
-                isFirstCondition = false;
-            }
-            if (currentValues.ContributingArtists != null && currentValues.ContributingArtists.Count() != 0)
-            {
-                if (isFirstCondition)
-                    sqlWHEREQuery += String.Format("WHERE (UPPER(contArt.ArtistName) LIKE UPPER('{0}') ", currentValues.ContributingArtists);
-                else
-                    sqlWHEREQuery += String.Format("AND (UPPER(contArt.ArtistName) LIKE UPPER('{0}') ", currentValues.ContributingArtists);
-
-                foreach (string artist in currentValues.ContributingArtists)
+                if (property.Count > 0)
                 {
-                    sqlWHEREQuery += String.Format("OR UPPER(contArt.ArtistName) LIKE UPPER('{0}') ", artist);
+                    if (isFirstCondition)
+                        sqlWHEREQuery += String.Format("WHERE (UPPER(" + columnName + ") LIKE UPPER('{0}') ", property[0]);
+                    else
+                        sqlWHEREQuery += String.Format("AND (UPPER(" + columnName + ") LIKE UPPER('{0}') ", property[0]);
+
+                    if (loop)
+                    {
+                        foreach (string artist in property[0].Split(';'))
+                        {
+                            sqlWHEREQuery += String.Format("OR UPPER(" + columnName + ") LIKE UPPER('{0}') ", artist);
+                        }
+                    }
+                    sqlWHEREQuery += ")";
+
+                    isFirstCondition = false;
                 }
-                sqlWHEREQuery += ")";
+            };
 
-                isFirstCondition = false;
-            }
-            if (currentValues.Album != "")
-            {
-                if (isFirstCondition)
-                    sqlWHEREQuery += String.Format("WHERE UPPER(Albums.AlbumName) LIKE UPPER('{0}') ", currentValues.Album);
-                else
-                    sqlWHEREQuery += String.Format("AND UPPER(Albums.AlbumName) LIKE UPPER('{0}') ", currentValues.Album);
-
-                isFirstCondition = false;
-            }
-            if (currentValues.Year >= 1000)
-            {
-                if (isFirstCondition)
-                    sqlWHEREQuery += String.Format("WHERE Songs.Year = {0} ", currentValues.Year);
-                else
-                    sqlWHEREQuery += String.Format("AND Songs.Year = {0} ", currentValues.Year);
-
-                isFirstCondition = false;
-            }
-            if (currentValues.TrackNo >= 1)
-            {
-                if (isFirstCondition)
-                    sqlWHEREQuery += String.Format("WHERE Songs.TrackNo = {0} ", currentValues.TrackNo);
-                else
-                    sqlWHEREQuery += String.Format("AND Songs.TrackNo = {0} ", currentValues.TrackNo);
-
-                isFirstCondition = false;
-            }
-            if (currentValues.Genre != null && currentValues.Genre.Count() != 0)
-            {
-                if (isFirstCondition)
-                    sqlWHEREQuery += String.Format("WHERE UPPER(Songs.Genre) LIKE UPPER('{0}')", currentValues.Genre);
-                else
-                    sqlWHEREQuery += String.Format("AND UPPER(Songs.Genre) LIKE UPPER('{0}') ", currentValues.Genre);
-
-                isFirstCondition = false;
-            }
-
+            generateQuery(currentValues.Title, "Songs.SongTitle", false);
+            generateQuery(currentValues.Artist, "art.ArtistName", false);
+            generateQuery(currentValues.ContributingArtists, "contArt.ArtistName", true);
+            generateQuery(currentValues.Album, "Albums.AlbumName", false);
+            generateQuery(currentValues.Year, "Songs.Year", false);
+            generateQuery(currentValues.TrackNo, "Songs.TrackNo", false);
+            generateQuery(currentValues.Genre, "Songs.Genre", false);
+            
             sqlQuery = sqlSELECTQuery + sqlFROMQuery + sqlWHEREQuery;
 
             return sqlQuery;
         }
 
-        public List<IFormComboBoxContainer> GetSuggestions(IFormComboBoxContainer currentValues)
+        public void GetSuggestions(IWindowProperties formPropertiesObject)
         {
-            tagDB.ExecuteSQLQuery(this.GetSQLQuery(currentValues));
-
-            IFormComboBoxContainer singleResult = ObjectFactory.GetNewComboBoxContainer();
-            List<IFormComboBoxContainer> allResults = new List<IFormComboBoxContainer>();
-
-            string oldTitle = "";
-            string newTitle = "";
-            bool first_db_result = true;
-            //Populate list with all relevant records from database
+            tagDB.ExecuteSQLQuery(this.GetSQLQuery(formPropertiesObject));
+            
             while (tagDB.Read())
             {
-                oldTitle = newTitle;
-                newTitle = tagDB.Title;
-
-                if (first_db_result)
-                {
-                    tagDB.IsNewSong = true;
-                    singleResult = ObjectFactory.GetNewComboBoxContainer(tagDB);
-                }
-                else if (newTitle != oldTitle)
-                {
-                    allResults.Add(singleResult);
-                    tagDB.IsNewSong = true;
-                    singleResult = ObjectFactory.GetNewComboBoxContainer(tagDB);
-                }
-                else if (newTitle == oldTitle)
-                {
-                    tagDB.IsNewSong = false;
-                    singleResult = ObjectFactory.GetNewComboBoxContainer(tagDB);
-                }
-
-                first_db_result = false;
+                tagDB.IsNewSong = true;
+                Assign.AssignTo(formPropertiesObject, tagDB, formPropertiesObject);
             }
-            allResults.Add(singleResult);
-            return allResults;
         }
     }
 }

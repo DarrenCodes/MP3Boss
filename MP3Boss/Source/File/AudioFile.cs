@@ -1,39 +1,43 @@
-﻿using System.Windows.Forms;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using MP3Boss.Source.Datastructures;
+using MP3Boss.Source.DataStructures;
 using MP3Boss.Source.Objects;
+using System.Windows;
+using System;
+using System.Collections.ObjectModel;
 
 namespace MP3Boss.Source.File
 {
     public class AudioFile : IAudioFile
     {
-        private bool FillWithFiles(string file, ListView listViewAudioFiles, List<string> audioFilesList, Iterate audioFilesDictionary)
+        private bool FillWithFiles(string file, List<string> AudioFilesList, ObservableCollection<string> ListViewCollection, Dictionary<int, string> AudioFilesDictionary)
         {
-            if (System.IO.File.Exists(file))
+            if (System.IO.File.Exists(file) && !AudioFilesDictionary.Values.Contains(file))
             {
-                if (!audioFilesDictionary.Contains(file))
-                {
-                    audioFilesDictionary.Add(file);
-                    audioFilesList.Add(file);
-                    listViewAudioFiles.Items.Add(System.IO.Path.GetFileName(file));
-                }
+                AudioFilesDictionary.Add(file.GetHashCode(), file);
+                AudioFilesList.Add(file);
+                ListViewCollection.Add(System.IO.Path.GetFileName(file));
                 return true;
             }
             else return false;
         }
 
         //Gets all Audio files in selected directory(s)
-        public bool GetAudioFiles(string[] dropedFiles, ListView listViewAudioFiles, List<string> audioFilesList, Iterate audioFilesDictionary)
+        public bool GetAudioFiles(string[] dropedFiles, List<string> AudioFilesList, ObservableCollection<string> ListViewCollection, Dictionary<int, string> AudioFilesDictionary)
         {
             bool newValuesAdded = false;
 
-            foreach (string file in dropedFiles.Where(s => s.EndsWith(".mp3") || s.EndsWith(".m4a")))
+            Action<string[]> getFiles = (filesList) =>
             {
-                newValuesAdded = FillWithFiles(file, listViewAudioFiles, audioFilesList, audioFilesDictionary);
-            }
+                foreach (string file in filesList.Where(s => s.EndsWith(".mp3") || s.EndsWith(".m4a")))
+                {
+                    newValuesAdded = FillWithFiles(file, AudioFilesList, ListViewCollection, AudioFilesDictionary);
+                };
+            };
+
+            getFiles(dropedFiles);
 
             List<string> folders = new List<string>();
             foreach (string folder in dropedFiles)
@@ -43,55 +47,40 @@ namespace MP3Boss.Source.File
             }
 
             //Message prompt asking the user if subdirectories should be searched for audio files and included as well
-            DialogResult subDirectorySelection = default(DialogResult);
+            MessageBoxResult subDirectorySelection = default(MessageBoxResult);
             if (folders.Count > 0)
-                subDirectorySelection = MessageBox.Show("Include subdirectories?", "Please select...", MessageBoxButtons.YesNo);
+                subDirectorySelection = MessageBox.Show("Include subdirectories?", "Please select...", MessageBoxButton.YesNo);
 
-            //This section of code will search and extract all audio files from the given directories
             foreach (string folder in folders)
             {
-                if (subDirectorySelection == DialogResult.Yes)
-                {
-                    foreach (string file in Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mp3") || s.EndsWith(".m4a")))
-                    {
-                        newValuesAdded = FillWithFiles(file, listViewAudioFiles, audioFilesList, audioFilesDictionary);
-                    }
-                }
-                else if (subDirectorySelection == DialogResult.No)
-                {
-                    foreach (string file in Directory.GetFiles(folder, "*.*").Where(s => s.EndsWith(".mp3") || s.EndsWith(".m4a")))
-                    {
-                        newValuesAdded = FillWithFiles(file, listViewAudioFiles, audioFilesList, audioFilesDictionary);
-                    }
-                }
+                if (subDirectorySelection == MessageBoxResult.Yes)
+                    getFiles(Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories));
+                else if (subDirectorySelection == MessageBoxResult.No)
+                    getFiles(Directory.GetFiles(folder, "*.*"));
             }
-
+            
             return newValuesAdded;
         }
 
-        public IFormComboBoxContainer Read(string filePath)
-        {
-            return ObjectFactory.GetNewComboBoxContainer(ObjectFactory.GetTagLibrary(filePath));
-        }
-
-        public bool Write(string filePath, IFormComboBoxContainer tagUpdates)
+        public void Read(string filePath, IWindowProperties formPropertiesObject)
         {
             IFileTagTools file = ObjectFactory.GetTagLibrary(filePath);
-            file.Title = tagUpdates.Title;
-            file.ArtistName = tagUpdates.Artist;
-            file.ContributingArtistName = tagUpdates.ContributingArtists;
-            file.AlbumName = tagUpdates.Album;
-            file.SongYear = tagUpdates.Year;
-            file.TrackNo = tagUpdates.TrackNo;
-            file.Genre = tagUpdates.Genre;
+            Assign.AssignTo(formPropertiesObject, file, formPropertiesObject);
+            formPropertiesObject.TagArt = file.TagArt;
+        }
+
+        public bool Write(string filePath, IWindowProperties formPropertiesObject)
+        {
+            IFileTagTools file = ObjectFactory.GetTagLibrary(filePath);
+            Assign.AssignTo(file, formPropertiesObject);
             file.Save();
 
             return true;
         }
 
-        public string Rename(string filePath, IFormComboBoxContainer tags, int format)
+        public string Rename(string filePath, IWindowProperties formPropertiesObject)
         {
-            string formmatedFilename = this.GenerateFormattedName(filePath, tags, format);
+            string formmatedFilename = this.GenerateFormattedName(filePath, formPropertiesObject);
 
             string newFilePath = System.IO.Path.GetDirectoryName(filePath) + "\\" + formmatedFilename;
 
@@ -103,11 +92,11 @@ namespace MP3Boss.Source.File
             return newFilePath;
         }
 
-        private string GenerateFormattedName(string filePath, IFormComboBoxContainer tags, int format)
+        private string GenerateFormattedName(string filePath, IWindowProperties formPropertiesObject)
         {
-            string title = tags.Title;
-            uint track = tags.TrackNo;
-            string artist = tags.Artist;
+            string title = formPropertiesObject.Title[0];
+            uint track = uint.Parse(formPropertiesObject.TrackNo[0]);
+            string artist = formPropertiesObject.Artist[0];
 
             string fileDirectoryPath = System.IO.Path.GetDirectoryName(filePath);
 
@@ -117,37 +106,37 @@ namespace MP3Boss.Source.File
             string formattedFileName = "";
 
             //Generate formatted filename
-            switch (format)
+            switch (formPropertiesObject.Format)
             {
-                case 1: //#. Title - Artist     format
+                case 0: //#. Title - Artist     format
                     {
                         formattedFileName = (track < 10 ? "0" : "") + track + ". " +
                             title + " - " + artist + System.IO.Path.GetExtension(filePath);
 
                         break;
                     }
-                case 2: //#. Artist - Title     format
+                case 1: //#. Artist - Title     format
                     {
                         formattedFileName = (track < 10 ? "0" : "") + track + ". " +
                             artist + " - " + title + System.IO.Path.GetExtension(filePath);
 
                         break;
                     }
-                case 3: //Artist - Title    format
+                case 2: //Artist - Title    format
                     {
                         formattedFileName = artist + " - " + title +
                             System.IO.Path.GetExtension(filePath);
 
                         break;
                     }
-                case 4: //#. Title      format
+                case 3: //#. Title      format
                     {
-                        formattedFileName =  (track < 10 ? "0" : "") + track + ". " +
+                        formattedFileName = (track < 10 ? "0" : "") + track + ". " +
                             title + System.IO.Path.GetExtension(filePath);
 
                         break;
                     }
-                case 5: //Title - Artist      format
+                case 4: //Title - Artist      format
                     {
                         formattedFileName = title + " - " +
                             artist + System.IO.Path.GetExtension(filePath);
@@ -164,12 +153,12 @@ namespace MP3Boss.Source.File
                     return formattedFileName;
                 else
                 {
-                    DialogResult result = default(DialogResult);
+                    MessageBoxResult result = default(MessageBoxResult);
 
                     result = MessageBox.Show("Invalid charachters in potential filename: " + formattedFileName +
                         "\nRemove invalid characters?",
-                        "Error!", MessageBoxButtons.YesNo);
-                    if (result == DialogResult.Yes)
+                        "Error!", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
                     {
                         formattedFileName = Regex.Replace(formattedFileName, invalidFilenameChars, "");
 
@@ -183,42 +172,21 @@ namespace MP3Boss.Source.File
                 return System.IO.Path.GetFileName(filePath);
         }
 
-        public void SearchAndReplace(string filePath, string find, string replace)
+        public void SearchAndReplace(string filePath, string find, string replacement)
         {
-            IFormComboBoxContainer tags = this.Read(filePath);
+            IFileTagTools tags = ObjectFactory.GetTagLibrary(filePath);
 
-            tags.Title = tags.Title.Replace(find, replace);
-            tags.Artist = tags.Artist.Replace(find, replace);
+            Func<string, string> replace = (property) => property.Replace(find, replacement);
 
-            Iterate tempContributingArtist = ObjectFactory.GetIterator(tags.ContributingArtists);
-            foreach (string artist in tags.ContributingArtists)
-            {
-                string currentString = artist;
-                if (currentString.Contains(find))
-                {
-                    tempContributingArtist.Remove(currentString);
-                    tempContributingArtist.Add(currentString.Replace(find, replace));
-                }
-            }
-            tags.ContributingArtists = tempContributingArtist;
+            tags.Title = replace(tags.Title);
+            tags.Artist = replace(tags.Artist);
+            tags.ContributingArtists = replace(tags.ContributingArtists);
+            tags.TrackNo = replace(tags.TrackNo);
+            tags.Year = replace(tags.Year);
+            tags.Album = replace(tags.Album);
+            tags.Genre = replace(tags.Genre);
 
-            tags.Album = tags.Album.Replace(find, replace);
-            tags.Year = tags.Year;
-            tags.TrackNo = tags.TrackNo;
-            
-            Iterate tempGenre = ObjectFactory.GetIterator(tags.Genre);
-            foreach (string genre in tags.Genre)
-            {
-                string currentString = genre;
-                if (currentString.Contains(find))
-                {
-                    tempGenre.Remove(currentString);
-                    tempGenre.Add(currentString.Replace(find, replace));
-                }
-            }
-            tags.Genre = tempGenre;
-
-            this.Write(filePath, tags);
+            tags.Save();
         }
         public void SearchAndReplace(List<string> audioFilesList, string find, string replace)
         {

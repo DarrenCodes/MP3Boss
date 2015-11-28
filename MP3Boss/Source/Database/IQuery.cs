@@ -2,7 +2,7 @@
 
 namespace MP3Boss.Source.Database
 { 
-    public interface IQuery : IReadAndWriteable
+    public interface IQuery : IReadAndWriteable<string>
     {
         bool ExecuteSQLQuery(string query);
         bool SQLNonQuery(string query);

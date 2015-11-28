@@ -1,6 +1,4 @@
-﻿using MP3Boss.Source.Datastructures;
-using MP3Boss.Source.Objects;
-using System;
+﻿using System;
 using System.Data.SQLite;
 
 namespace MP3Boss.Source.Database
@@ -9,13 +7,11 @@ namespace MP3Boss.Source.Database
     {
         private SQLiteDataReader readerResult;
         private string path;
-        private Iterate contributing_artists;
-        private Iterate genres;
-        private bool isNewSong = true;
 
-        public Query(string databasePath)
+        public Query(string path)
         {
-            this.path = databasePath;
+            this.path = path;
+            IsNewSong = true;
         }
 
         private static SQLiteConnection ConnectToDB(string path)
@@ -49,8 +45,9 @@ namespace MP3Boss.Source.Database
 
             SQLiteCommand command = new SQLiteCommand(ConnectToDB(path));
             command.CommandText = query;
-            this.readerResult = command.ExecuteReader();
-            
+
+            readerResult = command.ExecuteReader();
+
             return operationWasSuccessful;
         }
         #endregion
@@ -60,11 +57,7 @@ namespace MP3Boss.Source.Database
             return readerResult.Read();
         }
 
-        public bool IsNewSong
-        {
-            get { return isNewSong; }
-            set { isNewSong = value; }
-        }
+        public bool IsNewSong { get; set; }
 
         #region Get Table Attributes
         public string Title
@@ -72,64 +65,34 @@ namespace MP3Boss.Source.Database
             get { return readerResult["SongTitle"].ToString(); }
             set { throw new NotSupportedException(); }
         }
-        public string ArtistName
+        public string Artist
         {
             get { return readerResult["Artist_Name"].ToString(); }
             set { throw new NotSupportedException(); }
         }
-        public Iterate ContributingArtistName
+        public string ContributingArtists
         {
-            get
-            {
-                if (isNewSong)
-                    contributing_artists = ObjectFactory.GetIterator();
-
-                contributing_artists.Add(readerResult["ContArtists_Name"].ToString());
-
-                return contributing_artists;
-            }
+            get { return readerResult["ContArtists_Name"].ToString(); }
             set { throw new NotSupportedException(); }
         }
-        public string AlbumName
+        public string Album
         {
             get { return readerResult["AlbumName"].ToString(); }
             set { throw new NotSupportedException(); }
         }
-        public uint SongYear
+        public string Year
         {
-            get
-            {
-                uint song_year = 0;
-                if (uint.TryParse(readerResult["Year"].ToString(), out song_year))
-                    return song_year;
-                else
-                    return 0;
-            }
+            get { return readerResult["Year"].ToString(); }
             set { throw new NotSupportedException(); }
         }
-        public uint TrackNo
+        public string TrackNo
         {
-            get
-            {
-                uint track_no = 0;
-                if (uint.TryParse(readerResult["TrackNo"].ToString(), out track_no))
-                    return track_no;
-                else
-                    return 0;
-            }
+            get { return readerResult["TrackNo"].ToString(); }
             set { throw new NotSupportedException(); }
         }
-        public Iterate Genre
+        public string Genre
         {
-            get
-            {
-                if (isNewSong)
-                    genres = ObjectFactory.GetIterator();
-
-                genres.Add(readerResult["Genre"].ToString());
-
-                return genres;
-            }
+            get { return readerResult["Genre"].ToString(); }
             set { throw new NotSupportedException(); }
         }
         #endregion

@@ -1,5 +1,5 @@
 ﻿using System;
-using MP3Boss.Source.Datastructures;
+using MP3Boss.Source.DataStructures;
 using MP3Boss.Source.Objects;
 
 namespace MP3Boss.Source.Database
@@ -13,18 +13,20 @@ namespace MP3Boss.Source.Database
             this.tagDB = ObjectFactory.GetQuerier(db_path);
         }
 
-        public bool AddToDatabase(IFormComboBoxContainer valueToAdd)
+        Func<string, int> GetHash = (item) => item.ToUpper().GetHashCode();
+
+        public bool AddToDatabase(IWindowProperties formPropertiesObject)
         {
-            this.addNewArtistRecord(valueToAdd.Artist);
+            this.addNewArtistRecord(formPropertiesObject.Artist[0]);
 
-            this.addNewAlbumRecord(valueToAdd.Album, valueToAdd.Year, valueToAdd.Genre.FirstEntry(), valueToAdd.Artist.ToUpper().GetHashCode());
+            this.addNewAlbumRecord(formPropertiesObject.Album[0], formPropertiesObject.Year[0], formPropertiesObject.Genre[0], GetHash(formPropertiesObject.Artist[0]));
 
-            this.addNewSongRecord(valueToAdd.Title, valueToAdd.Artist.ToUpper().GetHashCode(), valueToAdd.Year, valueToAdd.Genre.FirstEntry(), valueToAdd.Album.ToUpper().GetHashCode(), valueToAdd.TrackNo);
+            this.addNewSongRecord(formPropertiesObject.Title[0], GetHash(formPropertiesObject.Artist[0]), formPropertiesObject.Year[0], formPropertiesObject.Genre[0], GetHash(formPropertiesObject.Album[0]), formPropertiesObject.TrackNo[0]);
 
-            foreach (string artist in valueToAdd.ContributingArtists)
+            foreach (string artist in formPropertiesObject.ContributingArtists[0].Split(';'))
             {
                 this.addNewArtistRecord(artist);
-                this.addNewContributingArtists(valueToAdd.Title.ToUpper().GetHashCode(), artist.ToUpper().GetHashCode());
+                this.addNewContributingArtists(GetHash(formPropertiesObject.Title[0]), GetHash(artist));
             }
 
             return true;
@@ -34,18 +36,18 @@ namespace MP3Boss.Source.Database
         //Methods used to add new data to the Database
         private void addNewArtistRecord(string artistName)
         {
-            string query = String.Format("INSERT OR REPLACE INTO Artists (ID, ArtistName) VALUES({0}, \"{1}\")", artistName.ToUpper().GetHashCode(), artistName);
+            string query = String.Format("INSERT OR REPLACE INTO Artists (ID, ArtistName) VALUES({0}, \"{1}\")", GetHash(artistName), artistName);
 
             tagDB.SQLNonQuery(query);
         }
-        private void addNewAlbumRecord(string albumName, uint year, string genre, int artistID)
+        private void addNewAlbumRecord(string albumName, string year, string genre, int artistID)
         {
-            string query = String.Format("INSERT OR REPLACE INTO Albums (ID, AlbumName, Year, Genre, ArtistID) VALUES ({0}, \"{1}\", {2}, \"{3}\", {4})", albumName.ToUpper().GetHashCode(), albumName, year, genre, artistID);
+            string query = String.Format("INSERT OR REPLACE INTO Albums (ID, AlbumName, Year, Genre, ArtistID) VALUES ({0}, \"{1}\", {2}, \"{3}\", {4})", GetHash(albumName), albumName, year, genre, artistID);
             tagDB.SQLNonQuery(query);
         }
-        private void addNewSongRecord(string songName, int artistID, uint year, string genre, int albumID, uint trackNO)
+        private void addNewSongRecord(string songName, int artistID, string year, string genre, int albumID, string trackNO)
         {
-            string query = String.Format("INSERT OR REPLACE INTO Songs (ID, SongTitle, ArtistID, Year, Genre, AlbumID, TrackNo) VALUES ({0}, \"{1}\", {2}, {3}, \"{4}\", {5}, {6})", songName.ToUpper().GetHashCode(), songName, artistID, year, genre, albumID, trackNO);
+            string query = String.Format("INSERT OR REPLACE INTO Songs (ID, SongTitle, ArtistID, Year, Genre, AlbumID, TrackNo) VALUES ({0}, \"{1}\", {2}, {3}, \"{4}\", {5}, {6})", GetHash(songName), songName, artistID, year, genre, albumID, trackNO);
             tagDB.SQLNonQuery(query);
         }
         private void addNewContributingArtists(int songID, int artistID)

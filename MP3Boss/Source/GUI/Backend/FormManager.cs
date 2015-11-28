@@ -1,70 +1,74 @@
-﻿using System.Windows.Forms;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using MP3Boss.Source.File;
 using MP3Boss.Source.Objects;
-using MP3Boss.Source.Datastructures;
+using MP3Boss.Source.DataStructures;
 using MP3Boss.Source.Validation;
 using MP3Boss.Source.Database;
+using System.Windows;
+using Microsoft.Win32;
+using System.Collections.ObjectModel;
 
 namespace MP3Boss.Source.GUI.Backend
 {
     public class FormManager : IFormManager
     {
-        private IView guiMain;
+        private IWindowProperties formPropertiesObject;
 
-        public FormManager(IView gui)
+        public FormManager(IWindowProperties formPropertiesObject)
         {
-            this.guiMain = gui;
+            this.formPropertiesObject = formPropertiesObject;
+            Reset();
         }
 
-        public void FillFileList(string[] dropedFiles, ListView listViewAudioFiles)
+        public void Reset()
+        {
+            AudioFilesList = new List<string>();
+            AudioFilesPathDictionary = new Dictionary<int, string>();
+            FirstDragAndDrop = true;
+        }
+
+        public void FillFileList(string[] dropedFiles)
         {
             IAudioFile file = ObjectFactory.GetAudioFileManager();
 
-            file.GetAudioFiles(dropedFiles, listViewAudioFiles, this.audioFilesList, this.audioFilesPathDictionary);
+            file.GetAudioFiles(dropedFiles, AudioFilesList, formPropertiesObject.ListViewAudioFiles, AudioFilesPathDictionary);
 
-            if (this.firstDragAndDrop)
+            if (FirstDragAndDrop)
             {
-                if (listViewAudioFiles.Items.Count > 0)
+                if (AudioFilesList.Count > 0)
                 {
-                    string path = audioFilesList[guiMain.CurrentIndex];
-                    this.setFormAttributes(path);
-                    guiMain.FilePathLabel = path;
+                    string path = AudioFilesList[formPropertiesObject.CurrentIndex];
+                    SetFormAttributes(path);
+                    formPropertiesObject.FilePathLabel = path;
                 }
             }
 
-            guiMain.ManageFormComponents(true);
-
-            this.firstDragAndDrop = false;
+            FirstDragAndDrop = false;
         }
 
-        public void RefreshListView(ListView listViewAudioFiles)
+        public void RefreshListView()
         {
-            listViewAudioFiles.Items.Clear();
-            foreach (string path in audioFilesList)
+            for (int i = 0; i < AudioFilesList.Count; i++)
             {
-                listViewAudioFiles.Items.Add(System.IO.Path.GetFileName(path));
+                if (!System.IO.File.Exists(AudioFilesList[i]))
+                    AudioFilesList.RemoveAt(i);
             }
 
-            this.setFormAttributes(this.audioFilesList[0]);
-            guiMain.ManageFormComponents(true);
-            guiMain.ItemsCountLabel = listViewAudioFiles.Items.Count.ToString();
+            SetFormAttributes(0);
         }
 
-        public void SaveToFile(bool applyToAll, bool autoNext, int format, ListView listViewAudioFiles)
+        public void SaveToFile(bool applyToAll, bool autoNext)
         {
-            IFormComboBoxContainer editedTags;
-
-            int i = guiMain.CurrentIndex;
+            int i = formPropertiesObject.CurrentIndex;
             bool firstSave = true;
             IAudioFile file = ObjectFactory.GetAudioFileManager();
             int loopEnd = 0;
             int originalIndex = 0;
             string originalPath = "";
 
-            int listLength = listViewAudioFiles.Items.Count;
+            int listLength = formPropertiesObject.ListViewAudioFiles.Count;
             string filePath = "";
 
             if (listLength > 0)
@@ -84,25 +88,25 @@ namespace MP3Boss.Source.GUI.Backend
                     #region Save Changes
                     for (; i < loopEnd; i++)
                     {
-                        filePath = audioFilesList[i];
+                        filePath = AudioFilesList[i];
 
                         if (firstSave == false)
-                            this.setFormAttributes(filePath);
-
-                        editedTags = guiMain.GetComboBoxesContent();
+                            this.SetFormAttributes(filePath);
 
                         if (userDecision != "Continue")
-                            userDecision = this.FormChecker(editedTags);
+                            userDecision = this.FormChecker(formPropertiesObject);
 
-                        if (listLength != 0 && (userDecision == null || userDecision == "Continue"))
+                        bool isAllowedToSave = (userDecision == null || userDecision == "Continue");
+
+                        if (listLength != 0 && isAllowedToSave)
                         {
                             originalPath = filePath;
 
-                            file.Write(filePath, editedTags);
-                            filePath = file.Rename(filePath, editedTags, format);
-                            listViewAudioFiles.Items[i].Text = System.IO.Path.GetFileName(filePath);
-                            audioFilesList[i] = filePath;
-                            this.UpdateAudioFilesDictionary(audioFilesPathDictionary, originalPath, audioFilesList[i]);
+                            file.Write(filePath, formPropertiesObject);
+                            filePath = file.Rename(filePath, formPropertiesObject);
+                            formPropertiesObject.ListViewAudioFiles[i] = System.IO.Path.GetFileName(filePath);
+                            AudioFilesList[i] = filePath;
+                            this.UpdateAudioFilesDictionary(AudioFilesPathDictionary, originalPath, AudioFilesList[i]);
 
                             firstSave = false;
 
@@ -123,20 +127,21 @@ namespace MP3Boss.Source.GUI.Backend
                         if (applyToAll == true)
                             firstSave = false;
 
-                        guiMain.StatusLabel = "Done.";
+                        formPropertiesObject.StatusLabel = "Done.";
                     }
-                    if (i >= audioFilesList.Count)
+
+                    if (i >= AudioFilesList.Count)
                     {
-                        guiMain.CurrentIndex = 0;
-                        this.LoadFileTags(0);
+                        formPropertiesObject.CurrentIndex = 0;
+                        this.SetFormAttributes(0);
                     }
                     #endregion
 
                     #region Go to next file
                     if ((autoNext == true || userDecision == "Skip") && i < listLength)
                     {
-                        this.setFormAttributes(this.audioFilesList[i]);
-                        ++guiMain.CurrentIndex;
+                        this.SetFormAttributes(this.AudioFilesList[i]);
+                        ++formPropertiesObject.CurrentIndex;
                     }
                     #endregion
                 }
@@ -156,13 +161,13 @@ namespace MP3Boss.Source.GUI.Backend
             }
         }
 
-        private void UpdateAudioFilesDictionary(Iterate audioFilesPathDictionary, string oldPath, string newPath)
+        private void UpdateAudioFilesDictionary(Dictionary<int, string> audioFilesPathDictionary, string oldPath, string newPath)
         {
-            audioFilesPathDictionary.Remove(oldPath);
+            audioFilesPathDictionary.Remove(oldPath.GetHashCode());
 
             int newPathDictionaryIndex = newPath.GetHashCode();
 
-            audioFilesPathDictionary.Add(newPath);
+            audioFilesPathDictionary.Add(newPath.GetHashCode(), newPath);
         }
 
         private string DatabaseChooserGetPath()
@@ -171,13 +176,10 @@ namespace MP3Boss.Source.GUI.Backend
             OpenFileDialog findFile = new OpenFileDialog();
             findFile.Filter = "SQLite Files (.sqlite)|*.sqlite";
 
-            DialogResult result = findFile.ShowDialog();
+            bool result = findFile.ShowDialog().Value;
 
-            // Process input if the user clicked OK.
-            if (result == DialogResult.OK)
-            {
+            if (result)
                 path = findFile.FileName;
-            }
 
             return path;
         }
@@ -200,40 +202,41 @@ namespace MP3Boss.Source.GUI.Backend
                 return true;
         }
 
-        private void LoadTagArt(PictureBox tagArtBox, string filePath)
+        private void ClearBindingObjectCollections()
         {
-            try
+            Action<ObservableCollection<string>> clear = (collection) => collection.Clear();
+            Action<ObservableCollection<string>, bool> clearIfNotLocked = (collection, isLockedStatus) =>
             {
-                TagLib.File tagObject = TagLib.File.Create(filePath);
-                MemoryStream ms = new MemoryStream(tagObject.Tag.Pictures[0].Data.Data);
-                System.Drawing.Image image = System.Drawing.Image.FromStream(ms);
-                tagArtBox.Image = image;
-            }
-            catch (IndexOutOfRangeException)
-            {
-                tagArtBox.Image = null;
-            }
+                if (!isLockedStatus)
+                    clear(collection);
+            };
+
+            clearIfNotLocked(formPropertiesObject.Title, formPropertiesObject.CheckBoxTitle);
+            clearIfNotLocked(formPropertiesObject.Artist, formPropertiesObject.CheckBoxArtist);
+            clearIfNotLocked(formPropertiesObject.ContributingArtists, formPropertiesObject.CheckBoxContributingArtists);
+            clearIfNotLocked(formPropertiesObject.Album, formPropertiesObject.CheckBoxAlbum);
+            clearIfNotLocked(formPropertiesObject.Year, formPropertiesObject.CheckBoxYear);
+            clearIfNotLocked(formPropertiesObject.TrackNo, formPropertiesObject.CheckBoxTrackNo);
+            clearIfNotLocked(formPropertiesObject.Genre, formPropertiesObject.CheckBoxGenre);
         }
 
-        public void LoadFileTags(int index)
+        IAudioFile file = null;
+        public void SetFormAttributes(int index)
         {
-            this.setFormAttributes(this.audioFilesList[index]);
+            SetFormAttributes(AudioFilesList[index]);
         }
-
-        private void setFormAttributes(string filePath)
+        private void SetFormAttributes(string filePath)
         {
-            IAudioFile file = null;
-
             if (file == null)
                 file = new AudioFile();
 
-            this.guiMain.SetComboBoxesContent(file.Read(filePath));
+            ClearBindingObjectCollections();
+            file.Read(filePath, formPropertiesObject);
+            formPropertiesObject.FilePathLabel = filePath;
 
-            this.LoadTagArt(guiMain.TagArt, filePath);
-            guiMain.FilePathLabel = filePath;
         }
 
-        public string FormChecker(IFormComboBoxContainer audioFileTags)
+        public string FormChecker(IWindowProperties audioFileTags)
         {
             IVerify iVerifyForm = ObjectFactory.GetVerifier();
             string userDecision = null;
@@ -243,48 +246,25 @@ namespace MP3Boss.Source.GUI.Backend
                 if (userDecision == null)
                     userDecision = iVerifyForm.nullTagChecker(tag);
             };
-            Action<Iterate> checkForNullIterateTags = (tag) =>
-            {
-                if (userDecision == null)
-                    userDecision = iVerifyForm.nullTagChecker(tag);
-            };
 
-            checkForNullTags(audioFileTags.Title);
-            checkForNullTags(audioFileTags.Artist);
-            checkForNullIterateTags(audioFileTags.ContributingArtists);
-            checkForNullTags(audioFileTags.Album);
-            checkForNullIterateTags(audioFileTags.Genre);
+            checkForNullTags(audioFileTags.Title[0]);
+            checkForNullTags(audioFileTags.Artist[0]);
+            checkForNullTags(audioFileTags.ContributingArtists[0]);
+            checkForNullTags(audioFileTags.Album[0]);
+            checkForNullTags(audioFileTags.Genre[0]);
 
             return userDecision;
         }
 
-        public void SearchAndReplace(string find, string replace, bool applyToAll)
-        {
-            IAudioFile file = null;
-
-            if (file == null)
-                file = ObjectFactory.GetAudioFileManager();
-
-            if (applyToAll)
-                file.SearchAndReplace(this.AudioFilesList, find, replace);
-            else
-                file.SearchAndReplace(this.AudioFilesList[guiMain.CurrentIndex], find, replace);
-
-            this.LoadFileTags(guiMain.CurrentIndex);
-        }
-        
         IDatabaseSuggest suggestions;
         public void ManageSuggestions()
         {
-            this.CheckDBFileAndSave();
-            
+            CheckDBFileAndSave();
+
             if (suggestions == null)
                 suggestions = ObjectFactory.GetDatabaseSuggestor(Properties.Settings.Default.DatabasePath);
-            
-            List<IFormComboBoxContainer> suggestionResults = suggestions.GetSuggestions(guiMain.GetComboBoxesContent());
 
-            if (suggestionResults.Count != 0)
-                guiMain.SetComboBoxesContent(suggestionResults);
+            suggestions.GetSuggestions(formPropertiesObject);
         }
 
         IDatabaseAdd add;
@@ -295,47 +275,49 @@ namespace MP3Boss.Source.GUI.Backend
 
             if (add == null)
                 add = ObjectFactory.GetDatabaseAdd(Properties.Settings.Default.DatabasePath);
-            
-            userDecision = this.FormChecker(guiMain.GetComboBoxesContent());
+
+            userDecision = FormChecker(formPropertiesObject);
             if (userDecision == null || userDecision == "Continue")
             {
-                add.AddToDatabase(guiMain.GetComboBoxesContent());
-                guiMain.CurrentIndex += 1;
-                this.setFormAttributes(this.audioFilesList[guiMain.CurrentIndex]);
+                add.AddToDatabase(formPropertiesObject);
+                formPropertiesObject.CurrentIndex += 1;
+                if (formPropertiesObject.CurrentIndex < AudioFilesList.Count)
+                    SetFormAttributes(AudioFilesList[formPropertiesObject.CurrentIndex]);
+                else
+                    SetFormAttributes(AudioFilesList[0]);
+
                 return true;
             }
             else if (userDecision == "Skip")
             {
-                guiMain.CurrentIndex += 1;
-                this.setFormAttributes(this.audioFilesList[guiMain.CurrentIndex]);
+                formPropertiesObject.CurrentIndex += 1;
+                SetFormAttributes(AudioFilesList[formPropertiesObject.CurrentIndex]);
                 return true;
             }
             else
                 return false;
         }
 
+        public void SearchAndReplace(string find, string replace, bool applyToAll)
+        {
+            IAudioFile file = null;
+
+            if (file == null)
+                file = ObjectFactory.GetAudioFileManager();
+
+            if (applyToAll)
+                file.SearchAndReplace(AudioFilesList, find, replace);
+            else
+                file.SearchAndReplace(AudioFilesList[formPropertiesObject.CurrentIndex], find, replace);
+
+            SetFormAttributes(formPropertiesObject.CurrentIndex);
+        }
+
         #region Variables
-        
-        private List<string> audioFilesList = new List<string>();
-        public List<string> AudioFilesList
-        {
-            get { return audioFilesList; }
-            set { audioFilesList = value; }
-        }
 
-        private Iterate audioFilesPathDictionary = ObjectFactory.GetIterator();
-        public Iterate AudioFilesPathDictionary
-        {
-            get { return audioFilesPathDictionary; }
-            set { audioFilesPathDictionary = value; }
-        }
-
-        private bool firstDragAndDrop = true;
-        public bool FirstDragAndDrop
-        {
-            get { return firstDragAndDrop; }
-            set { firstDragAndDrop = value; }
-        }
+        private List<string> AudioFilesList { get; set; }
+        private Dictionary<int, string> AudioFilesPathDictionary { get; set; }
+        private bool FirstDragAndDrop { get; set; }
 
         #endregion
     }

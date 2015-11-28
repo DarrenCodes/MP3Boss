@@ -1,10 +1,9 @@
-﻿using MP3Boss.Source.Datastructures;
-using System.Collections.Generic;
+﻿using MP3Boss.Source.DataStructures;
 
 namespace MP3Boss.Source.Database
 {
     public interface IDatabaseSuggest
     {
-        List<IFormComboBoxContainer> GetSuggestions(IFormComboBoxContainer currentValues);
+        void GetSuggestions(IWindowProperties formPropertiesObject);
     }
 }

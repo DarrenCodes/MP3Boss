@@ -229,7 +229,7 @@ namespace SQLite
 		public Task RunInTransactionAsync (Action<SQLiteAsyncConnection> action)
 		{
 			return Task.Factory.StartNew (() => {
-				var conn = this.GetConnection ();
+				var conn = GetConnection ();
 				using (conn.Lock ()) {
 					conn.BeginTransaction ();
 					try {
@@ -248,7 +248,7 @@ namespace SQLite
         {
             return Task.Factory.StartNew(() =>
             {
-                var conn = this.GetConnection();
+                var conn = GetConnection();
                 using (conn.Lock())
                 {
                     conn.BeginTransaction();
@@ -391,7 +391,7 @@ namespace SQLite
 
 		internal CreateTablesResult ()
 		{
-			this.Results = new Dictionary<Type, int> ();
+			Results = new Dictionary<Type, int> ();
 		}
 	}
 

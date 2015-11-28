@@ -1,85 +1,99 @@
-﻿using System.Drawing;
-using MP3Boss.Source.Datastructures;
-using MP3Boss.Source.Objects;
-using System.IO;
+﻿using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace MP3Boss.Source.File
 {
-    public class FileTagTools : IFileTagTools
+    public class FileTagTools : IFileTagTools, IFileTagImages
     {
         TagLib.File audioFile;
 
         public FileTagTools(string file_path)
         {
-            audioFile = TagLib.File.Create(file_path);
+            if (System.IO.File.Exists(file_path))
+                audioFile = TagLib.File.Create(file_path);
         }
+
         #region Properties
         public string Title
         {
             get { return audioFile.Tag.Title; }
             set { audioFile.Tag.Title = value; }
         }
-        public string ArtistName
+        public string Artist
         {
             get { return audioFile.Tag.FirstAlbumArtist; }
             set { audioFile.Tag.AlbumArtists = new string[1] { value }; }
         }
-        public Iterate ContributingArtistName
+        char[] filter = { ' ', ';' };
+        public string ContributingArtists
         {
             get
             {
-                Iterate contributingArtists = ObjectFactory.GetIterator();
+                string contributingArtists = "";
                 foreach (string artist in audioFile.Tag.Performers)
                 {
-                    contributingArtists.Add(artist);
+                    contributingArtists += artist + "; ";
                 }
-                return contributingArtists;
+                return contributingArtists.TrimEnd(filter);
             }
-            set { audioFile.Tag.Performers = value.ToArray(); }
+            set { audioFile.Tag.Performers = value.Split(';'); }
         }
-        public string AlbumName
+        public string Album
         {
             get { return audioFile.Tag.Album; }
             set { audioFile.Tag.Album = value; }
         }
-        public uint SongYear
+        public string Year
         {
-            get { return audioFile.Tag.Year; }
-            set { audioFile.Tag.Year = value; }
+            get { return audioFile.Tag.Year.ToString(); }
+            set { audioFile.Tag.Year = uint.Parse(value); }
         }
-        public uint TrackNo
+        public string TrackNo
         {
-            get { return audioFile.Tag.Track; }
-            set { audioFile.Tag.Track = value; }
+            get { return audioFile.Tag.Track.ToString(); }
+            set { audioFile.Tag.Track = uint.Parse(value); }
         }
-        public Iterate Genre
+        public string Genre
         {
             get
             {
-                Iterate genres = ObjectFactory.GetIterator();
+                string genres = "";
                 foreach (string genre in audioFile.Tag.Genres)
                 {
-                    genres.Add(genre);
+                    genres += genre + "; ";
                 }
-                return genres;
+                return genres.TrimEnd(filter);
             }
-            set { audioFile.Tag.Genres = value.ToArray(); }
+            set { audioFile.Tag.Genres = value.Split(';'); }
         }
 
-        public Image GetTagArt
+        public BitmapImage TagArt
         {
             get
             {
-                MemoryStream ms = new MemoryStream(audioFile.Tag.Pictures[0].Data.Data);
-                System.Drawing.Image image = System.Drawing.Image.FromStream(ms);
-                return image;
+                try
+                {
+                    BitmapImage image = new BitmapImage();
+                    using (MemoryStream ms = new MemoryStream(audioFile.Tag.Pictures[0].Data.Data))
+                    {
+                        image.BeginInit();
+                        image.StreamSource = ms;
+                        image.CacheOption = BitmapCacheOption.OnLoad;
+                        image.EndInit();
+                    }
+                    return image;
+                }
+                catch (System.IndexOutOfRangeException e)
+                {
+                    return null;
+                }
             }
         }
+        #endregion
 
         public void Save()
         {
             audioFile.Save();
         }
-        #endregion
     }
 }

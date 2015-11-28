@@ -1,4 +1,4 @@
-﻿using MP3Boss.Source.Datastructures;
+﻿using MP3Boss.Source.DataStructures;
 using MP3Boss.Source.GUI;
 
 namespace MP3Boss.Source.Validation
@@ -10,16 +10,7 @@ namespace MP3Boss.Source.Validation
         {
             string msgBoxResult = null;
 
-            if (tag.Length == 0)
-                msgBoxResult = checkFormMessage();
-
-            return msgBoxResult;
-        }
-        public string nullTagChecker(Iterate tag)
-        {
-            string msgBoxResult = null;
-
-            if (tag.Count() == 0)
+            if (tag == null || tag.Length == 0)
                 msgBoxResult = checkFormMessage();
 
             return msgBoxResult;
@@ -28,9 +19,9 @@ namespace MP3Boss.Source.Validation
         //Prompts the user to check the tags loaded in the form or to ignore
         public string checkFormMessage(bool reset = false)
         {
-            CheckMessageForm checkForm = null;
+            CheckMessageWindow checkForm = null;
             if (checkForm == null)
-                checkForm = new CheckMessageForm();
+                checkForm = new CheckMessageWindow();
 
             if (reset)
                 checkForm.ApplyToAll = false;
