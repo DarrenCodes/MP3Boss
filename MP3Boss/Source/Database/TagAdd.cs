@@ -1,5 +1,6 @@
 ﻿using System;
 using MP3Boss.Source.Datastructures;
+using MP3Boss.Source.Objects;
 
 namespace MP3Boss.Source.Database
 {
@@ -7,9 +8,9 @@ namespace MP3Boss.Source.Database
     {
         IQuery tagDB;
 
-        public TagAdd(IQuery tagDB)
+        public TagAdd(string db_path)
         {
-            this.tagDB = tagDB;
+            this.tagDB = ObjectFactory.GetQuerier(db_path);
         }
 
         public bool AddToDatabase(IFormComboBoxContainer valueToAdd)

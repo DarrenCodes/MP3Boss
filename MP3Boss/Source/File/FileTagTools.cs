@@ -1,13 +1,15 @@
-﻿using MP3Boss.Source.Datastructures;
+﻿using System.Drawing;
+using MP3Boss.Source.Datastructures;
 using MP3Boss.Source.Objects;
+using System.IO;
 
 namespace MP3Boss.Source.File
 {
-    public class TagLibrary : ITagLibrary
+    public class FileTagTools : IFileTagTools
     {
         TagLib.File audioFile;
 
-        public TagLibrary(string file_path)
+        public FileTagTools(string file_path)
         {
             audioFile = TagLib.File.Create(file_path);
         }
@@ -62,6 +64,16 @@ namespace MP3Boss.Source.File
                 return genres;
             }
             set { audioFile.Tag.Genres = value.ToArray(); }
+        }
+
+        public Image GetTagArt
+        {
+            get
+            {
+                MemoryStream ms = new MemoryStream(audioFile.Tag.Pictures[0].Data.Data);
+                System.Drawing.Image image = System.Drawing.Image.FromStream(ms);
+                return image;
+            }
         }
 
         public void Save()

@@ -9,9 +9,9 @@ namespace MP3Boss.Source.Database
     {
         IQuery tagDB;
 
-        public TagSuggest(IQuery tagDB)
+        public TagSuggest(string db_path)
         {
-            this.tagDB = tagDB;
+            this.tagDB = ObjectFactory.GetQuerier(db_path);
         }
 
         private IFormComboBoxContainer FillFormComboBoxesStruct(IFormComboBoxContainer singleResult, IQuery queryResult, bool firstIteration)

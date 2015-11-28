@@ -2,8 +2,9 @@
 
 namespace MP3Boss.Source.File
 {
-    public interface ITagLibrary : IReadAndWriteable
+    public interface IFileTagTools : IReadAndWriteable
     {
         void Save();
+        System.Drawing.Image GetTagArt { get; }
     }
 }

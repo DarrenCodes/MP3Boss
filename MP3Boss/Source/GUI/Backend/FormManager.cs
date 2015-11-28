@@ -238,51 +238,65 @@ namespace MP3Boss.Source.GUI.Backend
             IVerify iVerifyForm = ObjectFactory.GetVerifier();
             string userDecision = null;
 
-            if (userDecision == null)
-                userDecision = iVerifyForm.nullTagChecker(audioFileTags.Title);
-            if (userDecision == null)
-                userDecision = iVerifyForm.nullTagChecker(audioFileTags.Artist);
-            if (userDecision == null)
-                userDecision = iVerifyForm.nullTagChecker(audioFileTags.ContributingArtists);
-            if (userDecision == null)
-                userDecision = iVerifyForm.nullTagChecker(audioFileTags.Album);
-            if (userDecision == null)
-                userDecision = iVerifyForm.nullTagChecker(audioFileTags.Genre);
+            Action<string> checkForNullTags = (tag) =>
+            {
+                if (userDecision == null)
+                    userDecision = iVerifyForm.nullTagChecker(tag);
+            };
+            Action<Iterate> checkForNullIterateTags = (tag) =>
+            {
+                if (userDecision == null)
+                    userDecision = iVerifyForm.nullTagChecker(tag);
+            };
+
+            checkForNullTags(audioFileTags.Title);
+            checkForNullTags(audioFileTags.Artist);
+            checkForNullIterateTags(audioFileTags.ContributingArtists);
+            checkForNullTags(audioFileTags.Album);
+            checkForNullIterateTags(audioFileTags.Genre);
 
             return userDecision;
         }
 
-        IQuery tagDB;
+        public void SearchAndReplace(string find, string replace, bool applyToAll)
+        {
+            IAudioFile file = null;
+
+            if (file == null)
+                file = ObjectFactory.GetAudioFileManager();
+
+            if (applyToAll)
+                file.SearchAndReplace(this.AudioFilesList, find, replace);
+            else
+                file.SearchAndReplace(this.AudioFilesList[guiMain.CurrentIndex], find, replace);
+
+            this.LoadFileTags(guiMain.CurrentIndex);
+        }
+        
         IDatabaseSuggest suggestions;
-        IDatabaseAdd add;
-        string userDecision = null;
         public void ManageSuggestions()
         {
             this.CheckDBFileAndSave();
-
-            if (tagDB == null)
-                tagDB = ObjectFactory.GetQuerier(Properties.Settings.Default.DatabasePath);
-
+            
             if (suggestions == null)
-                suggestions = ObjectFactory.GetDatabaseSuggestor(tagDB);
-            IFormComboBoxContainer currentComboBoxContent = guiMain.GetComboBoxesContent();
-
-            List<IFormComboBoxContainer> suggestionResults = suggestions.GetSuggestions(currentComboBoxContent);
+                suggestions = ObjectFactory.GetDatabaseSuggestor(Properties.Settings.Default.DatabasePath);
+            
+            List<IFormComboBoxContainer> suggestionResults = suggestions.GetSuggestions(guiMain.GetComboBoxesContent());
 
             if (suggestionResults.Count != 0)
                 guiMain.SetComboBoxesContent(suggestionResults);
         }
+
+        IDatabaseAdd add;
+        string userDecision = null;
         public bool ManageAdditionsToDB()
         {
-            IFormComboBoxContainer tags = guiMain.GetComboBoxesContent();
-
-            if (tagDB == null)
-                tagDB = ObjectFactory.GetQuerier(Properties.Settings.Default.DatabasePath);
+            this.CheckDBFileAndSave();
 
             if (add == null)
-                add = ObjectFactory.GetDatabaseAdd(tagDB);
-
-            userDecision = this.FormChecker(tags);
+                add = ObjectFactory.GetDatabaseAdd(Properties.Settings.Default.DatabasePath);
+            
+            userDecision = this.FormChecker(guiMain.GetComboBoxesContent());
             if (userDecision == null || userDecision == "Continue")
             {
                 add.AddToDatabase(guiMain.GetComboBoxesContent());
@@ -300,23 +314,8 @@ namespace MP3Boss.Source.GUI.Backend
                 return false;
         }
 
-        public void SearchAndReplace(string find, string replace, bool applyToAll)
-        {
-            IAudioFile file = null;
-
-            if (file == null)
-                file = ObjectFactory.GetAudioFileManager();
-
-            if (applyToAll)
-                file.SearchAndReplace(this.audioFilesList, find, replace);
-            else
-                file.SearchAndReplace(this.audioFilesList[guiMain.CurrentIndex], find, replace);
-
-            this.LoadFileTags(guiMain.CurrentIndex);
-        }
-
         #region Variables
-
+        
         private List<string> audioFilesList = new List<string>();
         public List<string> AudioFilesList
         {

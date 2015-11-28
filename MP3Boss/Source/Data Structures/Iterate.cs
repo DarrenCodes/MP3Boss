@@ -21,5 +21,6 @@ namespace MP3Boss.Source.Datastructures
         void Remove(string value);
         int Count();
         string FirstEntry();
+        bool Contains(string item);
     }
 }

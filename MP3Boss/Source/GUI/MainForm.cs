@@ -7,7 +7,6 @@ using MP3Boss.Source.GUI.Backend;
 using MP3Boss.Source.Objects;
 using MP3Boss.Source.Datastructures;
 using MP3Boss.Source.Validation;
-using System.Threading;
 
 namespace MP3Boss.Source.GUI
 {
@@ -236,6 +235,11 @@ namespace MP3Boss.Source.GUI
                 MessageBoxIcon.Information);
         }
 
+        private void cBoxSelectAll_CheckedChanged(object sender, EventArgs e)
+        {
+            this.SetCheckBoxes(this.cBoxSelectAll.Checked);
+        }
+
         private void listViewAudioFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listViewAudioFiles.Items.Count != 0)
@@ -271,12 +275,7 @@ namespace MP3Boss.Source.GUI
                     this.listViewAudioFiles);
             }
         }
-
-        private void cBoxSelectAll_CheckedChanged(object sender, EventArgs e)
-        {
-            this.SetCheckBoxes(this.cBoxSelectAll.Checked);
-        }
-
+        
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             manageForm.RefreshListView(this.listViewAudioFiles);
@@ -394,7 +393,7 @@ namespace MP3Boss.Source.GUI
         }
         public void ResetForm()
         {
-            this.btnClear.PerformClick();
+            this.ClearFormAttributes();
             this.listViewAudioFiles.Items.Clear();
             this.FilePathLabel = "";
             this.StatusLabel = "";

@@ -5,7 +5,7 @@ using System.Data.SQLite;
 
 namespace MP3Boss.Source.Database
 {
-    class Query : TagDB, IQuery
+    class Query : IQuery
     {
         private SQLiteDataReader readerResult;
         private string path;
@@ -18,13 +18,25 @@ namespace MP3Boss.Source.Database
             this.path = databasePath;
         }
 
+        private static SQLiteConnection ConnectToDB(string path)
+        {
+            SQLiteConnection newConnection = null;
+            if (System.IO.File.Exists(path))
+            {
+                newConnection = new SQLiteConnection("Data Source=" + path + ";Version=3");
+                newConnection.Open();
+            }
+
+            return newConnection;
+        }
+
         #region Execute queries
         //Queries that require no return value
         public bool SQLNonQuery(string query)
         {
             bool operationWasSuccessful = false;
 
-            SQLiteCommand command = new SQLiteCommand(base.connectToDB(path));
+            SQLiteCommand command = new SQLiteCommand(ConnectToDB(path));
             command.CommandText = query;
             command.ExecuteNonQuery();
 
@@ -35,11 +47,10 @@ namespace MP3Boss.Source.Database
         {
             bool operationWasSuccessful = false;
 
-            SQLiteCommand command = new SQLiteCommand(base.connectToDB(path));
+            SQLiteCommand command = new SQLiteCommand(ConnectToDB(path));
             command.CommandText = query;
-
             this.readerResult = command.ExecuteReader();
-
+            
             return operationWasSuccessful;
         }
         #endregion

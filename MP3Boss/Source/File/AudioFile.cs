@@ -14,9 +14,12 @@ namespace MP3Boss.Source.File
         {
             if (System.IO.File.Exists(file))
             {
-                audioFilesDictionary.Add(file);
-                audioFilesList.Add(file);
-                listViewAudioFiles.Items.Add(System.IO.Path.GetFileName(file));
+                if (!audioFilesDictionary.Contains(file))
+                {
+                    audioFilesDictionary.Add(file);
+                    audioFilesList.Add(file);
+                    listViewAudioFiles.Items.Add(System.IO.Path.GetFileName(file));
+                }
                 return true;
             }
             else return false;
@@ -73,7 +76,7 @@ namespace MP3Boss.Source.File
 
         public bool Write(string filePath, IFormComboBoxContainer tagUpdates)
         {
-            ITagLibrary file = ObjectFactory.GetTagLibrary(filePath);
+            IFileTagTools file = ObjectFactory.GetTagLibrary(filePath);
             file.Title = tagUpdates.Title;
             file.ArtistName = tagUpdates.Artist;
             file.ContributingArtistName = tagUpdates.ContributingArtists;

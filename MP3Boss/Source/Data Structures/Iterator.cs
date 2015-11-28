@@ -54,6 +54,11 @@ namespace MP3Boss.Source.Datastructures
             return dictionary.Count;
         }
 
+        public bool Contains(string item)
+        {
+            return dictionary.ContainsValue(item);
+        }
+
         public IEnumerator<string> GetEnumerator()
         {
             return dictionary.Values.GetEnumerator();
