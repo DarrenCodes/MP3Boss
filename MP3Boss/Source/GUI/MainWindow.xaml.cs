@@ -13,15 +13,15 @@ namespace MP3Boss.Source.GUI
 {
     public partial class MainWindow : Window
     {
-        IFormManager manageForm;
-        IWindowProperties formPropertiesObject;
+        IFormManager FormManagerObject;
+        IWindowProperties BindingObject;
 
         public MainWindow()
         {
-            formPropertiesObject = ObjectFactory.GetBindingObject();
             InitializeComponent();
-            DataContext = formPropertiesObject;
-            manageForm = ObjectFactory.GetFormManager(formPropertiesObject);
+            BindingObject = ObjectFactory.GetBindingObject();
+            DataContext = BindingObject;
+            FormManagerObject = ObjectFactory.GetFormManager(BindingObject);
             EnableWindowElements(false);
         }
 
@@ -80,7 +80,7 @@ namespace MP3Boss.Source.GUI
 
         public void ClearFormAttributes()
         {
-            Action<ToggleButton, Collection<string>> clear = (checkbox, collection) =>
+            Action<ToggleButton, ObservableCollection<string>> clear = (checkbox, collection) =>
             {
                 if (checkbox.IsChecked != true)
                 {
@@ -88,27 +88,27 @@ namespace MP3Boss.Source.GUI
                 }
             };
 
-            clear(cBoxTitle, formPropertiesObject.Title);
-            clear(cBoxAlbumArtist, formPropertiesObject.Artist);
-            clear(cBoxContArtists, formPropertiesObject.ContributingArtists);
-            clear(cBoxAlbum, formPropertiesObject.Album);
-            clear(cBoxYear, formPropertiesObject.Year);
-            clear(cBoxTrackNo, formPropertiesObject.TrackNo);
-            clear(cBoxGenres, formPropertiesObject.Genre);
+            clear(cBoxTitle, BindingObject.Title);
+            clear(cBoxAlbumArtist, BindingObject.Artist);
+            clear(cBoxContArtists, BindingObject.ContributingArtists);
+            clear(cBoxAlbum, BindingObject.Album);
+            clear(cBoxYear, BindingObject.Year);
+            clear(cBoxTrackNo, BindingObject.TrackNo);
+            clear(cBoxGenres, BindingObject.Genre);
         }
 
         public void ResetForm()
         {
             ClearFormAttributes();
-            formPropertiesObject.FilePathLabel = "";
-            formPropertiesObject.StatusLabel = "";
-            formPropertiesObject.AudioFilesCountLabel = "";
-            formPropertiesObject.ListViewAudioFiles = new ObservableCollection<string>();
+            BindingObject.FilePathLabel = "";
+            BindingObject.StatusLabel = "";
+            BindingObject.AudioFilesCountLabel = "";
+            BindingObject.FullPathAudioFilesList = null;
             cBoxSelectAll.IsChecked = false;
             cBoxApplyToAll.IsChecked = false;
             cBoxAutoNext.IsChecked = false;
             tagArtPictureBox.Source = null;
-            manageForm.Reset();
+            FormManagerObject.Reset();
         }
         #endregion
 
@@ -124,8 +124,8 @@ namespace MP3Boss.Source.GUI
         private void listViewAudioFiles_DragDrop(object sender, DragEventArgs e)
         {
             string[] dropedFiles = (string[])e.Data.GetData(DataFormats.FileDrop, false);
-            manageForm.FillFileList(dropedFiles);
-            formPropertiesObject.AudioFilesCountLabel = listViewAudioFiles.Items.Count.ToString();
+            FormManagerObject.FillFileList(dropedFiles);
+            BindingObject.AudioFilesCountLabel = listViewAudioFiles.Items.Count.ToString();
             EnableWindowElements(true);
         }
 
@@ -167,12 +167,12 @@ namespace MP3Boss.Source.GUI
         {
             if (listViewAudioFiles.Items.Count != 0)
             {
-                formPropertiesObject.StatusLabel = "";
+                BindingObject.StatusLabel = "";
                 ClearFormAttributes();
 
-                formPropertiesObject.CurrentIndex = listViewAudioFiles.SelectedIndex;
+                BindingObject.CurrentIndex = listViewAudioFiles.SelectedIndex;
 
-                manageForm.SetFormAttributes(formPropertiesObject.CurrentIndex);
+                FormManagerObject.SetFormAttributes(BindingObject.CurrentIndex);
             }
         }
 
@@ -183,21 +183,21 @@ namespace MP3Boss.Source.GUI
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
-            if (formPropertiesObject.ListViewAudioFiles.Count > 0)
-                manageForm.SetFormAttributes(formPropertiesObject.CurrentIndex);
+            if (BindingObject.FullPathAudioFilesList.Count > 0)
+                FormManagerObject.SetFormAttributes(BindingObject.CurrentIndex);
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (formPropertiesObject.ListViewAudioFiles.Count > 0)
+            if (BindingObject.FullPathAudioFilesList.Count > 0)
             {
-                manageForm.SaveToFile(cBoxApplyToAll.IsChecked.Value, cBoxAutoNext.IsChecked.Value);
+                FormManagerObject.SaveToFile(cBoxApplyToAll.IsChecked.Value, cBoxAutoNext.IsChecked.Value);
             }
         }
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            manageForm.RefreshListView();
+            FormManagerObject.RefreshListView();
         }
 
         private void cBoxApplyToAll_CheckedChanged(object sender, RoutedEventArgs e)
@@ -213,7 +213,7 @@ namespace MP3Boss.Source.GUI
 
         private void btnSearchAndReplace_Click(object sender, RoutedEventArgs e)
         {
-            SearchAndReplaceWindow searchForm = new SearchAndReplaceWindow(manageForm);
+            SearchAndReplaceWindow searchForm = new SearchAndReplaceWindow(FormManagerObject);
             searchForm.Show();
         }
 
@@ -225,28 +225,28 @@ namespace MP3Boss.Source.GUI
 
         private void btnSuggest_Click(object sender, RoutedEventArgs e)
         {
-            manageForm.ManageSuggestions();
+            FormManagerObject.ManageSuggestions();
         }
         private void btnSuggest_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-            manageForm.CheckDBFileAndSave(true);
+            FormManagerObject.CheckDBFileAndSave(true);
         }
 
         bool isSuccessful = true;
         private void btnAddToDB_Click(object sender, RoutedEventArgs e)
         {
-            isSuccessful = manageForm.ManageAdditionsToDB();
+            isSuccessful = FormManagerObject.ManageAdditionsToDB();
             if (isSuccessful)
-                formPropertiesObject.StatusLabel = "Done.";
+                BindingObject.StatusLabel = "Done.";
         }
 
         private void btnAddToDB_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             for (int i = 0; (i < listViewAudioFiles.Items.Count) && isSuccessful; i++)
-                isSuccessful = manageForm.ManageAdditionsToDB();
+                isSuccessful = FormManagerObject.ManageAdditionsToDB();
 
             if (isSuccessful)
-                formPropertiesObject.StatusLabel = "Done.";
+                BindingObject.StatusLabel = "Done.";
         }
         #endregion
     }

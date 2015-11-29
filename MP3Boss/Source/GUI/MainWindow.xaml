@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MP3Boss"
         mc:Ignorable="d"
+        Icon="pack://application:,,,/icon.ico"
         Title="MP3Boss" Height="550.578" Width="1057.605" WindowStartupLocation="CenterScreen">
     <Grid Background="White">
         <Grid.RowDefinitions>
@@ -124,7 +125,7 @@
                 <DropShadowEffect Color="#FFF3F3F3" BlurRadius="10" ShadowDepth="3"/>
             </ComboBox.Effect>
         </ComboBox>
-        <ListView x:Name="listViewAudioFiles" ItemsSource="{Binding ListViewAudioFiles}" Grid.Column="2" Margin="5,25,5,0" Grid.Row="1" Grid.RowSpan="3" Opacity="0.7" Foreground="#FF043171" BorderBrush="White" AllowDrop="True" DragEnter="listViewAudioFiles_DragEnter" Drop="listViewAudioFiles_DragDrop" SelectionChanged="listViewAudioFiles_SelectionChanged" ToolTip="List of all entered songs"/>
+        <ListView x:Name="listViewAudioFiles" ItemsSource="{Binding ListViewAudioFilesList}" Grid.Column="2" Margin="5,25,5,0" Grid.Row="1" Grid.RowSpan="3" Opacity="0.7" Foreground="#FF043171" BorderBrush="White" AllowDrop="True" DragEnter="listViewAudioFiles_DragEnter" Drop="listViewAudioFiles_DragDrop" SelectionChanged="listViewAudioFiles_SelectionChanged" ToolTip="List of all entered songs"/>
         <Button x:Name="btnCheckFormMsg" Content="C" Grid.Column="3" HorizontalAlignment="Left" Margin="0,29,0,0" Grid.Row="1" VerticalAlignment="Top" Width="19" Height="22" BorderBrush="White" Background="#FF00DDFF" Foreground="White" Click="btnCheckFormMsg_Click" ToolTip="Pops up the Check Form Message box">
             <Button.Effect>
                 <DropShadowEffect Color="#FFF3F3F3" ShadowDepth="3"/>

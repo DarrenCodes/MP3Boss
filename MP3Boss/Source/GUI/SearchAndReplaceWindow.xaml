@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MP3Boss.Source.GUI"
         mc:Ignorable="d"
-        Title="Search &amp; Replace" Height="196" Width="299" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Icon="pack://application:,,,/icon.ico"
+        Title="Search &amp; Replace" Height="196" Width="299" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Topmost="True">
     <Grid x:Name="MainGrid">
         <TextBox x:Name="tBoxFind" HorizontalAlignment="Left" Height="23" Margin="78,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" Foreground="#FF00DDFF">
             <TextBox.Effect>

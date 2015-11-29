@@ -1,6 +1,7 @@
 ﻿using MP3Boss.Source.DataStructures;
 using MP3Boss.Source.Objects;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace MP3Boss.Source.Database

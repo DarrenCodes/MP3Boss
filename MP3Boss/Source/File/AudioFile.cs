@@ -12,20 +12,19 @@ namespace MP3Boss.Source.File
 {
     public class AudioFile : IAudioFile
     {
-        private bool FillWithFiles(string file, List<string> AudioFilesList, ObservableCollection<string> ListViewCollection, Dictionary<int, string> AudioFilesDictionary)
+        private bool FillWithFiles(string file, ObservableCollection<string> ListViewAudioFilesList, List<string> FullPathAudioFilesList)
         {
-            if (System.IO.File.Exists(file) && !AudioFilesDictionary.Values.Contains(file))
+            if (System.IO.File.Exists(file) && !FullPathAudioFilesList.Contains(file))
             {
-                AudioFilesDictionary.Add(file.GetHashCode(), file);
-                AudioFilesList.Add(file);
-                ListViewCollection.Add(System.IO.Path.GetFileName(file));
+                FullPathAudioFilesList.Add(file);
+                ListViewAudioFilesList.Add(System.IO.Path.GetFileName(file));
                 return true;
             }
             else return false;
         }
 
         //Gets all Audio files in selected directory(s)
-        public bool GetAudioFiles(string[] dropedFiles, List<string> AudioFilesList, ObservableCollection<string> ListViewCollection, Dictionary<int, string> AudioFilesDictionary)
+        public bool GetAudioFiles(string[] dropedFiles, ObservableCollection<string> ListViewAudioFilesList, List<string> FullPathAudioFilesList)
         {
             bool newValuesAdded = false;
 
@@ -33,7 +32,7 @@ namespace MP3Boss.Source.File
             {
                 foreach (string file in filesList.Where(s => s.EndsWith(".mp3") || s.EndsWith(".m4a")))
                 {
-                    newValuesAdded = FillWithFiles(file, AudioFilesList, ListViewCollection, AudioFilesDictionary);
+                    newValuesAdded = FillWithFiles(file, ListViewAudioFilesList, FullPathAudioFilesList);
                 };
             };
 
@@ -58,7 +57,7 @@ namespace MP3Boss.Source.File
                 else if (subDirectorySelection == MessageBoxResult.No)
                     getFiles(Directory.GetFiles(folder, "*.*"));
             }
-            
+
             return newValuesAdded;
         }
 
@@ -100,8 +99,7 @@ namespace MP3Boss.Source.File
 
             string fileDirectoryPath = System.IO.Path.GetDirectoryName(filePath);
 
-            string validFilenameFormat = @"^[\w\-.\(\)\[\]\s&']+$";
-            string invalidFilenameChars = @"[^\w\-.\(\)\s&']+";
+            string invalidFilenameChars = @"[\\/:?*""<>|]+";
 
             string formattedFileName = "";
 
@@ -149,7 +147,7 @@ namespace MP3Boss.Source.File
 
             if (formattedFileName != "")
             {
-                if (Regex.IsMatch(formattedFileName, validFilenameFormat))
+                if (!Regex.IsMatch(formattedFileName, invalidFilenameChars))
                     return formattedFileName;
                 else
                 {
@@ -193,9 +191,7 @@ namespace MP3Boss.Source.File
             if (audioFilesList != null && audioFilesList.Count != 0)
             {
                 foreach (string path in audioFilesList)
-                {
                     this.SearchAndReplace(path, find, replace);
-                }
             }
             else
                 MessageBox.Show("No files found.", "Error!");

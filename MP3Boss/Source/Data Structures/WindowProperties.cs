@@ -1,11 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
 
 namespace MP3Boss.Source.DataStructures
 {
-
     public class WindowProperties : IWindowProperties
     {
         public WindowProperties()
@@ -18,7 +18,8 @@ namespace MP3Boss.Source.DataStructures
             TrackNo = new ObservableCollection<string>();
             Genre = new ObservableCollection<string>();
 
-            ListViewAudioFiles = new ObservableCollection<string>();
+            ListViewAudioFilesList = new ObservableCollection<string>();
+            FullPathAudioFilesList = new List<string>();
         }
 
         #region Tag Properties
@@ -26,8 +27,8 @@ namespace MP3Boss.Source.DataStructures
         public ObservableCollection<string> Artist { get; set; }
         public ObservableCollection<string> ContributingArtists { get; set; }
         public ObservableCollection<string> Album { get; set; }
-        public ObservableCollection<string> Year {get; set;}
-        public ObservableCollection<string> TrackNo {  get; set; }
+        public ObservableCollection<string> Year { get; set; }
+        public ObservableCollection<string> TrackNo { get; set; }
         public ObservableCollection<string> Genre { get; set; }
 
         private BitmapImage tagArt;
@@ -72,10 +73,11 @@ namespace MP3Boss.Source.DataStructures
                     currentIndex = 0;
             }
         }
-
+        public int DictionaryIndex { get; set; }
         public int Format { get; set; }
 
-        public ObservableCollection<string> ListViewAudioFiles { get; set; }
+        public ObservableCollection<string> ListViewAudioFilesList { get; set; }
+        public List<string> FullPathAudioFilesList { get; set; }
 
         public bool CheckBoxTitle { get; set; }
         public bool CheckBoxArtist { get; set; }

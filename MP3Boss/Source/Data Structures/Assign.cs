@@ -11,7 +11,8 @@ namespace MP3Boss.Source.DataStructures
             Action<ObservableCollection<string>, string, bool> AddTo = (LHS, RHS, IsLocked) =>
             {
                 if (!IsLocked)
-                    LHS.Add(RHS);
+                    if (!LHS.Contains(RHS))
+                        LHS.Add(RHS);
             };
 
             AddTo(Left.Title, Right.Title, LockedStatus.CheckBoxTitle);

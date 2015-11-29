@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MP3Boss.Source.GUI"
         mc:Ignorable="d"
-        Title="Important!" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
+        Icon="pack://application:,,,/icon.ico"
+        Title="Important!" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" Topmost="True">
     <Grid x:Name="MainGrid">
         <Button x:Name="btnYes" Content="Yes" Margin="0,164,200,0" HorizontalAlignment="Right" Width="66" BorderBrush="White" Background="#FF00DDFF" Foreground="White" Click="btnYes_Click" Height="22" VerticalAlignment="Top">
             <Button.Effect>
