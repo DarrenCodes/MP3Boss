@@ -1,0 +1,92 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib"
+                    xmlns:local="clr-namespace:MP3Boss">
+
+    <!--MainWindow-->
+    <!--Buttons Content-->
+    <system:String x:Key="contentFileMenuItem">File</system:String>
+    <system:String x:Key="contentResetAllMenuItem">Reset All...</system:String>
+    <system:String x:Key="contentCloseMenuItem">Close...</system:String>
+    <system:String x:Key="contentHelpMenuItem">Help</system:String>
+    <system:String x:Key="contentHowToMenuItem">How To...</system:String>
+
+    <system:String x:Key="contentBtnReset">Reset</system:String>
+    <system:String x:Key="contentBtnClear">Clear</system:String>
+    <system:String x:Key="contentBtnSuggest">Suggest...</system:String>
+    
+    <system:String x:Key="contentBtnRefresh">Refresh</system:String>
+    <system:String x:Key="contentBtnSave">Save</system:String>
+    
+    <system:String x:Key="contentBtnCheckFormMsg">C</system:String>
+    <system:String x:Key="contentBtnSearchReplace">S</system:String>
+    <system:String x:Key="contentBtnAddToDB">A</system:String>
+
+    <!--Buttons ToolTip-->
+    <system:String x:Key="tipBtnReset">Resets the text boxes above to their original values</system:String>
+    <system:String x:Key="tipBtnClear">Clears the text boxes above</system:String>
+    <system:String x:Key="tipBtnSuggest">Suggests values for the text boxes above depending on the value entered</system:String>
+
+    <system:String x:Key="tipBtnRefresh">Refreshes the audio files list above</system:String>
+    <system:String x:Key="tipBtnSave">Saves any changes made to the audio file</system:String>
+
+    <system:String x:Key="tipBtnCheckFormMsg">Pops up the Check Form Message box</system:String>
+    <system:String x:Key="tipBtnSearchReplace">Pops up the Search And Replace window</system:String>
+    <system:String x:Key="tipBtnAddToDB">Adds the current or all songs into the selected database</system:String>
+
+    <!--CheckBoxes Content-->
+    <system:String x:Key="contentCBoxTitle">Title:</system:String>
+    <system:String x:Key="contentCBoxAlbumArtist">Album Artist:</system:String>
+    <system:String x:Key="contentCBoxContArtists">Contributing Artist(s):</system:String>
+    <system:String x:Key="contentCBoxAlbum">Album:</system:String>
+    <system:String x:Key="contentCBoxYear">Year:</system:String>
+    <system:String x:Key="contentCBoxTrackNo">Track no.:</system:String>
+    <system:String x:Key="contentCBoxGenres">Genre(s):</system:String>
+
+    <system:String x:Key="contentCBoxSelectAll">Select All...</system:String>
+
+    <system:String x:Key="contentCBoxApplyToAll">Apply To All:</system:String>
+    <system:String x:Key="contentCBoxAutoNext">AutoNext</system:String>
+    
+    <!--CheckBoxes ToolTip-->
+    <system:String x:Key="tipCBoxTitle">Locks the entered title text</system:String>
+    <system:String x:Key="tipCBoxAlbumArtist">Locks the entered album artist text</system:String>
+    <system:String x:Key="tipCBoxContArtists">Locks the entered contributing artist(s) text</system:String>
+    <system:String x:Key="tipCBoxAlbum">Locks the entered album name text</system:String>
+    <system:String x:Key="tipCBoxYear">Locks the entered song year text</system:String>
+    <system:String x:Key="tipCBoxTrackNo">Locks the entered song track number text</system:String>
+    <system:String x:Key="tipCBoxGenres">Locks the entered song genre text</system:String>
+
+    <system:String x:Key="tipCBoxSelectAll">Selects all the lock boxes above</system:String>
+
+    <system:String x:Key="tipCBoxApplyToAll">Applies any changes made to all files in the list above</system:String>
+    <system:String x:Key="tipCBoxAutoNext">Will automatically move to the next file in the list once the current file is saved</system:String>
+
+    <!--ComboBoxes ToolTip-->
+    <system:String x:Key="tipComboBoxTitle">Selected song's title</system:String>
+    <system:String x:Key="tipComboBoxAlbumArtist">Selected song's album artist's name</system:String>
+    <system:String x:Key="tipComboBoxContArtists">Selected song's contributing artists</system:String>
+    <system:String x:Key="tipComboBoxAlbum">Selected song's album name</system:String>
+    <system:String x:Key="tipComboBoxYear">Selected song's release year</system:String>
+    <system:String x:Key="tipComboBoxTrackNo">Selected song's track number</system:String>
+    <system:String x:Key="tipComboBoxGenres">Selected song's genre</system:String>
+
+    <system:String x:Key="tipComboBoxFormat">A list of formats to select from when wanting to format the file names of the audio files</system:String>
+
+    <!--ComboBoxes Items-->
+    <system:String x:Key="item1ComboBoxFormat">1: #. Title - Artist</system:String>
+    <system:String x:Key="item2ComboBoxFormat">2: #. Artist - Title</system:String>
+    <system:String x:Key="item3ComboBoxFormat">3: Artist - Title</system:String>
+    <system:String x:Key="item4ComboBoxFormat">4: #. Title</system:String>
+    <system:String x:Key="item5ComboBoxFormat">5: Title - Artist</system:String>
+
+    <!--Other ToolTip-->
+    <system:String x:Key="tipLblFileName">Displays the physical path of the selected file in storage</system:String>
+    <system:String x:Key="tipLblStatus">Shows whether the operation was executed successfully</system:String>
+    <system:String x:Key="tipLblItemsCount">Displays the amount of files in the list above</system:String>
+
+    <system:String x:Key="tipTagArtPictureBox">Displays the tag art (if any) of the selected audio file</system:String>
+
+    <system:String x:Key="tipListViewAudioFiles">List of all entered songs</system:String>
+
+</ResourceDictionary>

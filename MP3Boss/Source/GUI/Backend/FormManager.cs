@@ -24,8 +24,8 @@ namespace MP3Boss.Source.GUI.Backend
 
         public void Reset()
         {
-            formPropertiesObject.FullPathAudioFilesList = new List<string>();
-            formPropertiesObject.ListViewAudioFilesList = new ObservableCollection<string>();
+            formPropertiesObject.FullPathAudioFilesList.Clear();
+            formPropertiesObject.ListViewAudioFilesList.Clear();
             FirstDragAndDrop = true;
         }
 
@@ -221,7 +221,8 @@ namespace MP3Boss.Source.GUI.Backend
         IAudioFile file = null;
         public void SetFormAttributes(int index)
         {
-            SetFormAttributes(formPropertiesObject.FullPathAudioFilesList[index]);
+            if (formPropertiesObject.FullPathAudioFilesList.Count > index)
+                SetFormAttributes(formPropertiesObject.FullPathAudioFilesList[index]);
         }
         private void SetFormAttributes(string filePath)
         {
@@ -312,7 +313,7 @@ namespace MP3Boss.Source.GUI.Backend
         }
 
         #region Variables
-        
+
         private bool FirstDragAndDrop { get; set; }
 
         #endregion

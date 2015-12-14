@@ -12,34 +12,28 @@ namespace MP3Boss.Source.File
 {
     public class AudioFile : IAudioFile
     {
-        private bool FillWithFiles(string file, ObservableCollection<string> ListViewAudioFilesList, List<string> FullPathAudioFilesList)
-        {
-            if (System.IO.File.Exists(file) && !FullPathAudioFilesList.Contains(file))
-            {
-                FullPathAudioFilesList.Add(file);
-                ListViewAudioFilesList.Add(System.IO.Path.GetFileName(file));
-                return true;
-            }
-            else return false;
-        }
-
         //Gets all Audio files in selected directory(s)
-        public bool GetAudioFiles(string[] dropedFiles, ObservableCollection<string> ListViewAudioFilesList, List<string> FullPathAudioFilesList)
+        public void GetAudioFiles(string[] dropedFiles, ObservableCollection<string> ListViewAudioFilesList, List<string> FullPathAudioFilesList)
         {
-            bool newValuesAdded = false;
+            List<string> UnprocessedDroppedItems = dropedFiles.ToList();
 
-            Action<string[]> getFiles = (filesList) =>
+            Action<string[]> GetFiles = (filesList) =>
             {
                 foreach (string file in filesList.Where(s => s.EndsWith(".mp3") || s.EndsWith(".m4a")))
                 {
-                    newValuesAdded = FillWithFiles(file, ListViewAudioFilesList, FullPathAudioFilesList);
+                    if (System.IO.File.Exists(file) && !FullPathAudioFilesList.Contains(file))
+                    {
+                        FullPathAudioFilesList.Add(file);
+                        ListViewAudioFilesList.Add(System.IO.Path.GetFileName(file));
+                        UnprocessedDroppedItems.Remove(file);
+                    }
                 };
             };
 
-            getFiles(dropedFiles);
+            GetFiles(dropedFiles);
 
             List<string> folders = new List<string>();
-            foreach (string folder in dropedFiles)
+            foreach (string folder in UnprocessedDroppedItems)
             {
                 if (System.IO.Directory.Exists(folder))
                     folders.Add(folder);
@@ -53,12 +47,10 @@ namespace MP3Boss.Source.File
             foreach (string folder in folders)
             {
                 if (subDirectorySelection == MessageBoxResult.Yes)
-                    getFiles(Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories));
+                    GetFiles(Directory.GetFiles(folder, "*.*", SearchOption.AllDirectories));
                 else if (subDirectorySelection == MessageBoxResult.No)
-                    getFiles(Directory.GetFiles(folder, "*.*"));
+                    GetFiles(Directory.GetFiles(folder, "*.*"));
             }
-
-            return newValuesAdded;
         }
 
         public void Read(string filePath, IWindowProperties formPropertiesObject)
@@ -93,7 +85,15 @@ namespace MP3Boss.Source.File
 
         private string GenerateFormattedName(string filePath, IWindowProperties formPropertiesObject)
         {
-            string title = formPropertiesObject.Title[0];
+            Func<ObservableCollection<string>, string> nullCheck = (collection) =>
+            {
+                if (!(collection == null))
+                    return collection[0];
+                else
+                    return "";
+            };
+
+            string title = nullCheck(formPropertiesObject.Title);
             uint track = uint.Parse(formPropertiesObject.TrackNo[0]);
             string artist = formPropertiesObject.Artist[0];
 
@@ -173,16 +173,12 @@ namespace MP3Boss.Source.File
         public void SearchAndReplace(string filePath, string find, string replacement)
         {
             IFileTagTools tags = ObjectFactory.GetTagLibrary(filePath);
-
-            Func<string, string> replace = (property) => property.Replace(find, replacement);
-
-            tags.Title = replace(tags.Title);
-            tags.Artist = replace(tags.Artist);
-            tags.ContributingArtists = replace(tags.ContributingArtists);
-            tags.TrackNo = replace(tags.TrackNo);
-            tags.Year = replace(tags.Year);
-            tags.Album = replace(tags.Album);
-            tags.Genre = replace(tags.Genre);
+            
+            tags.Title = tags.Title.Replace(find, replacement);
+            tags.Artist = tags.Artist.Replace(find, replacement);
+            tags.ContributingArtists = tags.ContributingArtists.Replace(find, replacement);
+            tags.Album = tags.Album.Replace(find, replacement);
+            tags.Genre = tags.Genre.Replace(find, replacement);
 
             tags.Save();
         }

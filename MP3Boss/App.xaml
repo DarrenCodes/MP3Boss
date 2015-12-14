@@ -4,6 +4,11 @@
              xmlns:local="clr-namespace:MP3Boss"
              StartupUri="..\..\Source\GUI\MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Themes/Turquoise.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Languages/en.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

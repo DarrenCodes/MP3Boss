@@ -17,7 +17,6 @@ namespace MP3Boss.Source.DataStructures
 
         int CurrentIndex { get; set; }
         int Format { get; set; }
-        int DictionaryIndex { get; set; }
 
         #region Locked Status
         bool CheckBoxTitle { get; set; }

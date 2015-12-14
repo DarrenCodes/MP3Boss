@@ -71,7 +71,7 @@ namespace MP3Boss.Source.File
         {
             get
             {
-                try
+                if (!(audioFile.Tag.Pictures == null || audioFile.Tag.Pictures.Length == 0))
                 {
                     BitmapImage image = new BitmapImage();
                     using (MemoryStream ms = new MemoryStream(audioFile.Tag.Pictures[0].Data.Data))
@@ -83,10 +83,8 @@ namespace MP3Boss.Source.File
                     }
                     return image;
                 }
-                catch (System.IndexOutOfRangeException e)
-                {
+                else
                     return null;
-                }
             }
         }
         #endregion

@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP3Boss", "MP3Boss\MP3Boss.csproj", "{1701C163-43E1-47D2-8532-6B2775BD1790}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MP3Boss.Tests", "MP3Boss.Tests\MP3Boss.Tests.csproj", "{2860297F-2F25-4256-8D4F-5938A86C0157}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{1701C163-43E1-47D2-8532-6B2775BD1790}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1701C163-43E1-47D2-8532-6B2775BD1790}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1701C163-43E1-47D2-8532-6B2775BD1790}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2860297F-2F25-4256-8D4F-5938A86C0157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2860297F-2F25-4256-8D4F-5938A86C0157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2860297F-2F25-4256-8D4F-5938A86C0157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2860297F-2F25-4256-8D4F-5938A86C0157}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

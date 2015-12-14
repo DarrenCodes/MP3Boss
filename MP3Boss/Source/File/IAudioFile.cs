@@ -6,7 +6,7 @@ namespace MP3Boss.Source.File
 {
     public interface IAudioFile
     {
-        bool GetAudioFiles(string[] dropedFiles, ObservableCollection<string> ListViewAudioFilesList, List<string> FullPathAudioFilesList);
+        void GetAudioFiles(string[] dropedFiles, ObservableCollection<string> ListViewAudioFilesList, List<string> FullPathAudioFilesList);
         void Read(string filePath, IWindowProperties formPropertiesObject);
         bool Write(string filePath, IWindowProperties formPropertiesObject);
         string Rename(string filePath, IWindowProperties formPropertiesObject);

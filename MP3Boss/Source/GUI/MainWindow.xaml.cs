@@ -16,6 +16,8 @@ namespace MP3Boss.Source.GUI
         IFormManager FormManagerObject;
         IWindowProperties BindingObject;
 
+        bool containsItems;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -40,6 +42,7 @@ namespace MP3Boss.Source.GUI
             check(cBoxGenres);
         }
 
+        System.Windows.Media.Brush listViewBackground;
         public void EnableWindowElements(bool directoryIsSet)
         {
             Action<UIElement> enable = (setting) => setting.IsEnabled = directoryIsSet;
@@ -76,6 +79,13 @@ namespace MP3Boss.Source.GUI
 
             enable(btnSuggest);
             enable(btnAddToDB);
+
+
+            if (directoryIsSet)
+            {
+                listViewBackground = listViewAudioFiles.Background;
+                listViewAudioFiles.Background = null;
+            }
         }
 
         public void ClearFormAttributes()
@@ -103,12 +113,12 @@ namespace MP3Boss.Source.GUI
             BindingObject.FilePathLabel = "";
             BindingObject.StatusLabel = "";
             BindingObject.AudioFilesCountLabel = "";
-            BindingObject.FullPathAudioFilesList = null;
             cBoxSelectAll.IsChecked = false;
             cBoxApplyToAll.IsChecked = false;
             cBoxAutoNext.IsChecked = false;
-            tagArtPictureBox.Source = null;
+            BindingObject.TagArt = null;
             FormManagerObject.Reset();
+            listViewAudioFiles.Background = listViewBackground;
         }
         #endregion
 
@@ -125,13 +135,18 @@ namespace MP3Boss.Source.GUI
         {
             string[] dropedFiles = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             FormManagerObject.FillFileList(dropedFiles);
-            BindingObject.AudioFilesCountLabel = listViewAudioFiles.Items.Count.ToString();
-            EnableWindowElements(true);
+            if (listViewAudioFiles.Items.Count > 0)
+            {
+                BindingObject.AudioFilesCountLabel = listViewAudioFiles.Items.Count.ToString();
+                EnableWindowElements(true);
+                containsItems = true;
+            }
         }
 
         private void ResetAllMenuItem_Click(object sender, RoutedEventArgs e)
         {
             ResetForm();
+            containsItems = false;
         }
 
         private void CloseMenuItem_Click(object sender, RoutedEventArgs e)
@@ -165,7 +180,7 @@ namespace MP3Boss.Source.GUI
 
         private void listViewAudioFiles_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (listViewAudioFiles.Items.Count != 0)
+            if (containsItems)
             {
                 BindingObject.StatusLabel = "";
                 ClearFormAttributes();
@@ -183,13 +198,13 @@ namespace MP3Boss.Source.GUI
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
-            if (BindingObject.FullPathAudioFilesList.Count > 0)
+            if (containsItems)
                 FormManagerObject.SetFormAttributes(BindingObject.CurrentIndex);
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (BindingObject.FullPathAudioFilesList.Count > 0)
+            if (containsItems)
             {
                 FormManagerObject.SaveToFile(cBoxApplyToAll.IsChecked.Value, cBoxAutoNext.IsChecked.Value);
             }
@@ -235,9 +250,12 @@ namespace MP3Boss.Source.GUI
         bool isSuccessful = true;
         private void btnAddToDB_Click(object sender, RoutedEventArgs e)
         {
-            isSuccessful = FormManagerObject.ManageAdditionsToDB();
-            if (isSuccessful)
-                BindingObject.StatusLabel = "Done.";
+            if (containsItems)
+            {
+                isSuccessful = FormManagerObject.ManageAdditionsToDB();
+                if (isSuccessful)
+                    BindingObject.StatusLabel = "Done.";
+            }
         }
 
         private void btnAddToDB_DoubleClick(object sender, MouseButtonEventArgs e)
