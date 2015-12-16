@@ -9,6 +9,7 @@ using MP3Boss.Source.Database;
 using System.Windows;
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace MP3Boss.Source.GUI.Backend
 {
@@ -143,17 +144,19 @@ namespace MP3Boss.Source.GUI.Backend
                     }
                     #endregion
                 }
-                catch (FileNotFoundException ex)
+                catch (FileNotFoundException)
                 {
                     MessageBox.Show("The file was not found.", "Warning!");
                 }
                 catch (IOException ex)
                 {
                     MessageBox.Show("An unexpected error occured while trying to save the changes made.", "Warning!");
+                    ErrorLogging.Logger(ex.ToString());
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("An unexpected error occured. Sorry.", "Warning!");
+                    ErrorLogging.Logger(ex.ToString());
                 }
                 #endregion
             }

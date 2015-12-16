@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace MP3Boss.Source.File
@@ -91,7 +92,14 @@ namespace MP3Boss.Source.File
 
         public void Save()
         {
-            audioFile.Save();
+            try
+            {
+                audioFile.Save();
+            }
+            catch (System.UnauthorizedAccessException)
+            {
+                MessageBox.Show(string.Format("The file: '{0}' does not allow the editing of its tags.", Title), "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

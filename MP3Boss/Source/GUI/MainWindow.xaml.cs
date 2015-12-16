@@ -4,6 +4,7 @@ using MP3Boss.Source.Objects;
 using MP3Boss.Source.Validation;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -266,6 +267,12 @@ namespace MP3Boss.Source.GUI
             if (isSuccessful)
                 BindingObject.StatusLabel = "Done.";
         }
+
+        private void ComboBoxFormat_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            BindingObject.Format = comboBoxFormat.SelectedIndex;
+        }
         #endregion
+
     }
 }

@@ -274,7 +274,7 @@
                 <DropShadowEffect Color="{DynamicResource DropShadowColour}"/>
             </Label.Effect>
         </Label>
-        <ComboBox x:Name="comboBoxFormat" Grid.Column="2" Margin="0,0,201,17" Grid.Row="4" VerticalAlignment="Bottom" Height="20" HorizontalAlignment="Right" Width="126" BorderBrush="White" ToolTip="{DynamicResource tipComboBoxFormat}">
+        <ComboBox x:Name="comboBoxFormat" Grid.Column="2" Margin="0,0,201,17" Grid.Row="4" VerticalAlignment="Bottom" Height="20" HorizontalAlignment="Right" Width="126" BorderBrush="White" ToolTip="{DynamicResource tipComboBoxFormat}" SelectionChanged="ComboBoxFormat_SelectionChanged">
             <ComboBox.Foreground>
                 <SolidColorBrush Color="{DynamicResource ComboBoxFontColour}"/>
             </ComboBox.Foreground>

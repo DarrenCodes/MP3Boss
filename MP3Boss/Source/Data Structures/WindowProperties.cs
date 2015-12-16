@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -85,7 +86,7 @@ namespace MP3Boss.Source.DataStructures
         public bool CheckBoxYear { get; set; }
         public bool CheckBoxTrackNo { get; set; }
         public bool CheckBoxGenre { get; set; }
-        
+
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
