@@ -118,6 +118,7 @@ namespace MP3Boss.Source.GUI.Backend
                         else if (userDecision == "Yes")
                         {
                             firstSave = true;
+                            formPropertiesObject.CurrentIndex = i;
                             break;
                         }
                         else if (userDecision == "Skip")
