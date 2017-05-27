@@ -5,6 +5,7 @@
              StartupUri="..\..\Source\GUI\MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+            <local:ViewModelLocator x:Key="ViewModelLocator"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Themes/Turquoise.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Languages/en.xaml"/>

@@ -1,0 +1,14 @@
+D:\Mixed\I.T\Projects\C#\MP3Boss - WPF\MP3Boss - WPF\bin\Debug\MP3Boss - WPF.exe.config
+D:\Mixed\I.T\Projects\C#\MP3Boss - WPF\MP3Boss - WPF\bin\Debug\MP3Boss - WPF.exe
+D:\Mixed\I.T\Projects\C#\MP3Boss - WPF\MP3Boss - WPF\bin\Debug\MP3Boss - WPF.pdb
+D:\Mixed\I.T\Projects\C#\MP3Boss - WPF\MP3Boss - WPF\obj\Debug\MP3Boss - WPF.csprojResolveAssemblyReference.cache
+D:\Mixed\I.T\Projects\C#\MP3Boss - WPF\MP3Boss - WPF\obj\Debug\MainWindow.g.cs
+D:\Mixed\I.T\Projects\C#\MP3Boss - WPF\MP3Boss - WPF\obj\Debug\App.g.cs
+D:\Mixed\I.T\Projects\C#\MP3Boss - WPF\MP3Boss - WPF\obj\Debug\MP3Boss - WPF_MarkupCompile.cache
+D:\Mixed\I.T\Projects\C#\MP3Boss - WPF\MP3Boss - WPF\obj\Debug\MP3Boss - WPF_MarkupCompile.lref
+D:\Mixed\I.T\Projects\C#\MP3Boss - WPF\MP3Boss - WPF\obj\Debug\MainWindow.baml
+D:\Mixed\I.T\Projects\C#\MP3Boss - WPF\MP3Boss - WPF\obj\Debug\MP3Boss - WPF.g.resources
+D:\Mixed\I.T\Projects\C#\MP3Boss - WPF\MP3Boss - WPF\obj\Debug\MP3Boss___WPF.Properties.Resources.resources
+D:\Mixed\I.T\Projects\C#\MP3Boss - WPF\MP3Boss - WPF\obj\Debug\MP3Boss - WPF.csproj.GenerateResource.Cache
+D:\Mixed\I.T\Projects\C#\MP3Boss - WPF\MP3Boss - WPF\obj\Debug\MP3Boss - WPF.exe
+D:\Mixed\I.T\Projects\C#\MP3Boss - WPF\MP3Boss - WPF\obj\Debug\MP3Boss - WPF.pdb

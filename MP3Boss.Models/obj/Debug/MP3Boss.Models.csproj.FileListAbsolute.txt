@@ -1,0 +1,4 @@
+E:\Mixed\I.T\Projects\C#\MP3Boss\MP3Boss\MP3Boss.Models\bin\Debug\MP3Boss.Models.dll
+E:\Mixed\I.T\Projects\C#\MP3Boss\MP3Boss\MP3Boss.Models\bin\Debug\MP3Boss.Models.pdb
+E:\Mixed\I.T\Projects\C#\MP3Boss\MP3Boss\MP3Boss.Models\obj\Debug\MP3Boss.Models.dll
+E:\Mixed\I.T\Projects\C#\MP3Boss\MP3Boss\MP3Boss.Models\obj\Debug\MP3Boss.Models.pdb

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using MP3Boss.Source.File;
-using MP3Boss.Source.Objects;
-using MP3Boss.Source.DataStructures;
-using MP3Boss.Source.Validation;
+﻿using Microsoft.Win32;
 using MP3Boss.Source.Database;
-using System.Windows;
-using Microsoft.Win32;
+using MP3Boss.Source.Validation;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.IO;
+using System.Windows;
 
 namespace MP3Boss.Source.GUI.Backend
 {
@@ -231,7 +227,7 @@ namespace MP3Boss.Source.GUI.Backend
         private void SetFormAttributes(string filePath)
         {
             if (file == null)
-                file = new AudioFile();
+                file = new FileDirectoryManipulation();
 
             ClearBindingObjectCollections();
             file.Read(filePath, formPropertiesObject);

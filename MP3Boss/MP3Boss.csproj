@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MP3Boss</RootNamespace>
     <AssemblyName>MP3Boss</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -29,6 +29,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -53,6 +54,10 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.5.0\lib\net45\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SQLiteDB">
       <HintPath>..\..\MP3Boss\SQLiteDB\SQLiteDB\bin\Debug\SQLiteDB.dll</HintPath>
     </Reference>
@@ -71,9 +76,6 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="taglib-sharp">
-      <HintPath>..\..\MP3Boss\MP3Boss\MP3Boss\bin\Debug\taglib-sharp.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -83,21 +85,32 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Source\Data Structures\Assign.cs" />
+    <Compile Include="ViewModelLocator.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\SearchAndReplaceWindowViewModel.cs" />
+    <Compile Include="ViewModels\TagCheckWindowViewModel.cs" />
+    <Compile Include="ViewModels\TagPairViewModel.cs" />
+    <Compile Include="ViewModels\TagViewModel.cs" />
     <Compile Include="Source\GUI\Backend\FormManager.cs" />
     <Compile Include="Source\GUI\Backend\IFormManager.cs" />
-    <Compile Include="Source\GUI\CheckMessageWindow.xaml.cs">
+    <Compile Include="Views\CheckMessageWindow.xaml.cs">
       <DependentUpon>CheckMessageWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Source\GUI\SearchAndReplaceWindow.xaml.cs">
+    <Compile Include="Views\SearchAndReplaceWindow.xaml.cs">
       <DependentUpon>SearchAndReplaceWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Source\Logging\ErrorLogging.cs" />
-    <Compile Include="Source\Objects\ObjectFactory.cs" />
-    <Compile Include="Source\Objects\Requirements\IReadAndWriteable.cs" />
     <Compile Include="Source\Validation\IVerify.cs" />
     <Compile Include="Source\Validation\Verify.cs" />
-    <Page Include="Source\GUI\MainWindow.xaml">
+    <Page Include="Languages\en.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Turquoise.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -105,8 +118,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Source\Data Structures\WindowProperties.cs" />
-    <Compile Include="Source\Data Structures\IWindowProperties.cs" />
     <Compile Include="Source\Database\IDatabaseAdd.cs" />
     <Compile Include="Source\Database\IDatabaseSuggest.cs" />
     <Compile Include="Source\Database\IQuery.cs" />
@@ -116,27 +127,15 @@
     <Compile Include="Source\Database\TagAdd.cs" />
     <Compile Include="Source\Database\TagDelete.cs" />
     <Compile Include="Source\Database\TagSuggest.cs" />
-    <Compile Include="Source\File\AudioFile.cs" />
-    <Compile Include="Source\File\IAudioFile.cs" />
-    <Compile Include="Source\File\IFileTagTools.cs" />
-    <Compile Include="Source\File\FileTagTools.cs" />
-    <Compile Include="Source\GUI\MainWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Source\GUI\CheckMessageWindow.xaml">
+    <Page Include="Views\CheckMessageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Source\GUI\SearchAndReplaceWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Languages\en.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Turquoise.xaml">
+    <Page Include="Views\SearchAndReplaceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -159,6 +158,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -185,6 +185,23 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Styles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MP3Boss.BLL\MP3Boss.BLL.csproj">
+      <Project>{0b97c335-01dd-4bf3-94ec-61a71b29cdef}</Project>
+      <Name>MP3Boss.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MP3Boss.Common\MP3Boss.Common.csproj">
+      <Project>{1C5FB1BB-F04C-405B-9A55-F40CA6A88D56}</Project>
+      <Name>MP3Boss.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MP3Boss.Models\MP3Boss.Models.csproj">
+      <Project>{99EE8C05-14BD-4D10-9837-02D4ABD3C6C3}</Project>
+      <Name>MP3Boss.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

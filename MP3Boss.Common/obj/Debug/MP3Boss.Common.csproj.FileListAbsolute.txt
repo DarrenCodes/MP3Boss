@@ -1,0 +1,7 @@
+E:\Mixed\I.T\Projects\C#\MP3Boss\MP3Boss\MP3Boss.Common\bin\Debug\MP3Boss.Common.dll
+E:\Mixed\I.T\Projects\C#\MP3Boss\MP3Boss\MP3Boss.Common\bin\Debug\MP3Boss.Common.pdb
+E:\Mixed\I.T\Projects\C#\MP3Boss\MP3Boss\MP3Boss.Common\bin\Debug\MP3Boss.Models.dll
+E:\Mixed\I.T\Projects\C#\MP3Boss\MP3Boss\MP3Boss.Common\bin\Debug\MP3Boss.Models.pdb
+E:\Mixed\I.T\Projects\C#\MP3Boss\MP3Boss\MP3Boss.Common\obj\Debug\MP3Boss.Common.csprojResolveAssemblyReference.cache
+E:\Mixed\I.T\Projects\C#\MP3Boss\MP3Boss\MP3Boss.Common\obj\Debug\MP3Boss.Common.dll
+E:\Mixed\I.T\Projects\C#\MP3Boss\MP3Boss\MP3Boss.Common\obj\Debug\MP3Boss.Common.pdb
