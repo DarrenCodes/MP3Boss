@@ -3,9 +3,8 @@ using System.IO;
 
 namespace MP3Boss.DAL.Files
 {
-    class FileDirectoryDAL : IManipulateFileDirectoryDAL
+    public class FileDirectoryDAL : IManipulateFileDirectoryDAL
     {
-
         public void RenameFile(string currentFilePath, string newFileName)
         {
             File.Move(currentFilePath, newFileName);

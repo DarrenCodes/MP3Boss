@@ -6,7 +6,7 @@ using System.Windows.Media.Imaging;
 
 namespace MP3Boss.DAL.FileTags
 {
-    class FileTagsDAL : IManipulateFileTagsDAL
+    public class FileTagsDAL : IManipulateFileTagsDAL
     {
         TagLib.File audioFile;
         string filePath;
@@ -32,7 +32,7 @@ namespace MP3Boss.DAL.FileTags
             string contributingArtists = "";
             foreach (string artist in audioFile.Tag.Performers)
             {
-                contributingArtists += artist + "; ";
+                contributingArtists += artist + ";";
             }
             fileTags.ContributingArtists = contributingArtists.TrimEnd(filter);
 

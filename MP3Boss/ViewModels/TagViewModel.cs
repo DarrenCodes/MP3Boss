@@ -1,15 +1,19 @@
 ﻿using MP3Boss.Common.Interfaces;
 using MP3Boss.Models.Models;
-using System.ComponentModel;
 using System.Windows.Media.Imaging;
 
 namespace MP3Boss.ViewModels
 {
-    class TagViewModel : INotifyPropertyChanged, IAmFileTags
+    public class TagViewModel : IAmFileTags
     {
+        #region Members
+        IManipulateFileTagsBLL _manipulateFileTagsBLL;
+
+        bool _selectAll;
+        #endregion
+
         #region Properties 
         #region Data
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public TagPair<string> Title { get; }
 
@@ -29,26 +33,22 @@ namespace MP3Boss.ViewModels
         #endregion
 
         #region General
-        public bool DisableNotifyPropertyChangedEvent { get; set; }
+        public bool SelectAll { get { return _selectAll; } set { _selectAll = value; UpdateCheckBoxes(value); } }
         #endregion
-        #endregion
-
-        #region Members
-        IManipulateFileTagsBLL _manipulateFileTagsBLL;
         #endregion
 
         #region Constructors
 
         public TagViewModel(IManipulateFileTagsBLL manipulateFileTagsBLL)
         {
-            Title = new TagPair<string>(PropertyChanged);
-            Artist = new TagPair<string>(PropertyChanged);
-            ContributingArtists = new TagPair<string>(PropertyChanged);
-            Album = new TagPair<string>(PropertyChanged);
-            Year = new TagPair<string>(PropertyChanged);
-            TrackNo = new TagPair<string>(PropertyChanged);
-            Genre = new TagPair<string>(PropertyChanged);
-            TagArt = new TagPair<BitmapImage>(PropertyChanged);
+            Title = new TagPair<string>();
+            Artist = new TagPair<string>();
+            ContributingArtists = new TagPair<string>();
+            Album = new TagPair<string>();
+            Year = new TagPair<string>();
+            TrackNo = new TagPair<string>();
+            Genre = new TagPair<string>();
+            TagArt = new TagPair<BitmapImage>();
 
             _manipulateFileTagsBLL = manipulateFileTagsBLL;
         }
@@ -65,6 +65,18 @@ namespace MP3Boss.ViewModels
         public void Load(string filePath)
         {
             _manipulateFileTagsBLL.Load(filePath, this);
+        }
+
+        private void UpdateCheckBoxes(bool selectAll)
+        {
+            Title.LockedStatus = selectAll;
+            Artist.LockedStatus = selectAll;
+            ContributingArtists.LockedStatus = selectAll;
+            Album.LockedStatus = selectAll;
+            Year.LockedStatus = selectAll;
+            TrackNo.LockedStatus = selectAll;
+            Genre.LockedStatus = selectAll;
+            TagArt.LockedStatus = selectAll;
         }
         #endregion
     }

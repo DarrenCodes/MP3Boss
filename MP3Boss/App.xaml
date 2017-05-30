@@ -1,11 +1,9 @@
 ﻿<Application x:Class="MP3Boss.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:MP3Boss"
-             StartupUri="..\..\Source\GUI\MainWindow.xaml">
+             xmlns:local="clr-namespace:MP3Boss">
     <Application.Resources>
         <ResourceDictionary>
-            <local:ViewModelLocator x:Key="ViewModelLocator"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Themes/Turquoise.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Languages/en.xaml"/>

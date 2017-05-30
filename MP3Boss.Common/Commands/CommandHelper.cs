@@ -5,9 +5,9 @@ namespace MP3Boss.Common.Commands
 {
     public class CommandHandler : ICommand
     {
-        private Action _action;
+        private Action<object> _action;
         private bool _canExecute;
-        public CommandHandler(Action action, bool canExecute = true)
+        public CommandHandler(Action<object> action, bool canExecute = true)
         {
             _action = action;
             _canExecute = canExecute;
@@ -22,7 +22,7 @@ namespace MP3Boss.Common.Commands
 
         public void Execute(object parameter)
         {
-            _action();
+            _action(parameter);
         }
     }
 }

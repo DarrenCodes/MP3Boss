@@ -1,8 +1,6 @@
-﻿using MP3Boss.Source.Objects.Requirements;
-
-namespace MP3Boss.Source.Database
-{ 
-    public interface IQuery : IReadAndWriteable<string>
+﻿namespace MP3Boss.Source.Database
+{
+    public interface IQuery
     {
         bool ExecuteSQLQuery(string query);
         bool SQLNonQuery(string query);

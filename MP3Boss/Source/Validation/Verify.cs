@@ -1,5 +1,4 @@
-﻿using MP3Boss.Source.DataStructures;
-using MP3Boss.Source.GUI;
+﻿using MP3Boss.Source.GUI;
 
 namespace MP3Boss.Source.Validation
 {

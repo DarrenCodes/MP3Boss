@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace MP3Boss.Models.Models
 {
-    public class TagPair<T>
+    public class TagPair<T> : INotifyPropertyChanged
     {
         T _item;
         public T Item { get { return _item; } set { _item = value; OnPropertyChanged(); } }
@@ -11,16 +11,11 @@ namespace MP3Boss.Models.Models
         bool _lockedStatus;
         public bool LockedStatus { get { return _lockedStatus; } set { _lockedStatus = value; OnPropertyChanged(); } }
 
-        event PropertyChangedEventHandler _propertyChanged;
-
-        public TagPair(PropertyChangedEventHandler PropertyChanged)
-        {
-            _propertyChanged = PropertyChanged;
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged([CallerMemberName]string caller = null)
         {
-            _propertyChanged?.Invoke(this, new PropertyChangedEventArgs(caller));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(caller));
         }
     }
 }

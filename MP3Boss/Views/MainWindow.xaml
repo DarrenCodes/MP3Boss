@@ -3,10 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+        xmlns:local="clr-namespace:MP3Boss.ViewModels"
         mc:Ignorable="d"
         Icon="pack://application:,,,/icon.ico"
-        Title="MP3Boss" Height="550.578" Width="1057.605" WindowStartupLocation="CenterScreen">
-    <UserControl DataContext="{Binding MainWindowViewModel, Source={StaticResource ViewModelLocator}}">
+        Title="MP3Boss" Height="550.578" Width="1057.605" WindowStartupLocation="CenterScreen"
+        d:DataContext="{d:DesignInstance  local:MainWindowViewModel }">
+    <UserControl>
         <Grid>
             <Grid.Background>
                 <SolidColorBrush Color="White"/>
@@ -20,34 +24,55 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="153"/>
-                <ColumnDefinition Width="61*"/>
-                <ColumnDefinition Width="91*"/>
+                <ColumnDefinition Width="66*"/>
+                <ColumnDefinition Width="284*"/>
+                <ColumnDefinition Width="523*"/>
                 <ColumnDefinition Width="Auto" MinWidth="24"/>
             </Grid.ColumnDefinitions>
-            <Menu x:Name="menu" Height="24" VerticalAlignment="Top" Grid.ColumnSpan="4" Margin="0,0,1,0">
+            <Menu Height="24" 
+                  VerticalAlignment="Top" 
+                  Grid.ColumnSpan="5" 
+                  Margin="0,0,1,0">
                 <Menu.Foreground>
                     <SolidColorBrush Color="{DynamicResource BackgroundColour}"/>
                 </Menu.Foreground>
                 <Menu.Background>
                     <SolidColorBrush Color="#FF00DDFF"/>
                 </Menu.Background>
-                <MenuItem x:Name="fileMenuItem" Header="{DynamicResource contentFileMenuItem}" BorderBrush="White" Foreground="White">
-                    <MenuItem x:Name="resetAllMenuItem" Header="{DynamicResource contentResetAllMenuItem}" BorderBrush="White" Padding="0,0,0,3" Click="ResetAllMenuItem_Click">
+                <MenuItem Header="{DynamicResource contentFileMenuItem}" 
+                          BorderBrush="White" 
+                          Foreground="White">
+                    <MenuItem Header="{DynamicResource contentResetAllMenuItem}"
+                              BorderBrush="White" 
+                              Padding="0,0,0,3" >
                         <MenuItem.Background>
                             <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                         </MenuItem.Background>
                     </MenuItem>
-                    <MenuItem x:Name="closeMenuItem" Header="{DynamicResource contentCloseMenuItem}" BorderBrush="White" Padding="0" Click="CloseMenuItem_Click">
+                    <MenuItem Header="{DynamicResource contentCloseMenuItem}" 
+                              BorderBrush="White" 
+                              Padding="0">
                         <MenuItem.Background>
                             <SolidColorBrush Color="{Binding Mode=OneWay, Source={StaticResource OutterColour}}"/>
                         </MenuItem.Background>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem x:Name="helpMenuItem" Header="{DynamicResource contentHelpMenuItem}" BorderBrush="White" Foreground="White" Click="HowToMenu_Click">
-                    <MenuItem x:Name="howToMenuItem" Header="{DynamicResource contentHowToMenuItem}" Background="#FF00DDFF" BorderBrush="White"/>
+                <MenuItem Header="{DynamicResource contentHelpMenuItem}"
+                          BorderBrush="White"
+                          Foreground="White">
+                    <MenuItem Header="{DynamicResource contentHowToMenuItem}" 
+                              Background="#FF00DDFF" 
+                              BorderBrush="White"/>
                 </MenuItem>
             </Menu>
-            <CheckBox Content="{DynamicResource contentCBoxTitle}" IsChecked="{Binding TagViewModel.Title.LockedStatus, Mode=TwoWay}" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Margin="10,29,0,0" BorderBrush="White" ToolTip="{DynamicResource tipCBoxTitle}">
+            <CheckBox Content="{DynamicResource contentCBoxTitle}" 
+                      IsChecked="{Binding TagViewModel.Title.LockedStatus, Mode=TwoWay}"
+                      HorizontalAlignment="Left" 
+                      Grid.Row="1"
+                      VerticalAlignment="Top" 
+                      Margin="10,29,0,0"
+                      BorderBrush="White"
+                      ToolTip="{DynamicResource tipCBoxTitle}">
                 <CheckBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </CheckBox.Foreground>
@@ -55,7 +80,14 @@
                     <DropShadowEffect Color="{DynamicResource DropShadowColour}"/>
                 </CheckBox.Effect>
             </CheckBox>
-            <CheckBox x:Name="cBoxAlbumArtist" Content="{DynamicResource contentCBoxAlbumArtist}" IsChecked="{Binding TagViewModel.Artist.LockedStatus, Mode=TwoWay}" HorizontalAlignment="Left" Margin="10,55,0,0" Grid.Row="1" VerticalAlignment="Top" BorderBrush="White" ToolTip="{DynamicResource tipCBoxAlbumArtist}">
+            <CheckBox Content="{DynamicResource contentCBoxAlbumArtist}" 
+                      IsChecked="{Binding TagViewModel.Artist.LockedStatus, Mode=TwoWay}" 
+                      HorizontalAlignment="Left" 
+                      Margin="10,55,0,0" 
+                      Grid.Row="1" 
+                      VerticalAlignment="Top" 
+                      BorderBrush="White" 
+                      ToolTip="{DynamicResource tipCBoxAlbumArtist}">
                 <CheckBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </CheckBox.Foreground>
@@ -63,7 +95,14 @@
                     <DropShadowEffect Color="{DynamicResource DropShadowColour}"/>
                 </CheckBox.Effect>
             </CheckBox>
-            <CheckBox x:Name="cBoxContArtists" Content="{DynamicResource contentCBoxContArtists}" IsChecked="{Binding TagViewModel.ContributinArtists.LockedStatus, Mode=TwoWay}" HorizontalAlignment="Left" Margin="10,81,0,0" Grid.Row="1" VerticalAlignment="Top" BorderBrush="White" ToolTip="{DynamicResource tipCBoxContArtists}">
+            <CheckBox Content="{DynamicResource contentCBoxContArtists}" 
+                      IsChecked="{Binding TagViewModel.ContributingArtists.LockedStatus, Mode=TwoWay}" 
+                      HorizontalAlignment="Left"
+                      Margin="10,81,0,0" 
+                      Grid.Row="1" 
+                      VerticalAlignment="Top" 
+                      BorderBrush="White" 
+                      ToolTip="{DynamicResource tipCBoxContArtists}">
                 <CheckBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </CheckBox.Foreground>
@@ -71,7 +110,14 @@
                     <DropShadowEffect Color="{DynamicResource DropShadowColour}"/>
                 </CheckBox.Effect>
             </CheckBox>
-            <CheckBox x:Name="cBoxAlbum" Content="{DynamicResource contentCBoxAlbum}" IsChecked="{Binding TagViewModel.Album.LockedStatus, Mode=TwoWay}" HorizontalAlignment="Left" Margin="10,104,0,0" Grid.Row="1" VerticalAlignment="Top" BorderBrush="White" ToolTip="{DynamicResource tipCBoxAlbum}">
+            <CheckBox Content="{DynamicResource contentCBoxAlbum}" 
+                      IsChecked="{Binding TagViewModel.Album.LockedStatus, Mode=TwoWay}"
+                      HorizontalAlignment="Left"
+                      Margin="10,104,0,0" 
+                      Grid.Row="1" 
+                      VerticalAlignment="Top" 
+                      BorderBrush="White" 
+                      ToolTip="{DynamicResource tipCBoxAlbum}">
                 <CheckBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </CheckBox.Foreground>
@@ -79,7 +125,14 @@
                     <DropShadowEffect Color="{DynamicResource DropShadowColour}"/>
                 </CheckBox.Effect>
             </CheckBox>
-            <CheckBox x:Name="cBoxYear" Content="{DynamicResource contentCBoxYear}" IsChecked="{Binding TagViewModel.Year.LockedStatus, Mode=TwoWay}" HorizontalAlignment="Left" Margin="10,130,0,0" Grid.Row="1" VerticalAlignment="Top" BorderBrush="White" ToolTip="{DynamicResource tipCBoxYear}">
+            <CheckBox Content="{DynamicResource contentCBoxYear}" 
+                      IsChecked="{Binding TagViewModel.Year.LockedStatus, Mode=TwoWay}"
+                      HorizontalAlignment="Left"
+                      Margin="10,130,0,0"
+                      Grid.Row="1" 
+                      VerticalAlignment="Top"
+                      BorderBrush="White"
+                      ToolTip="{DynamicResource tipCBoxYear}">
                 <CheckBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </CheckBox.Foreground>
@@ -87,7 +140,14 @@
                     <DropShadowEffect Color="{DynamicResource DropShadowColour}"/>
                 </CheckBox.Effect>
             </CheckBox>
-            <CheckBox x:Name="cBoxTrackNo" Content="{DynamicResource contentCBoxTrackNo}" IsChecked="{Binding TagViewModel.TrackNo.LockedStatus, Mode=TwoWay}" HorizontalAlignment="Left" Margin="10,156,0,0" Grid.Row="1" VerticalAlignment="Top" BorderBrush="White" ToolTip="{DynamicResource tipCBoxTrackNo}">
+            <CheckBox Content="{DynamicResource contentCBoxTrackNo}" 
+                      IsChecked="{Binding TagViewModel.TrackNo.LockedStatus, Mode=TwoWay}" 
+                      HorizontalAlignment="Left" 
+                      Margin="10,156,0,0" 
+                      Grid.Row="1" 
+                      VerticalAlignment="Top" 
+                      BorderBrush="White" 
+                      ToolTip="{DynamicResource tipCBoxTrackNo}">
                 <CheckBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </CheckBox.Foreground>
@@ -95,7 +155,14 @@
                     <DropShadowEffect Color="{DynamicResource DropShadowColour}"/>
                 </CheckBox.Effect>
             </CheckBox>
-            <CheckBox x:Name="cBoxGenres" Content="{DynamicResource contentCBoxGenres}" IsChecked="{Binding TagViewModel.Genre.LockedStatus, Mode=TwoWay}" HorizontalAlignment="Left" Margin="10,182,0,0" Grid.Row="1" VerticalAlignment="Top" BorderBrush="White" ToolTip="{DynamicResource tipCBoxGenres}">
+            <CheckBox Content="{DynamicResource contentCBoxGenres}" 
+                      IsChecked="{Binding TagViewModel.Genre.LockedStatus, Mode=TwoWay}" 
+                      HorizontalAlignment="Left" 
+                      Margin="10,182,0,0" 
+                      Grid.Row="1" 
+                      VerticalAlignment="Top" 
+                      BorderBrush="White" 
+                      ToolTip="{DynamicResource tipCBoxGenres}">
                 <CheckBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </CheckBox.Foreground>
@@ -103,31 +170,65 @@
                     <DropShadowEffect Color="{DynamicResource DropShadowColour}"/>
                 </CheckBox.Effect>
             </CheckBox>
-            <Button x:Name="btnSuggest" Content="{DynamicResource contentBtnSuggest}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right" Width="66" Margin="0,4,0,1" BorderBrush="White" Foreground="White" MouseDoubleClick="btnSuggest_DoubleClick" Click="btnSuggest_Click" ToolTip="{DynamicResource tipBtnSuggest}">
+            <Button Content="{DynamicResource contentBtnSuggest}" 
+                    Grid.Column="2"
+                    Grid.Row="2"
+                    HorizontalAlignment="Right"
+                    Width="66" Margin="0,4,0,1"
+                    BorderBrush="White"
+                    Foreground="White"
+                    ToolTip="{DynamicResource tipBtnSuggest}">
                 <Button.Background>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </Button.Background>
                 <Button.Effect>
-                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" ShadowDepth="3"/>
+                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" 
+                                      ShadowDepth="3"/>
                 </Button.Effect>
             </Button>
-            <Button x:Name="btnClear" Content="{DynamicResource contentBtnClear}" Grid.Column="1" Margin="0,4,71,1" Grid.Row="2" HorizontalAlignment="Right" Width="66" BorderBrush="White" Foreground="White" Click="btnClear_Click" ToolTip="{DynamicResource tipBtnClear}">
+            <Button Content="{DynamicResource contentBtnClear}" 
+                    Grid.Column="2" 
+                    Margin="0,4,71,1"
+                    Grid.Row="2"
+                    HorizontalAlignment="Right"
+                    Width="66" 
+                    BorderBrush="White" 
+                    Foreground="White"
+                    ToolTip="{DynamicResource tipBtnClear}">
                 <Button.Background>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </Button.Background>
                 <Button.Effect>
-                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" ShadowDepth="3"/>
+                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" 
+                                      ShadowDepth="3"/>
                 </Button.Effect>
             </Button>
-            <Button x:Name="btnReset" Content="{DynamicResource contentBtnReset}" Grid.Column="1" Margin="0,4,159,1" Grid.Row="2" HorizontalAlignment="Right" Width="66" BorderBrush="White" Foreground="White" Click="btnReset_Click" ToolTip="{DynamicResource tipBtnReset}">
+            <Button Content="{DynamicResource contentBtnReset}" 
+                    Grid.Column="2" 
+                    Margin="0,4,159,1" 
+                    Grid.Row="2"
+                    HorizontalAlignment="Right" 
+                    Width="66" 
+                    BorderBrush="White" 
+                    Foreground="White" 
+                    ToolTip="{DynamicResource tipBtnReset}">
                 <Button.Background>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </Button.Background>
                 <Button.Effect>
-                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" ShadowDepth="3"/>
+                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" 
+                                      ShadowDepth="3"/>
                 </Button.Effect>
             </Button>
-            <CheckBox Content="{DynamicResource contentCBoxSelectAll}" HorizontalAlignment="Left" Margin="10,7,0,0" Grid.Row="2" VerticalAlignment="Top" BorderBrush="White" Background="White" Click="cBoxSelectAll_CheckedChanged" ToolTip="{DynamicResource tipCBoxSelectAll}">
+            <CheckBox Content="{DynamicResource contentCBoxSelectAll}" 
+                      IsChecked="{Binding TagViewModel.SelectAll, Mode=TwoWay}" 
+                      HorizontalAlignment="Left" 
+                      Margin="10,7,0,0" 
+                      Grid.Row="2"
+                      VerticalAlignment="Top" 
+                      BorderBrush="White" 
+                      Background="White"
+                      ToolTip="{DynamicResource tipCBoxSelectAll}">
                 <CheckBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </CheckBox.Foreground>
@@ -135,7 +236,14 @@
                     <DropShadowEffect Color="{DynamicResource DropShadowColour}"/>
                 </CheckBox.Effect>
             </CheckBox>
-            <Label x:Name="lblStatus" Content="{Binding StatusLabel}" Grid.Row="2" VerticalAlignment="Top" Grid.Column="1" HorizontalAlignment="Left" Width="137" Panel.ZIndex="-1" ToolTip="{DynamicResource tipLblStatus}">
+            <Label Content="{Binding StatusLabel}" 
+                   Grid.Row="2" 
+                   VerticalAlignment="Top" 
+                   Grid.Column="1" 
+                   HorizontalAlignment="Left"
+                   Width="137" 
+                   Panel.ZIndex="-1"
+                   ToolTip="{DynamicResource tipLblStatus}" Grid.ColumnSpan="2">
                 <Label.Foreground>
                     <SolidColorBrush Color="{DynamicResource LabelFontColour}"/>
                 </Label.Foreground>
@@ -143,7 +251,16 @@
                     <DropShadowEffect Color="{DynamicResource DropShadowColour}"/>
                 </Label.Effect>
             </Label>
-            <ComboBox Text="{Binding Title[0], Mode=TwoWay}" ItemsSource="{Binding TagViewModel.Title.Item}" Grid.Column="1" Margin="0,25,0,0" Grid.Row="1" VerticalAlignment="Top" Height="21" BorderBrush="White" IsEditable="True" ToolTip="{DynamicResource tipComboBoxTitle}">
+            <ComboBox Text="{Binding  TagViewModel.Title.Item, Mode=TwoWay}"
+                      Grid.Column="1"
+                      Margin="0,25,0,0"
+                      Grid.Row="1" 
+                      VerticalAlignment="Top"
+                      Height="21" 
+                      BorderBrush="White" 
+                      IsEditable="True" 
+                      ToolTip="{DynamicResource tipComboBoxTitle}" 
+                      Grid.ColumnSpan="2">
                 <ComboBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource ComboBoxFontColour}"/>
                 </ComboBox.Foreground>
@@ -151,10 +268,20 @@
                     <SolidColorBrush Color="#FF6CECFF"/>
                 </ComboBox.Background>
                 <ComboBox.Effect>
-                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" ShadowDepth="3"/>
+                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" 
+                                      ShadowDepth="3"/>
                 </ComboBox.Effect>
             </ComboBox>
-            <ComboBox Text="{Binding Artist[0], Mode=TwoWay}" ItemsSource="{Binding TagViewModel.Artist.Item}" Grid.Column="1" Margin="0,51,0,0" Grid.Row="1" VerticalAlignment="Top" Height="21" BorderBrush="White" IsEditable="True" ToolTip="{DynamicResource tipComboBoxAlbumArtist}">
+            <ComboBox Text="{Binding TagViewModel.Artist.Item, Mode=TwoWay}"
+                      Grid.Column="1" 
+                      Margin="0,51,0,0"
+                      Grid.Row="1"
+                      VerticalAlignment="Top"
+                      Height="21"
+                      BorderBrush="White"
+                      IsEditable="True" 
+                      ToolTip="{DynamicResource tipComboBoxAlbumArtist}" 
+                      Grid.ColumnSpan="2">
                 <ComboBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource ComboBoxFontColour}"/>
                 </ComboBox.Foreground>
@@ -162,10 +289,20 @@
                     <SolidColorBrush Color="{DynamicResource InnerColour}"/>
                 </ComboBox.Background>
                 <ComboBox.Effect>
-                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" ShadowDepth="3"/>
+                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" 
+                                      ShadowDepth="3"/>
                 </ComboBox.Effect>
             </ComboBox>
-            <ComboBox x:Name="comboBoxContArtists" Text="{Binding ContributingArtists[0], Mode=TwoWay}" ItemsSource="{Binding TagViewModel.ContributingArtists.Item}" Grid.Column="1" Margin="0,77,0,0" Grid.Row="1" VerticalAlignment="Top" Height="21" BorderBrush="White" IsEditable="True" ToolTip="{DynamicResource tipComboBoxContArtists}">
+            <ComboBox Text="{Binding TagViewModel.ContributingArtists.Item, Mode=TwoWay}"
+                      Grid.Column="1"
+                      Margin="0,77,0,0" 
+                      Grid.Row="1" 
+                      VerticalAlignment="Top"
+                      Height="21" 
+                      BorderBrush="White"
+                      IsEditable="True"
+                      ToolTip="{DynamicResource tipComboBoxContArtists}" 
+                      Grid.ColumnSpan="2">
                 <ComboBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource ComboBoxFontColour}"/>
                 </ComboBox.Foreground>
@@ -173,10 +310,20 @@
                     <SolidColorBrush Color="{DynamicResource InnerColour}"/>
                 </ComboBox.Background>
                 <ComboBox.Effect>
-                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" ShadowDepth="3"/>
+                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" 
+                                      ShadowDepth="3"/>
                 </ComboBox.Effect>
             </ComboBox>
-            <ComboBox x:Name="comboBoxAlbum" Text="{Binding Album[0]}" ItemsSource="{Binding TagViewModel.Album.Item, Mode=TwoWay}" Grid.Column="1" Margin="0,103,0,0" Grid.Row="1" VerticalAlignment="Top" Height="21" BorderBrush="White" IsEditable="True" ToolTip="{DynamicResource tipComboBoxAlbum}">
+            <ComboBox Text="{Binding TagViewModel.Album.Item, Mode=TwoWay}" 
+                      Grid.Column="1" 
+                      Margin="0,103,0,0" 
+                      Grid.Row="1" 
+                      VerticalAlignment="Top" 
+                      Height="21"
+                      BorderBrush="White"
+                      IsEditable="True" 
+                      ToolTip="{DynamicResource tipComboBoxAlbum}" 
+                      Grid.ColumnSpan="2">
                 <ComboBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource ComboBoxFontColour}"/>
                 </ComboBox.Foreground>
@@ -184,10 +331,20 @@
                     <SolidColorBrush Color="{DynamicResource InnerColour}"/>
                 </ComboBox.Background>
                 <ComboBox.Effect>
-                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" ShadowDepth="3"/>
+                    <DropShadowEffect Color="{DynamicResource DropShadowColour}"
+                                      ShadowDepth="3"/>
                 </ComboBox.Effect>
             </ComboBox>
-            <ComboBox x:Name="comboBoxYear" Text="{Binding Year[0]}" ItemsSource="{Binding TagViewModel.Year.Item, Mode=TwoWay}" Grid.Column="1" Margin="0,129,0,0" Grid.Row="1" VerticalAlignment="Top" Height="21" BorderBrush="White" IsEditable="True" ToolTip="{DynamicResource tipComboBoxYear}">
+            <ComboBox Text="{Binding TagViewModel.Year.Item, Mode=TwoWay}" 
+                      Grid.Column="1"
+                      Margin="0,129,0,0" 
+                      Grid.Row="1" 
+                      VerticalAlignment="Top"
+                      Height="21" 
+                      BorderBrush="White" 
+                      IsEditable="True" 
+                      ToolTip="{DynamicResource tipComboBoxYear}" 
+                      Grid.ColumnSpan="2">
                 <ComboBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource ComboBoxFontColour}"/>
                 </ComboBox.Foreground>
@@ -195,10 +352,20 @@
                     <SolidColorBrush Color="{DynamicResource InnerColour}"/>
                 </ComboBox.Background>
                 <ComboBox.Effect>
-                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" ShadowDepth="3"/>
+                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" 
+                                      ShadowDepth="3"/>
                 </ComboBox.Effect>
             </ComboBox>
-            <ComboBox x:Name="comboBoxTrackNo" Text="{Binding TrackNo[0]}" ItemsSource="{Binding TagViewModel.TrackNo.Item, Mode=TwoWay}" Grid.Column="1" Margin="0,155,0,0" Grid.Row="1" VerticalAlignment="Top" Height="21" BorderBrush="White" IsEditable="True" ToolTip="{DynamicResource tipComboBoxTrackNo}">
+            <ComboBox Text="{Binding TagViewModel.TrackNo.Item, Mode=TwoWay}"
+                      Grid.Column="1"
+                      Margin="0,155,0,0" 
+                      Grid.Row="1" 
+                      VerticalAlignment="Top" 
+                      Height="21"
+                      BorderBrush="White" 
+                      IsEditable="True" 
+                      ToolTip="{DynamicResource tipComboBoxTrackNo}" 
+                      Grid.ColumnSpan="2">
                 <ComboBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource ComboBoxFontColour}"/>
                 </ComboBox.Foreground>
@@ -206,10 +373,20 @@
                     <SolidColorBrush Color="#FF6CECFF"/>
                 </ComboBox.Background>
                 <ComboBox.Effect>
-                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" ShadowDepth="3"/>
+                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" 
+                                      ShadowDepth="3"/>
                 </ComboBox.Effect>
             </ComboBox>
-            <ComboBox x:Name="comboBoxGenre" Text="{Binding Genre[0]}" ItemsSource="{Binding TagViewModel.Genre.Item, Mode=TwoWay}" Grid.Column="1" Margin="0,181,0,0" Grid.Row="1" VerticalAlignment="Top" Height="21" BorderBrush="White" IsEditable="True" ToolTip="{DynamicResource tipComboBoxGenres}">
+            <ComboBox Text="{Binding TagViewModel.Genre.Item, Mode=TwoWay}" 
+                      Grid.Column="1"
+                      Margin="0,181,0,0"
+                      Grid.Row="1" 
+                      VerticalAlignment="Top" 
+                      Height="21" 
+                      BorderBrush="White" 
+                      IsEditable="True" 
+                      ToolTip="{DynamicResource tipComboBoxGenres}" 
+                      Grid.ColumnSpan="2">
                 <ComboBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource ComboBoxFontColour}"/>
                 </ComboBox.Foreground>
@@ -217,40 +394,110 @@
                     <SolidColorBrush Color="{DynamicResource InnerColour}"/>
                 </ComboBox.Background>
                 <ComboBox.Effect>
-                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" BlurRadius="10" ShadowDepth="3"/>
+                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" 
+                                      BlurRadius="10" 
+                                      ShadowDepth="3"/>
                 </ComboBox.Effect>
             </ComboBox>
-            <ListView x:Name="listViewAudioFiles" ItemsSource="{Binding ListViewAudioFilesList}" Grid.Column="2" Margin="5,25,5,0" Grid.Row="1" Grid.RowSpan="3" Opacity="0.7" Foreground="#FF043171" BorderBrush="White" AllowDrop="True" DragEnter="listViewAudioFiles_DragEnter" Drop="listViewAudioFiles_DragDrop" SelectionChanged="listViewAudioFiles_SelectionChanged" ToolTip="{DynamicResource tipListViewAudioFiles}">
+            <ListView ItemsSource="{Binding ListViewAudioFilesList}" 
+                      Grid.Column="3" 
+                      Margin="5,25,5,0" 
+                      Grid.Row="1" 
+                      Grid.RowSpan="3"
+                      Opacity="0.7" 
+                      Foreground="#FF043171" 
+                      BorderBrush="White" 
+                      AllowDrop="True"
+                      ToolTip="{DynamicResource tipListViewAudioFiles}"
+                      SelectedItem="{Binding SelectedFilePathPair}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Drop">
+                        <ei:CallMethodAction MethodName="AudioFiles_DragDrop" TargetObject="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding DisplayText}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
                 <ListView.Background>
                     <ImageBrush ImageSource="pack://application:,,,/Resources/Drop Files Here.png" Stretch="Uniform"/>
                 </ListView.Background>
             </ListView>
-            <Button x:Name="btnCheckFormMsg" Content="{DynamicResource contentBtnCheckFormMsg}" Grid.Column="3" HorizontalAlignment="Left" Margin="0,29,0,0" Grid.Row="1" VerticalAlignment="Top" Width="19" Height="22" BorderBrush="White" Foreground="White" Click="btnCheckFormMsg_Click" ToolTip="{DynamicResource tipBtnCheckFormMsg}">
+            <Button Content="{DynamicResource contentBtnCheckFormMsg}"
+                    Grid.Column="4"
+                    HorizontalAlignment="Left" 
+                    Margin="0,29,0,0"
+                    Grid.Row="1" 
+                    VerticalAlignment="Top"
+                    Width="19"
+                    Height="22" 
+                    BorderBrush="White"
+                    Foreground="White" 
+                    ToolTip="{DynamicResource tipBtnCheckFormMsg}">
                 <Button.Background>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </Button.Background>
                 <Button.Effect>
-                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" ShadowDepth="3"/>
+                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" 
+                                      ShadowDepth="3"/>
                 </Button.Effect>
             </Button>
-            <Button x:Name="btnSearchReplace" Content="{DynamicResource contentBtnSearchReplace}" Grid.Column="3" HorizontalAlignment="Left" Margin="0,55,0,0" Grid.Row="1" VerticalAlignment="Top" Width="19" Height="22" BorderBrush="White" Foreground="White" Click="btnSearchAndReplace_Click" ToolTip="{DynamicResource tipBtnSearchReplace}">
+            <Button Content="{DynamicResource contentBtnSearchReplace}" 
+                    Grid.Column="4" 
+                    HorizontalAlignment="Left" 
+                    Margin="0,55,0,0" 
+                    Grid.Row="1" 
+                    VerticalAlignment="Top"
+                    Width="19"
+                    Height="22" 
+                    BorderBrush="White" 
+                    Foreground="White"
+                    ToolTip="{DynamicResource tipBtnSearchReplace}">
                 <Button.Background>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </Button.Background>
                 <Button.Effect>
-                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" ShadowDepth="3"/>
+                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" 
+                                      ShadowDepth="3"/>
                 </Button.Effect>
             </Button>
-            <Button x:Name="btnAddToDB" Content="{DynamicResource contentBtnAddToDB}" Grid.Column="3" HorizontalAlignment="Left" Margin="0,82,0,0" Grid.Row="1" VerticalAlignment="Top" Width="19" Height="22" BorderBrush="White" Foreground="White" Click="btnAddToDB_Click" MouseDoubleClick="btnAddToDB_DoubleClick" ToolTip="{DynamicResource tipBtnAddToDB}">
+            <Button Content="{DynamicResource contentBtnAddToDB}" 
+                    Grid.Column="4"
+                    HorizontalAlignment="Left"
+                    Margin="0,82,0,0" 
+                    Grid.Row="1" 
+                    VerticalAlignment="Top"
+                    Width="19" 
+                    Height="22" 
+                    BorderBrush="White" 
+                    Foreground="White" 
+                    ToolTip="{DynamicResource tipBtnAddToDB}">
                 <Button.Background>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </Button.Background>
                 <Button.Effect>
-                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" ShadowDepth="3"/>
+                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" 
+                                      ShadowDepth="3"/>
                 </Button.Effect>
             </Button>
-            <Image x:Name="tagArtPictureBox" Source="{Binding TagViewModel.TagArt.Item}" Margin="10" Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2" ToolTip="{DynamicResource tipTagArtPictureBox}"/>
-            <Label x:Name="lblItemsCount" Content="{Binding AudioFilesCountLabel}" Grid.Column="2" Margin="0,0,388,33" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontStretch="Condensed" VerticalContentAlignment="Stretch" Padding="5,1" Width="125" ToolTip="{DynamicResource tipLblItemsCount}">
+            <Image Source="{Binding TagViewModel.TagArt.Item}"
+                   Margin="10"
+                   Grid.Row="3"
+                   Grid.ColumnSpan="3"
+                   Grid.RowSpan="2"
+                   ToolTip="{DynamicResource tipTagArtPictureBox}"/>
+            <Label Content="{Binding AudioFilesCountLabel}" 
+                   Grid.Column="3"
+                   Margin="0,0,388,33" 
+                   Grid.Row="4" 
+                   HorizontalAlignment="Right" 
+                   VerticalAlignment="Bottom"
+                   FontStretch="Condensed"
+                   VerticalContentAlignment="Stretch"
+                   Padding="5,1" 
+                   Width="125"
+                   ToolTip="{DynamicResource tipLblItemsCount}">
                 <Label.Foreground>
                     <SolidColorBrush Color="{DynamicResource LabelFontColour}"/>
                 </Label.Foreground>
@@ -258,15 +505,34 @@
                     <DropShadowEffect Color="{DynamicResource DropShadowColour}"/>
                 </Label.Effect>
             </Label>
-            <Button x:Name="btnRefresh" Content="{DynamicResource contentBtnRefresh}" Grid.Column="2" Margin="0,0,410,6" Grid.Row="4" VerticalAlignment="Bottom" Height="22" HorizontalAlignment="Right" Width="72" BorderBrush="White" Foreground="White" Click="btnRefresh_Click" ToolTip="{DynamicResource tipBtnRefresh}">
+            <Button Content="{DynamicResource contentBtnRefresh}"
+                    Grid.Column="3"
+                    Margin="0,0,410,6"
+                    Grid.Row="4" 
+                    VerticalAlignment="Bottom" 
+                    Height="22"
+                    HorizontalAlignment="Right"
+                    Width="72" 
+                    BorderBrush="White" 
+                    Foreground="White" 
+                    ToolTip="{DynamicResource tipBtnRefresh}">
                 <Button.Background>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </Button.Background>
                 <Button.Effect>
-                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" ShadowDepth="3"/>
+                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" 
+                                      ShadowDepth="3"/>
                 </Button.Effect>
             </Button>
-            <Label x:Name="lblFormat" Content="Format:" Grid.Column="2" Margin="0,0,332,17" Grid.Row="4" HorizontalAlignment="Right" Width="51" Height="20" VerticalAlignment="Bottom" Padding="5,1">
+            <Label Content="Format:" 
+                   Grid.Column="3" 
+                   Margin="0,0,332,17" 
+                   Grid.Row="4" 
+                   HorizontalAlignment="Right"
+                   Width="51" 
+                   Height="20" 
+                   VerticalAlignment="Bottom" 
+                   Padding="5,1">
                 <Label.Foreground>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </Label.Foreground>
@@ -274,7 +540,15 @@
                     <DropShadowEffect Color="{DynamicResource DropShadowColour}"/>
                 </Label.Effect>
             </Label>
-            <ComboBox x:Name="comboBoxFormat" Grid.Column="2" Margin="0,0,201,17" Grid.Row="4" VerticalAlignment="Bottom" Height="20" HorizontalAlignment="Right" Width="126" BorderBrush="White" ToolTip="{DynamicResource tipComboBoxFormat}" SelectionChanged="ComboBoxFormat_SelectionChanged">
+            <ComboBox Grid.Column="3" 
+                      Margin="0,0,201,17" 
+                      Grid.Row="4" 
+                      VerticalAlignment="Bottom" 
+                      Height="20" 
+                      HorizontalAlignment="Right" 
+                      Width="126" 
+                      BorderBrush="White" 
+                      ToolTip="{DynamicResource tipComboBoxFormat}">
                 <ComboBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource ComboBoxFontColour}"/>
                 </ComboBox.Foreground>
@@ -282,7 +556,9 @@
                     <SolidColorBrush Color="{DynamicResource InnerColour}"/>
                 </ComboBox.Background>
                 <ComboBox.Effect>
-                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" BlurRadius="10" ShadowDepth="3"/>
+                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" 
+                                      BlurRadius="10" 
+                                      ShadowDepth="3"/>
                 </ComboBox.Effect>
                 <ComboBoxItem Content="{DynamicResource item1ComboBoxFormat}"/>
                 <ComboBoxItem Content="{DynamicResource item2ComboBoxFormat}"/>
@@ -290,7 +566,16 @@
                 <ComboBoxItem Content="{DynamicResource item4ComboBoxFormat}"/>
                 <ComboBoxItem Content="{DynamicResource item5ComboBoxFormat}"/>
             </ComboBox>
-            <CheckBox x:Name="cBoxApplyToAll" Content="{DynamicResource contentCBoxApplyToAll}" Grid.Column="2" Margin="0,0,89,31" Grid.Row="4" VerticalAlignment="Bottom" Height="16" HorizontalAlignment="Right" Width="93" BorderBrush="White" Click="cBoxApplyToAll_CheckedChanged" ToolTip="{DynamicResource tipCBoxApplyToAll}">
+            <CheckBox Content="{DynamicResource contentCBoxApplyToAll}" 
+                      Grid.Column="3" 
+                      Margin="0,0,89,31"
+                      Grid.Row="4" 
+                      VerticalAlignment="Bottom"
+                      Height="16" 
+                      HorizontalAlignment="Right"
+                      Width="93"
+                      BorderBrush="White" 
+                      ToolTip="{DynamicResource tipCBoxApplyToAll}">
                 <CheckBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </CheckBox.Foreground>
@@ -298,7 +583,16 @@
                     <DropShadowEffect Color="{DynamicResource DropShadowColour}"/>
                 </CheckBox.Effect>
             </CheckBox>
-            <CheckBox x:Name="cBoxAutoNext" Content="{DynamicResource contentCBoxAutoNext}" Grid.Column="2" Margin="0,0,89,6" Grid.Row="4" VerticalAlignment="Bottom" Height="16" HorizontalAlignment="Right" Width="93" BorderBrush="White" ToolTip="{DynamicResource tipCBoxAutoNext}">
+            <CheckBox Content="{DynamicResource contentCBoxAutoNext}"
+                      Grid.Column="3"
+                      Margin="0,0,89,6"
+                      Grid.Row="4"
+                      VerticalAlignment="Bottom" 
+                      Height="16"
+                      HorizontalAlignment="Right"
+                      Width="93"
+                      BorderBrush="White"
+                      ToolTip="{DynamicResource tipCBoxAutoNext}">
                 <CheckBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </CheckBox.Foreground>
@@ -306,15 +600,31 @@
                     <DropShadowEffect Color="{DynamicResource DropShadowColour}"/>
                 </CheckBox.Effect>
             </CheckBox>
-            <Button x:Name="btnSave" Content="{DynamicResource contentBtnSave}" Grid.Column="2" Margin="0,0,10,6" Grid.Row="4" VerticalAlignment="Bottom" Height="41" HorizontalAlignment="Right" Width="79" BorderBrush="White" Foreground="White" Click="btnSave_Click" ToolTip="{DynamicResource tipBtnSave}">
+            <Button Content="{DynamicResource contentBtnSave}"
+                    Grid.Column="3"
+                    Margin="0,0,10,6"
+                    Grid.Row="4" 
+                    VerticalAlignment="Bottom" 
+                    Height="41"
+                    HorizontalAlignment="Right"
+                    Width="79"
+                    BorderBrush="White"
+                    Foreground="White"
+                    ToolTip="{DynamicResource tipBtnSave}">
                 <Button.Background>
                     <SolidColorBrush Color="{DynamicResource OutterColour}"/>
                 </Button.Background>
                 <Button.Effect>
-                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" ShadowDepth="3"/>
+                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" 
+                                      ShadowDepth="3"/>
                 </Button.Effect>
             </Button>
-            <Label x:Name="lblFileName" Content="{Binding FilePathLabel}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2" ToolTip="{DynamicResource tipLblFileName}">
+            <Label Content="{Binding SelectedFilePathPair.DisplayText}" 
+                   Grid.Column="1" 
+                   Grid.Row="1" 
+                   VerticalAlignment="Top" 
+                   Grid.ColumnSpan="3" 
+                   ToolTip="{DynamicResource tipLblFileName}">
                 <Label.Foreground>
                     <SolidColorBrush Color="{DynamicResource LabelFontColour}"/>
                 </Label.Foreground>

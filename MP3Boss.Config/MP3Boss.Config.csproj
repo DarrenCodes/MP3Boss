@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1C5FB1BB-F04C-405B-9A55-F40CA6A88D56}</ProjectGuid>
+    <ProjectGuid>{C107F5F9-2E3E-44B6-9964-BE4098AFE8F0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MP3Boss.Common</RootNamespace>
-    <AssemblyName>MP3Boss.Common</AssemblyName>
+    <RootNamespace>MP3Boss.Config</RootNamespace>
+    <AssemblyName>MP3Boss.Config</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,7 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
+    <Reference Include="Autofac, Version=4.6.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.6.0\lib\net45\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,21 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\CommandHelper.cs" />
-    <Compile Include="Constants\FileDirectoryConstants.cs" />
-    <Compile Include="Enums\EventUpdateTypeEnum.cs" />
-    <Compile Include="Interfaces\IAmFileTags.cs" />
-    <Compile Include="Interfaces\IManipulateFileDirectoryDAL.cs" />
-    <Compile Include="Interfaces\IManipulateFileTagsBLL.cs" />
-    <Compile Include="Interfaces\IManipulateFileDirectoryBLL.cs" />
-    <Compile Include="Interfaces\IManipulateFileTagsDAL.cs" />
+    <Compile Include="DependencyInjection\DIContainerSetup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MP3Boss.Models\MP3Boss.Models.csproj">
-      <Project>{99EE8C05-14BD-4D10-9837-02D4ABD3C6C3}</Project>
-      <Name>MP3Boss.Models</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
