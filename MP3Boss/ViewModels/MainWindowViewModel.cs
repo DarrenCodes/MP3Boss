@@ -17,6 +17,7 @@ namespace MP3Boss.ViewModels
         IManipulateFileDirectoryLogic _manipulateFileDirectory;
         FilePathPair _selectedFilePathPair;
 
+        bool _applicationControllsAreEnabled;
         bool _applyToAll;
         bool _autoNext;
         string _statusLabel;
@@ -72,6 +73,7 @@ namespace MP3Boss.ViewModels
                 OnPropertyChanged();
             }
         }
+
         public bool AutoNext
         {
             get { return _autoNext; }
@@ -80,6 +82,16 @@ namespace MP3Boss.ViewModels
                 _autoNext = value;
                 if (value)
                     ApplyToAll = false;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool ApplicationControlsAreEnabled
+        {
+            get { return _applicationControllsAreEnabled; }
+            private set
+            {
+                _applicationControllsAreEnabled = value;
                 OnPropertyChanged();
             }
         }
@@ -157,13 +169,6 @@ namespace MP3Boss.ViewModels
         #endregion
 
         #region Event Handlers
-        //private void ListViewAudioFiles_DragEnter(object sender, DragEventArgs e)
-        //{
-        //    if (e.Data.GetDataPresent(DataFormats.FileDrop))
-        //        e.Effects = DragDropEffects.All;
-        //    else
-        //        e.Effects = DragDropEffects.None;
-        //}
 
         public void AudioFiles_DragDrop(object sender, DragEventArgs e)
         {
@@ -181,8 +186,12 @@ namespace MP3Boss.ViewModels
                 AudioFilesList.Add(filePath);
 
             AudioFilesCount = AudioFilesList.Count.ToString();
-            SelectedFilePathPair = AudioFilesList[0];
-            TagViewModel.Load(SelectedFilePathPair.FilePath);
+            if (AudioFilesList.Count > 0)
+            {
+                SelectedFilePathPair = AudioFilesList[0];
+                TagViewModel.Load(SelectedFilePathPair.FilePath);
+                ApplicationControlsAreEnabled = true;
+            }
         }
 
         private void HowToMenu_Click(object sender, RoutedEventArgs e)
@@ -277,7 +286,6 @@ namespace MP3Boss.ViewModels
             //FormManagerObject.CheckDBFileAndSave(true);
         }
 
-        bool isSuccessful = true;
         private void btnAddToDB_Click(object sender, RoutedEventArgs e)
         {
             //if (containsItems)

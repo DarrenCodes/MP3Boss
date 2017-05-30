@@ -68,6 +68,7 @@
             </Menu>
             <CheckBox Content="{DynamicResource contentCBoxTitle}" 
                       IsChecked="{Binding TagViewModel.Title.LockedStatus, Mode=TwoWay}"
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       HorizontalAlignment="Left" 
                       Grid.Row="1"
                       VerticalAlignment="Top" 
@@ -83,6 +84,7 @@
             </CheckBox>
             <CheckBox Content="{DynamicResource contentCBoxAlbumArtist}" 
                       IsChecked="{Binding TagViewModel.Artist.LockedStatus, Mode=TwoWay}" 
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       HorizontalAlignment="Left" 
                       Margin="10,55,0,0" 
                       Grid.Row="1" 
@@ -98,6 +100,7 @@
             </CheckBox>
             <CheckBox Content="{DynamicResource contentCBoxContArtists}" 
                       IsChecked="{Binding TagViewModel.ContributingArtists.LockedStatus, Mode=TwoWay}" 
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       HorizontalAlignment="Left"
                       Margin="10,81,0,0" 
                       Grid.Row="1" 
@@ -113,6 +116,7 @@
             </CheckBox>
             <CheckBox Content="{DynamicResource contentCBoxAlbum}" 
                       IsChecked="{Binding TagViewModel.Album.LockedStatus, Mode=TwoWay}"
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       HorizontalAlignment="Left"
                       Margin="10,104,0,0" 
                       Grid.Row="1" 
@@ -128,6 +132,7 @@
             </CheckBox>
             <CheckBox Content="{DynamicResource contentCBoxYear}" 
                       IsChecked="{Binding TagViewModel.Year.LockedStatus, Mode=TwoWay}"
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       HorizontalAlignment="Left"
                       Margin="10,130,0,0"
                       Grid.Row="1" 
@@ -143,6 +148,7 @@
             </CheckBox>
             <CheckBox Content="{DynamicResource contentCBoxTrackNo}" 
                       IsChecked="{Binding TagViewModel.TrackNo.LockedStatus, Mode=TwoWay}" 
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       HorizontalAlignment="Left" 
                       Margin="10,156,0,0" 
                       Grid.Row="1" 
@@ -158,6 +164,7 @@
             </CheckBox>
             <CheckBox Content="{DynamicResource contentCBoxGenres}" 
                       IsChecked="{Binding TagViewModel.Genre.LockedStatus, Mode=TwoWay}" 
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       HorizontalAlignment="Left" 
                       Margin="10,182,0,0" 
                       Grid.Row="1" 
@@ -172,6 +179,7 @@
                 </CheckBox.Effect>
             </CheckBox>
             <Button Content="{DynamicResource contentBtnSuggest}" 
+                    IsEnabled="{Binding ApplicationControlsAreEnabled}"
                     Grid.Column="3"
                     Grid.Row="2"
                     HorizontalAlignment="Right"
@@ -188,6 +196,7 @@
                 </Button.Effect>
             </Button>
             <Button Content="{DynamicResource contentBtnClear}" 
+                    IsEnabled="{Binding ApplicationControlsAreEnabled}"
                     Grid.Column="3" 
                     Margin="0,4,71,1"
                     Grid.Row="2"
@@ -205,6 +214,7 @@
                 </Button.Effect>
             </Button>
             <Button Content="{DynamicResource contentBtnReset}" 
+                    IsEnabled="{Binding ApplicationControlsAreEnabled}"
                     Grid.Column="3" 
                     Margin="0,4,159,1" 
                     Grid.Row="2"
@@ -223,6 +233,7 @@
             </Button>
             <CheckBox Content="{DynamicResource contentCBoxSelectAll}" 
                       IsChecked="{Binding TagViewModel.SelectAll, Mode=TwoWay}" 
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       HorizontalAlignment="Left" 
                       Margin="10,7,0,0" 
                       Grid.Row="2"
@@ -253,6 +264,7 @@
                 </Label.Effect>
             </Label>
             <ComboBox Text="{Binding  TagViewModel.Title.Item, Mode=TwoWay}"
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       Grid.Column="1"
                       Margin="0,25,0,0"
                       Grid.Row="1" 
@@ -274,6 +286,7 @@
                 </ComboBox.Effect>
             </ComboBox>
             <ComboBox Text="{Binding TagViewModel.Artist.Item, Mode=TwoWay}"
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       Grid.Column="1" 
                       Margin="0,51,0,0"
                       Grid.Row="1"
@@ -295,6 +308,7 @@
                 </ComboBox.Effect>
             </ComboBox>
             <ComboBox Text="{Binding TagViewModel.ContributingArtists.Item, Mode=TwoWay}"
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       Grid.Column="1"
                       Margin="0,77,0,0" 
                       Grid.Row="1" 
@@ -316,6 +330,7 @@
                 </ComboBox.Effect>
             </ComboBox>
             <ComboBox Text="{Binding TagViewModel.Album.Item, Mode=TwoWay}" 
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       Grid.Column="1" 
                       Margin="0,103,0,0" 
                       Grid.Row="1" 
@@ -337,6 +352,7 @@
                 </ComboBox.Effect>
             </ComboBox>
             <ComboBox Text="{Binding TagViewModel.Year.Item, Mode=TwoWay}" 
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       Grid.Column="1"
                       Margin="0,129,0,0" 
                       Grid.Row="1" 
@@ -358,6 +374,7 @@
                 </ComboBox.Effect>
             </ComboBox>
             <ComboBox Text="{Binding TagViewModel.TrackNo.Item, Mode=TwoWay}"
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       Grid.Column="1"
                       Margin="0,155,0,0" 
                       Grid.Row="1" 
@@ -379,6 +396,7 @@
                 </ComboBox.Effect>
             </ComboBox>
             <ComboBox Text="{Binding TagViewModel.Genre.Item, Mode=TwoWay}" 
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       Grid.Column="1"
                       Margin="0,181,0,0"
                       Grid.Row="1" 
@@ -426,6 +444,7 @@
                 </ListView.Background>
             </ListView>
             <Button Content="{DynamicResource contentBtnCheckFormMsg}"
+                    IsEnabled="{Binding ApplicationControlsAreEnabled}"
                     Grid.Column="5"
                     HorizontalAlignment="Left" 
                     Margin="0,29,0,0"
@@ -445,6 +464,7 @@
                 </Button.Effect>
             </Button>
             <Button Content="{DynamicResource contentBtnSearchReplace}" 
+                    IsEnabled="{Binding ApplicationControlsAreEnabled}"
                     Grid.Column="5" 
                     HorizontalAlignment="Left" 
                     Margin="0,55,0,0" 
@@ -464,6 +484,7 @@
                 </Button.Effect>
             </Button>
             <Button Content="{DynamicResource contentBtnAddToDB}" 
+                    IsEnabled="{Binding ApplicationControlsAreEnabled}"
                     Grid.Column="5"
                     HorizontalAlignment="Left"
                     Margin="0,82,0,0" 
@@ -525,6 +546,7 @@
                 </Label.Effect>
             </Label>
             <Button Content="{DynamicResource contentBtnRefresh}"
+                    IsEnabled="{Binding ApplicationControlsAreEnabled}"
                     Grid.Column="4"
                     Margin="0,0,410,6"
                     Grid.Row="4" 
@@ -560,6 +582,7 @@
                 </Label.Effect>
             </Label>
             <ComboBox Grid.Column="4" 
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       Margin="0,0,201,17" 
                       Grid.Row="4" 
                       VerticalAlignment="Bottom" 
@@ -588,6 +611,7 @@
             </ComboBox>
             <CheckBox Content="{DynamicResource contentCBoxApplyToAll}" 
                       IsChecked="{Binding ApplyToAll, Mode=TwoWay}"
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       Grid.Column="4" 
                       Margin="0,0,89,31"
                       Grid.Row="4" 
@@ -606,6 +630,7 @@
             </CheckBox>
             <CheckBox Content="{DynamicResource contentCBoxAutoNext}"
                       IsChecked="{Binding AutoNext, Mode=TwoWay}"
+                      IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       Grid.Column="4"
                       Margin="0,0,89,6"
                       Grid.Row="4"
@@ -624,6 +649,7 @@
             </CheckBox>
             <Button Content="{DynamicResource contentBtnSave}"
                     Command="{Binding SaveCommand}"
+                    IsEnabled="{Binding ApplicationControlsAreEnabled}"
                     Grid.Column="4"
                     Margin="0,0,10,6"
                     Grid.Row="4" 
