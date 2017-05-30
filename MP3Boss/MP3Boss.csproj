@@ -99,8 +99,6 @@
     <Compile Include="ViewModels\TagCheckWindowViewModel.cs" />
     <Compile Include="ViewModels\TagPairViewModel.cs" />
     <Compile Include="ViewModels\TagViewModel.cs" />
-    <Compile Include="Source\GUI\Backend\FormManager.cs" />
-    <Compile Include="Source\GUI\Backend\IFormManager.cs" />
     <Compile Include="Views\CheckMessageWindow.xaml.cs">
       <DependentUpon>CheckMessageWindow.xaml</DependentUpon>
     </Compile>

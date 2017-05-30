@@ -19,18 +19,46 @@ namespace MP3Boss.ViewModels
 
         bool _applyToAll;
         bool _autoNext;
+        string _statusLabel;
+        string _audioFilesCount;
         #endregion
 
         #region Properties
 
         public TagViewModel TagViewModel { get; }
-        public FilePathPair SelectedFilePathPair { get { return _selectedFilePathPair; } set { _selectedFilePathPair = value; OnPropertyChanged(); FileSelected(); } }
         public ObservableCollection<FilePathPair> AudioFilesList { get; }
-        public string StatusLabel { get; set; }
-        public string AudioFilesCount { get; set; }
-        public string FilePathLabel { get; set; }
 
-        public int CurrentIndex { get; set; }
+        public FilePathPair SelectedFilePathPair
+        {
+            get { return _selectedFilePathPair; }
+            set
+            {
+                _selectedFilePathPair = value;
+                OnPropertyChanged();
+                FileSelected();
+            }
+        }
+
+        public string StatusLabel
+        {
+            get { return _statusLabel; }
+            private set
+            {
+                _statusLabel = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string AudioFilesCount
+        {
+            get { return _audioFilesCount; }
+            private set
+            {
+                _audioFilesCount = value;
+                OnPropertyChanged();
+            }
+        }
+
         public int Format { get; set; }
 
         public bool ApplyToAll

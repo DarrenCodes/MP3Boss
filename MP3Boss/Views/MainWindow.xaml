@@ -24,14 +24,15 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="153"/>
-                <ColumnDefinition Width="66*"/>
+                <ColumnDefinition Width="48*"/>
+                <ColumnDefinition Width="18*"/>
                 <ColumnDefinition Width="284*"/>
                 <ColumnDefinition Width="523*"/>
                 <ColumnDefinition Width="Auto" MinWidth="24"/>
             </Grid.ColumnDefinitions>
             <Menu Height="24" 
                   VerticalAlignment="Top" 
-                  Grid.ColumnSpan="5" 
+                  Grid.ColumnSpan="6" 
                   Margin="0,0,1,0">
                 <Menu.Foreground>
                     <SolidColorBrush Color="{DynamicResource BackgroundColour}"/>
@@ -171,7 +172,7 @@
                 </CheckBox.Effect>
             </CheckBox>
             <Button Content="{DynamicResource contentBtnSuggest}" 
-                    Grid.Column="2"
+                    Grid.Column="3"
                     Grid.Row="2"
                     HorizontalAlignment="Right"
                     Width="66" Margin="0,4,0,1"
@@ -187,7 +188,7 @@
                 </Button.Effect>
             </Button>
             <Button Content="{DynamicResource contentBtnClear}" 
-                    Grid.Column="2" 
+                    Grid.Column="3" 
                     Margin="0,4,71,1"
                     Grid.Row="2"
                     HorizontalAlignment="Right"
@@ -204,7 +205,7 @@
                 </Button.Effect>
             </Button>
             <Button Content="{DynamicResource contentBtnReset}" 
-                    Grid.Column="2" 
+                    Grid.Column="3" 
                     Margin="0,4,159,1" 
                     Grid.Row="2"
                     HorizontalAlignment="Right" 
@@ -243,7 +244,7 @@
                    HorizontalAlignment="Left"
                    Width="137" 
                    Panel.ZIndex="-1"
-                   ToolTip="{DynamicResource tipLblStatus}" Grid.ColumnSpan="2">
+                   ToolTip="{DynamicResource tipLblStatus}" Grid.ColumnSpan="3">
                 <Label.Foreground>
                     <SolidColorBrush Color="{DynamicResource LabelFontColour}"/>
                 </Label.Foreground>
@@ -260,7 +261,7 @@
                       BorderBrush="White" 
                       IsEditable="True" 
                       ToolTip="{DynamicResource tipComboBoxTitle}" 
-                      Grid.ColumnSpan="2">
+                      Grid.ColumnSpan="3">
                 <ComboBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource ComboBoxFontColour}"/>
                 </ComboBox.Foreground>
@@ -281,7 +282,7 @@
                       BorderBrush="White"
                       IsEditable="True" 
                       ToolTip="{DynamicResource tipComboBoxAlbumArtist}" 
-                      Grid.ColumnSpan="2">
+                      Grid.ColumnSpan="3">
                 <ComboBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource ComboBoxFontColour}"/>
                 </ComboBox.Foreground>
@@ -302,7 +303,7 @@
                       BorderBrush="White"
                       IsEditable="True"
                       ToolTip="{DynamicResource tipComboBoxContArtists}" 
-                      Grid.ColumnSpan="2">
+                      Grid.ColumnSpan="3">
                 <ComboBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource ComboBoxFontColour}"/>
                 </ComboBox.Foreground>
@@ -323,7 +324,7 @@
                       BorderBrush="White"
                       IsEditable="True" 
                       ToolTip="{DynamicResource tipComboBoxAlbum}" 
-                      Grid.ColumnSpan="2">
+                      Grid.ColumnSpan="3">
                 <ComboBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource ComboBoxFontColour}"/>
                 </ComboBox.Foreground>
@@ -344,7 +345,7 @@
                       BorderBrush="White" 
                       IsEditable="True" 
                       ToolTip="{DynamicResource tipComboBoxYear}" 
-                      Grid.ColumnSpan="2">
+                      Grid.ColumnSpan="3">
                 <ComboBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource ComboBoxFontColour}"/>
                 </ComboBox.Foreground>
@@ -365,7 +366,7 @@
                       BorderBrush="White" 
                       IsEditable="True" 
                       ToolTip="{DynamicResource tipComboBoxTrackNo}" 
-                      Grid.ColumnSpan="2">
+                      Grid.ColumnSpan="3">
                 <ComboBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource ComboBoxFontColour}"/>
                 </ComboBox.Foreground>
@@ -386,7 +387,7 @@
                       BorderBrush="White" 
                       IsEditable="True" 
                       ToolTip="{DynamicResource tipComboBoxGenres}" 
-                      Grid.ColumnSpan="2">
+                      Grid.ColumnSpan="3">
                 <ComboBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource ComboBoxFontColour}"/>
                 </ComboBox.Foreground>
@@ -400,7 +401,7 @@
                 </ComboBox.Effect>
             </ComboBox>
             <ListView ItemsSource="{Binding AudioFilesList}" 
-                      Grid.Column="3" 
+                      Grid.Column="4" 
                       Margin="5,25,5,0" 
                       Grid.Row="1" 
                       Grid.RowSpan="3"
@@ -425,7 +426,7 @@
                 </ListView.Background>
             </ListView>
             <Button Content="{DynamicResource contentBtnCheckFormMsg}"
-                    Grid.Column="4"
+                    Grid.Column="5"
                     HorizontalAlignment="Left" 
                     Margin="0,29,0,0"
                     Grid.Row="1" 
@@ -444,7 +445,7 @@
                 </Button.Effect>
             </Button>
             <Button Content="{DynamicResource contentBtnSearchReplace}" 
-                    Grid.Column="4" 
+                    Grid.Column="5" 
                     HorizontalAlignment="Left" 
                     Margin="0,55,0,0" 
                     Grid.Row="1" 
@@ -463,7 +464,7 @@
                 </Button.Effect>
             </Button>
             <Button Content="{DynamicResource contentBtnAddToDB}" 
-                    Grid.Column="4"
+                    Grid.Column="5"
                     HorizontalAlignment="Left"
                     Margin="0,82,0,0" 
                     Grid.Row="1" 
@@ -484,19 +485,37 @@
             <Image Source="{Binding TagViewModel.TagArt.Item}"
                    Margin="10"
                    Grid.Row="3"
-                   Grid.ColumnSpan="3"
+                   Grid.ColumnSpan="4"
                    Grid.RowSpan="2"
                    ToolTip="{DynamicResource tipTagArtPictureBox}"/>
-            <Label Content="{Binding AudioFilesCount}" 
-                   Grid.Column="3"
-                   Margin="0,0,388,33" 
+            <Label Content="{DynamicResource fileCount}" 
+                   Grid.Column="4"
+                   Margin="0,0,468,33" 
                    Grid.Row="4" 
                    HorizontalAlignment="Right" 
                    VerticalAlignment="Bottom"
                    FontStretch="Condensed"
                    VerticalContentAlignment="Stretch"
                    Padding="5,1" 
-                   Width="125"
+                   Width="50"
+                   ToolTip="{DynamicResource tipLblItemsCount}">
+                <Label.Foreground>
+                    <SolidColorBrush Color="{DynamicResource LabelFontColour}"/>
+                </Label.Foreground>
+                <Label.Effect>
+                    <DropShadowEffect Color="{DynamicResource DropShadowColour}"/>
+                </Label.Effect>
+            </Label>
+            <Label Content="{Binding AudioFilesCount}" 
+                   Grid.Column="4"
+                   Margin="0,0,410,33" 
+                   Grid.Row="4" 
+                   HorizontalAlignment="Right" 
+                   VerticalAlignment="Bottom"
+                   FontStretch="Condensed"
+                   VerticalContentAlignment="Stretch"
+                   Padding="5,1" 
+                   Width="58"
                    ToolTip="{DynamicResource tipLblItemsCount}">
                 <Label.Foreground>
                     <SolidColorBrush Color="{DynamicResource LabelFontColour}"/>
@@ -506,7 +525,7 @@
                 </Label.Effect>
             </Label>
             <Button Content="{DynamicResource contentBtnRefresh}"
-                    Grid.Column="3"
+                    Grid.Column="4"
                     Margin="0,0,410,6"
                     Grid.Row="4" 
                     VerticalAlignment="Bottom" 
@@ -525,7 +544,7 @@
                 </Button.Effect>
             </Button>
             <Label Content="Format:" 
-                   Grid.Column="3" 
+                   Grid.Column="4" 
                    Margin="0,0,332,17" 
                    Grid.Row="4" 
                    HorizontalAlignment="Right"
@@ -540,7 +559,7 @@
                     <DropShadowEffect Color="{DynamicResource DropShadowColour}"/>
                 </Label.Effect>
             </Label>
-            <ComboBox Grid.Column="3" 
+            <ComboBox Grid.Column="4" 
                       Margin="0,0,201,17" 
                       Grid.Row="4" 
                       VerticalAlignment="Bottom" 
@@ -569,7 +588,7 @@
             </ComboBox>
             <CheckBox Content="{DynamicResource contentCBoxApplyToAll}" 
                       IsChecked="{Binding ApplyToAll, Mode=TwoWay}"
-                      Grid.Column="3" 
+                      Grid.Column="4" 
                       Margin="0,0,89,31"
                       Grid.Row="4" 
                       VerticalAlignment="Bottom"
@@ -587,7 +606,7 @@
             </CheckBox>
             <CheckBox Content="{DynamicResource contentCBoxAutoNext}"
                       IsChecked="{Binding AutoNext, Mode=TwoWay}"
-                      Grid.Column="3"
+                      Grid.Column="4"
                       Margin="0,0,89,6"
                       Grid.Row="4"
                       VerticalAlignment="Bottom" 
@@ -605,7 +624,7 @@
             </CheckBox>
             <Button Content="{DynamicResource contentBtnSave}"
                     Command="{Binding SaveCommand}"
-                    Grid.Column="3"
+                    Grid.Column="4"
                     Margin="0,0,10,6"
                     Grid.Row="4" 
                     VerticalAlignment="Bottom" 
@@ -627,7 +646,7 @@
                    Grid.Column="1" 
                    Grid.Row="1" 
                    VerticalAlignment="Top" 
-                   Grid.ColumnSpan="3" 
+                   Grid.ColumnSpan="4" 
                    ToolTip="{DynamicResource tipLblFileName}">
                 <Label.Foreground>
                     <SolidColorBrush Color="{DynamicResource LabelFontColour}"/>

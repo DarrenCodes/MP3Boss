@@ -1,21 +1,19 @@
-﻿using MP3Boss.Source.GUI.Backend;
-using System.Windows;
+﻿using System.Windows;
 
 namespace MP3Boss.Source.GUI
 {
     public partial class SearchAndReplaceWindow : Window
     {
-        IFormManager manageForm;
-        public SearchAndReplaceWindow(IFormManager manager)
+        public SearchAndReplaceWindow()
         {
             InitializeComponent();
-            manageForm = manager;
+            //manageForm = manager;
         }
 
         private void btnChange_Click(object sender, RoutedEventArgs e)
         {
-            manageForm.SearchAndReplace(tBoxFind.Text, tBoxReplace.Text, cBoxSearchAll.IsChecked.Value);
-            Close();
+            //manageForm.SearchAndReplace(tBoxFind.Text, tBoxReplace.Text, cBoxSearchAll.IsChecked.Value);
+            //Close();
         }
     }
 }
