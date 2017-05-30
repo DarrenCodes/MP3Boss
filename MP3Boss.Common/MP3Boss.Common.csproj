@@ -45,10 +45,10 @@
     <Compile Include="Constants\FileDirectoryConstants.cs" />
     <Compile Include="Enums\EventUpdateTypeEnum.cs" />
     <Compile Include="Interfaces\IAmFileTags.cs" />
-    <Compile Include="Interfaces\IManipulateFileDirectoryDAL.cs" />
-    <Compile Include="Interfaces\IManipulateFileTagsBLL.cs" />
-    <Compile Include="Interfaces\IManipulateFileDirectoryBLL.cs" />
-    <Compile Include="Interfaces\IManipulateFileTagsDAL.cs" />
+    <Compile Include="Interfaces\IManipulateFileDirectoryDataAccess.cs" />
+    <Compile Include="Interfaces\IManipulateFileTagsLogic.cs" />
+    <Compile Include="Interfaces\IManipulateFileDirectoryLogic.cs" />
+    <Compile Include="Interfaces\IManipulateFileTagsDataAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

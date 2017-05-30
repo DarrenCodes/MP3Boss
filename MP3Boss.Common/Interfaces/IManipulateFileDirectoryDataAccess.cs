@@ -1,6 +1,6 @@
 ﻿namespace MP3Boss.Common.Interfaces
 {
-    public interface IManipulateFileDirectoryDAL
+    public interface IManipulateFileDirectoryDataAccess
     {
         void RenameFile(string oldFileName, string newFileName);
         bool FileExists(string filePath);

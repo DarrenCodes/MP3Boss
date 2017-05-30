@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace MP3Boss.Common.Interfaces
 {
-    public interface IManipulateFileDirectoryBLL
+    public interface IManipulateFileDirectoryLogic
     {
         List<FilePathPair> GetFiles(string[] droppedPaths, bool performDeepSearch, string fileTypeFilters = null);
+        FilePathPair Rename(string filePath, IAmFileTags fileTags, int format);
     }
 }

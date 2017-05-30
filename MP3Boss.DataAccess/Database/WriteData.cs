@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MP3Boss.DAL.DataAccess.Write
+namespace MP3Boss.DataAccess.Database
 {
     class WriteData
     {

@@ -1,9 +1,9 @@
 ﻿using Autofac;
-using MP3Boss.BLL.Directory;
 using MP3Boss.Common.Interfaces;
-using MP3Boss.DAL.Files;
-using MP3Boss.DAL.FileTags;
-using MP3Boss.Source.File;
+using MP3Boss.DataAccess.Files;
+using MP3Boss.DataAccess.FileTags;
+using MP3Boss.Logic.Directory;
+using MP3Boss.Logic.FileTags;
 using MP3Boss.ViewModels;
 
 namespace MP3Boss.DependencyInjection
@@ -31,14 +31,14 @@ namespace MP3Boss.DependencyInjection
             //Only need one instance of these
             _builder.RegisterType<MainWindowViewModel>();
             _builder.RegisterType<TagViewModel>();
-            _builder.RegisterType<FileTagManipulation>()
-                .As<IManipulateFileTagsBLL>();
-            _builder.RegisterType<FileDirectoryManipulation>()
-                .As<IManipulateFileDirectoryBLL>();
-            _builder.RegisterType<FileDirectoryDAL>()
-                .As<IManipulateFileDirectoryDAL>();
-            _builder.RegisterType<FileTagsDAL>()
-                .As<IManipulateFileTagsDAL>();
+            _builder.RegisterType<FileTagManipulationLogic>()
+                .As<IManipulateFileTagsLogic>();
+            _builder.RegisterType<FileDirectoryManipulationLogic>()
+                .As<IManipulateFileDirectoryLogic>();
+            _builder.RegisterType<FileDirectoryDataAccess>()
+                .As<IManipulateFileDirectoryDataAccess>();
+            _builder.RegisterType<FileTagsDataAccess>()
+                .As<IManipulateFileTagsDataAccess>();
         }
 
         /// <summary>

@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using MP3Boss.Common.Constants;
 
-namespace MP3Boss.BLL.Directory
+namespace MP3Boss.Logic.Directory
 {
-    public class FileDirectoryManipulation : IManipulateFileDirectoryBLL
+    public class FileDirectoryManipulationLogic : IManipulateFileDirectoryLogic
     {
-        IManipulateFileDirectoryDAL _manipulateFileDirectoryDAL;
+        IManipulateFileDirectoryDataAccess _manipulateFileDirectoryDAL;
 
-        public FileDirectoryManipulation(IManipulateFileDirectoryDAL manipulateFileDirectoryDAL)
+        public FileDirectoryManipulationLogic(IManipulateFileDirectoryDataAccess manipulateFileDirectoryDAL)
         {
             _manipulateFileDirectoryDAL = manipulateFileDirectoryDAL;
         }
@@ -45,7 +45,7 @@ namespace MP3Boss.BLL.Directory
             return files;
         }
 
-        public string Rename(string filePath, IAmFileTags fileTags, int format)
+        public FilePathPair Rename(string filePath, IAmFileTags fileTags, int format)
         {
             string formmatedFilename = GenerateFormattedName(filePath, fileTags, format);
 
@@ -53,7 +53,7 @@ namespace MP3Boss.BLL.Directory
 
             _manipulateFileDirectoryDAL.RenameFile(filePath, newFilePath);
 
-            return newFilePath;
+            return new FilePathPair(_manipulateFileDirectoryDAL.GetFileName(filePath), newFilePath);
         }
 
         private string GenerateFormattedName(string filePath, IAmFileTags fileTags, int format)

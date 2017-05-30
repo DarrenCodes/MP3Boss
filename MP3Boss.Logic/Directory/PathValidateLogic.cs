@@ -1,9 +1,9 @@
 ﻿using MP3Boss.Common.Constants;
 using System.Text.RegularExpressions;
 
-namespace MP3Boss.BLL.Directory
+namespace MP3Boss.Logic.Directory
 {
-    public class PathValidate
+    public class PathValidateLogic
     {
         public bool IsValidFileName(string fileName)
         {

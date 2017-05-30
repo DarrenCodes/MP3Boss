@@ -487,7 +487,7 @@
                    Grid.ColumnSpan="3"
                    Grid.RowSpan="2"
                    ToolTip="{DynamicResource tipTagArtPictureBox}"/>
-            <Label Content="{Binding AudioFilesCountLabel}" 
+            <Label Content="{Binding AudioFilesCount}" 
                    Grid.Column="3"
                    Margin="0,0,388,33" 
                    Grid.Row="4" 
@@ -548,7 +548,8 @@
                       HorizontalAlignment="Right" 
                       Width="126" 
                       BorderBrush="White" 
-                      ToolTip="{DynamicResource tipComboBoxFormat}">
+                      ToolTip="{DynamicResource tipComboBoxFormat}"
+                      SelectedIndex="{Binding Format}">
                 <ComboBox.Foreground>
                     <SolidColorBrush Color="{DynamicResource ComboBoxFontColour}"/>
                 </ComboBox.Foreground>
@@ -601,6 +602,7 @@
                 </CheckBox.Effect>
             </CheckBox>
             <Button Content="{DynamicResource contentBtnSave}"
+                    Command="{Binding SaveCommand}"
                     Grid.Column="3"
                     Margin="0,0,10,6"
                     Grid.Row="4" 

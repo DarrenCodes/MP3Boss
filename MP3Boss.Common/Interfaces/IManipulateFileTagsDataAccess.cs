@@ -2,7 +2,7 @@
 
 namespace MP3Boss.Common.Interfaces
 {
-    public interface IManipulateFileTagsDAL
+    public interface IManipulateFileTagsDataAccess
     {
         FileTagsDTO Read(string filePath);
         void Write(FileTagsDTO fileTags);

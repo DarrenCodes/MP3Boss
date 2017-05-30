@@ -7,7 +7,7 @@ namespace MP3Boss.ViewModels
     public class TagViewModel : IAmFileTags
     {
         #region Members
-        IManipulateFileTagsBLL _manipulateFileTagsBLL;
+        IManipulateFileTagsLogic _manipulateFileTagsBLL;
 
         bool _selectAll;
         #endregion
@@ -39,7 +39,7 @@ namespace MP3Boss.ViewModels
 
         #region Constructors
 
-        public TagViewModel(IManipulateFileTagsBLL manipulateFileTagsBLL)
+        public TagViewModel(IManipulateFileTagsLogic manipulateFileTagsBLL)
         {
             Title = new TagPair<string>();
             Artist = new TagPair<string>();

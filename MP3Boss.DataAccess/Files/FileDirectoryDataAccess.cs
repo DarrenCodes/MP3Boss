@@ -1,9 +1,9 @@
 ﻿using MP3Boss.Common.Interfaces;
 using System.IO;
 
-namespace MP3Boss.DAL.Files
+namespace MP3Boss.DataAccess.Files
 {
-    public class FileDirectoryDAL : IManipulateFileDirectoryDAL
+    public class FileDirectoryDataAccess : IManipulateFileDirectoryDataAccess
     {
         public void RenameFile(string currentFilePath, string newFileName)
         {

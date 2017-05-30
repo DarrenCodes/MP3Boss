@@ -198,17 +198,17 @@
     <Folder Include="Styles\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MP3Boss.BLL\MP3Boss.BLL.csproj">
-      <Project>{0b97c335-01dd-4bf3-94ec-61a71b29cdef}</Project>
-      <Name>MP3Boss.BLL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MP3Boss.Common\MP3Boss.Common.csproj">
       <Project>{1C5FB1BB-F04C-405B-9A55-F40CA6A88D56}</Project>
       <Name>MP3Boss.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MP3Boss.DAL\MP3Boss.DAL.csproj">
+    <ProjectReference Include="..\MP3Boss.DataAccess\MP3Boss.DataAccess.csproj">
       <Project>{61C117EA-EE28-4269-84ED-D81711561F8E}</Project>
-      <Name>MP3Boss.DAL</Name>
+      <Name>MP3Boss.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MP3Boss.Logic\MP3Boss.Logic.csproj">
+      <Project>{0b97c335-01dd-4bf3-94ec-61a71b29cdef}</Project>
+      <Name>MP3Boss.Logic</Name>
     </ProjectReference>
     <ProjectReference Include="..\MP3Boss.Models\MP3Boss.Models.csproj">
       <Project>{99EE8C05-14BD-4D10-9837-02D4ABD3C6C3}</Project>

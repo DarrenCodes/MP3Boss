@@ -4,9 +4,9 @@ using System;
 using System.IO;
 using System.Windows.Media.Imaging;
 
-namespace MP3Boss.DAL.FileTags
+namespace MP3Boss.DataAccess.FileTags
 {
-    public class FileTagsDAL : IManipulateFileTagsDAL
+    public class FileTagsDataAccess : IManipulateFileTagsDataAccess
     {
         TagLib.File audioFile;
         string filePath;

@@ -2,13 +2,13 @@
 using MP3Boss.Models.DTOs;
 using System.Collections.Generic;
 
-namespace MP3Boss.Source.File
+namespace MP3Boss.Logic.FileTags
 {
-    public class FileTagManipulation : IManipulateFileTagsBLL
+    public class FileTagManipulationLogic : IManipulateFileTagsLogic
     {
-        IManipulateFileTagsDAL _manipulateFileTags;
+        IManipulateFileTagsDataAccess _manipulateFileTags;
 
-        public FileTagManipulation(IManipulateFileTagsDAL manipulateFileTags)
+        public FileTagManipulationLogic(IManipulateFileTagsDataAccess manipulateFileTags)
         {
             _manipulateFileTags = manipulateFileTags;
         }

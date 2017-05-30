@@ -15,17 +15,17 @@ namespace MP3Boss.ViewModels
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         #region Members
-        IManipulateFileDirectoryBLL _manipulateFileDirectory;
+        IManipulateFileDirectoryLogic _manipulateFileDirectory;
         FilePathPair _selectedFilePathPair;
         #endregion
 
         #region Properties
 
         public TagViewModel TagViewModel { get; }
-        public FilePathPair SelectedFilePathPair { get {return _selectedFilePathPair; } set { _selectedFilePathPair = value; OnPropertyChanged(); FileSelected(value.FilePath); } }
+        public FilePathPair SelectedFilePathPair { get { return _selectedFilePathPair; } set { _selectedFilePathPair = value; OnPropertyChanged(); FileSelected(); } }
         public ObservableCollection<FilePathPair> ListViewAudioFilesList { get; }
         public string StatusLabel { get; set; }
-        public string AudioFilesCountLabel { get; set; }
+        public string AudioFilesCount { get; set; }
         public string FilePathLabel { get; set; }
 
         public int CurrentIndex { get; set; }
@@ -37,10 +37,9 @@ namespace MP3Boss.ViewModels
         #region Commands
         public ICommand SelectAllCommand { get; }
         public ICommand ResetAllCommand { get; }
+        public ICommand SaveCommand { get; }
         public ICommand CloseCommand { get; }
         public ICommand HowToCommand { get; }
-        public ICommand SelectSongCommand { get; }
-        public ICommand DragDropCommand { get; }
         #endregion
 
         #region Events
@@ -49,22 +48,38 @@ namespace MP3Boss.ViewModels
         #endregion
 
         #region Constructor Methods
-        public MainWindowViewModel(TagViewModel tagViewModel, IManipulateFileDirectoryBLL manipulateFileDirectory)
+        public MainWindowViewModel(TagViewModel tagViewModel, IManipulateFileDirectoryLogic manipulateFileDirectory)
         {
             ListViewAudioFilesList = new ObservableCollection<FilePathPair>();
             TagViewModel = tagViewModel;
             _manipulateFileDirectory = manipulateFileDirectory;
-
-            SelectSongCommand = new CommandHandler((filePath) => { TagViewModel.Load((string)filePath); });
-            DragDropCommand = new CommandHandler((droppedFiles) => 
-            {
-                foreach (FilePathPair pathPair in _manipulateFileDirectory.GetFiles((string[])droppedFiles, true))
-                    ListViewAudioFilesList.Add(pathPair);
-            });
+            SaveCommand = new CommandHandler((o) => { SaveLoaded(); });
         }
         #endregion
 
         #region Methods
+        private void SaveLoaded()
+        {
+            TagViewModel.Save();
+            FilePathPair renamedFilePathPair = _manipulateFileDirectory.Rename(SelectedFilePathPair.FilePath, TagViewModel, Format);
+
+            //Set properties of SelectedFilePathPair property so that it fires PropertyChanged event on the object it is assigned
+            //Otherwise assigning the returned object from the Rename method to the SelectedFilePathPair property will not allow item in the
+            //ListView to be updated, as it is a new object which isn't in the List
+            SelectedFilePathPair.FilePath = renamedFilePathPair.FilePath;
+            SelectedFilePathPair.DisplayText = renamedFilePathPair.DisplayText;
+        }
+
+        private void SaveAll()
+        {
+            foreach (FilePathPair filePathPair in ListViewAudioFilesList)
+            {
+                SelectedFilePathPair = filePathPair;
+                TagViewModel.Load(filePathPair.FilePath);
+                SaveLoaded();
+            }
+        }
+
         public void SaveToFile(bool applyToAll, bool autoNext)
         {
             //int i = CurrentIndex;
@@ -168,7 +183,7 @@ namespace MP3Boss.ViewModels
             //}
         }
         #endregion
-        
+
         #region Event Handlers
         //private void ListViewAudioFiles_DragEnter(object sender, DragEventArgs e)
         //{
@@ -182,8 +197,6 @@ namespace MP3Boss.ViewModels
         {
             string[] dropedFiles = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             FillFileList(dropedFiles);
-
-            AudioFilesCountLabel = ListViewAudioFilesList.Count.ToString();
         }
 
         private void FillFileList(string[] dropedFiles)
@@ -194,9 +207,10 @@ namespace MP3Boss.ViewModels
 
             foreach (FilePathPair filePath in _manipulateFileDirectory.GetFiles(dropedFiles, subDirectorySelection == MessageBoxResult.Yes))
                 ListViewAudioFilesList.Add(filePath);
-
-            string path = ListViewAudioFilesList[0].FilePath;
-            TagViewModel.Load(path);
+            
+            AudioFilesCount = ListViewAudioFilesList.Count.ToString();
+            SelectedFilePathPair = ListViewAudioFilesList[0];
+            TagViewModel.Load(SelectedFilePathPair.FilePath);
         }
 
         private void HowToMenu_Click(object sender, RoutedEventArgs e)
@@ -223,9 +237,9 @@ namespace MP3Boss.ViewModels
             //ApplyToAllCheckBoxes(cBoxSelectAll.IsChecked.Value);
         }
 
-        public void FileSelected(string selectedFilePath)
+        public void FileSelected()
         {
-            TagViewModel.Load(selectedFilePath);
+            TagViewModel.Load(SelectedFilePathPair.FilePath);
             //if (containsItems)
             //{
             //    BindingObject.StatusLabel = "";
@@ -315,7 +329,7 @@ namespace MP3Boss.ViewModels
         {
             //BindingObject.Format = comboBoxFormat.SelectedIndex;
         }
-        
+
         private void OnPropertyChanged([CallerMemberName]string caller = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(caller));
