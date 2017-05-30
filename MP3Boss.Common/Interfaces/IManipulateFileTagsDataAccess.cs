@@ -7,5 +7,6 @@ namespace MP3Boss.Common.Interfaces
         FileTagsDTO Read(string filePath);
         void Write(FileTagsDTO fileTags);
         void Write(FileTagsDTO fileTags, string filePath);
+        void Clear();
     }
 }

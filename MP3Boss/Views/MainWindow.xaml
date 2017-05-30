@@ -44,17 +44,11 @@
                           BorderBrush="White" 
                           Foreground="White">
                     <MenuItem Header="{DynamicResource contentResetAllMenuItem}"
+                              Command="{Binding ResetAllCommand}"
                               BorderBrush="White" 
                               Padding="0,0,0,3" >
                         <MenuItem.Background>
                             <SolidColorBrush Color="{DynamicResource OutterColour}"/>
-                        </MenuItem.Background>
-                    </MenuItem>
-                    <MenuItem Header="{DynamicResource contentCloseMenuItem}" 
-                              BorderBrush="White" 
-                              Padding="0">
-                        <MenuItem.Background>
-                            <SolidColorBrush Color="{Binding Mode=OneWay, Source={StaticResource OutterColour}}"/>
                         </MenuItem.Background>
                     </MenuItem>
                 </MenuItem>

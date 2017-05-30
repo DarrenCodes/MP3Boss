@@ -6,7 +6,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MP3Boss.ViewModels
@@ -14,8 +13,9 @@ namespace MP3Boss.ViewModels
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         #region Members
-        IManipulateFileDirectoryLogic _manipulateFileDirectory;
+        IManipulateFileDirectoryLogic _manipulateFileDirectoryLogic;
         FilePathPair _selectedFilePathPair;
+        TagViewModel _tagViewModel;
 
         bool _applicationControllsAreEnabled;
         bool _applyToAll;
@@ -26,8 +26,17 @@ namespace MP3Boss.ViewModels
 
         #region Properties
 
-        public TagViewModel TagViewModel { get; }
         public ObservableCollection<FilePathPair> AudioFilesList { get; }
+
+        public TagViewModel TagViewModel
+        {
+            get { return _tagViewModel; }
+            private set
+            {
+                _tagViewModel = value;
+                OnPropertyChanged();
+            }
+        }
 
         public FilePathPair SelectedFilePathPair
         {
@@ -36,7 +45,8 @@ namespace MP3Boss.ViewModels
             {
                 _selectedFilePathPair = value;
                 OnPropertyChanged();
-                FileSelected();
+                if (value != null)
+                    FileSelected();
             }
         }
 
@@ -97,6 +107,7 @@ namespace MP3Boss.ViewModels
         }
 
         #region Commands
+        public ICommand ResetAllCommand { get; }
         public ICommand ResetCommand { get; }
         public ICommand ClearCommand { get; }
         public ICommand SaveCommand { get; }
@@ -108,12 +119,13 @@ namespace MP3Boss.ViewModels
         #endregion
 
         #region Constructor Methods
-        public MainWindowViewModel(TagViewModel tagViewModel, IManipulateFileDirectoryLogic manipulateFileDirectory)
+        public MainWindowViewModel(TagViewModel tagViewModel, IManipulateFileDirectoryLogic manipulateFileDirectoryLogic)
         {
             AudioFilesList = new ObservableCollection<FilePathPair>();
             TagViewModel = tagViewModel;
-            _manipulateFileDirectory = manipulateFileDirectory;
+            _manipulateFileDirectoryLogic = manipulateFileDirectoryLogic;
 
+            ResetAllCommand = new CommandHandler((o) => { ResetAll(); });
             ResetCommand = new CommandHandler((o) => { ResetTags(); });
             ClearCommand = new CommandHandler((o) => { ClearTags(); });
             SaveCommand = new CommandHandler((o) =>
@@ -135,7 +147,7 @@ namespace MP3Boss.ViewModels
         private void SaveLoaded(bool autoNext = false)
         {
             TagViewModel.Save();
-            FilePathPair renamedFilePathPair = _manipulateFileDirectory.Rename(SelectedFilePathPair.FilePath, TagViewModel, Format);
+            FilePathPair renamedFilePathPair = _manipulateFileDirectoryLogic.Rename(SelectedFilePathPair.FilePath, TagViewModel, Format);
 
             //Set properties of SelectedFilePathPair property so that it fires PropertyChanged event on the object it is assigned
             //Otherwise assigning the returned object from the Rename method to the SelectedFilePathPair property will not allow item in the
@@ -183,7 +195,7 @@ namespace MP3Boss.ViewModels
             if (dropedFiles.Length > 0)
                 subDirectorySelection = MessageBox.Show("Include subdirectories?", "Please select...", MessageBoxButton.YesNo);
 
-            foreach (FilePathPair filePath in _manipulateFileDirectory.GetFiles(dropedFiles, subDirectorySelection == MessageBoxResult.Yes))
+            foreach (FilePathPair filePath in _manipulateFileDirectoryLogic.GetFiles(dropedFiles, subDirectorySelection == MessageBoxResult.Yes))
                 AudioFilesList.Add(filePath);
 
             AudioFilesCount = AudioFilesList.Count.ToString();
@@ -219,9 +231,17 @@ namespace MP3Boss.ViewModels
             TagViewModel.Load(SelectedFilePathPair.FilePath);
         }
 
+        private void ResetAll()
+        {
+            AudioFilesList.Clear();
+            TagViewModel.Clear();
+            SelectedFilePathPair = null;
+            AudioFilesCount = null;
+        }
+
         private void ClearTags()
         {
-            TagViewModel.Clear();
+            TagViewModel.ClearTags();
         }
 
         private void ResetTags()

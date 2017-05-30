@@ -88,5 +88,11 @@ namespace MP3Boss.DataAccess.FileTags
 
             Write(fileTags);
         }
+
+        public void Clear()
+        {
+            audioFile = null;
+            filePath = null;
+        }
     }
 }

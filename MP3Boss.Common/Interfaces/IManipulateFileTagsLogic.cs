@@ -3,6 +3,7 @@
     public interface IManipulateFileTagsLogic
     {
         void Load(string filePath, IAmFileTags fileTags);
-        void  Save(IAmFileTags fileTags);
+        void Save(IAmFileTags fileTags);
+        void Clear();
     }
 }

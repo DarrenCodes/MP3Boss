@@ -7,7 +7,7 @@ namespace MP3Boss.ViewModels
     public class TagViewModel : IAmFileTags
     {
         #region Members
-        IManipulateFileTagsLogic _manipulateFileTagsBLL;
+        IManipulateFileTagsLogic _manipulateFileTagsLogic;
 
         bool _selectAll;
         #endregion
@@ -39,7 +39,7 @@ namespace MP3Boss.ViewModels
 
         #region Constructors
 
-        public TagViewModel(IManipulateFileTagsLogic manipulateFileTagsBLL)
+        public TagViewModel(IManipulateFileTagsLogic manipulateFileTagsLogic)
         {
             Title = new TagPair<string>();
             Artist = new TagPair<string>();
@@ -50,7 +50,7 @@ namespace MP3Boss.ViewModels
             Genre = new TagPair<string>();
             TagArt = new TagPair<BitmapImage>();
 
-            _manipulateFileTagsBLL = manipulateFileTagsBLL;
+            _manipulateFileTagsLogic = manipulateFileTagsLogic;
         }
 
         #endregion
@@ -59,12 +59,12 @@ namespace MP3Boss.ViewModels
 
         public void Save()
         {
-            _manipulateFileTagsBLL.Save(this);
+            _manipulateFileTagsLogic.Save(this);
         }
 
         public void Load(string filePath)
         {
-            _manipulateFileTagsBLL.Load(filePath, this);
+            _manipulateFileTagsLogic.Load(filePath, this);
         }
 
         private void UpdateCheckBoxes(bool selectAll)
@@ -79,7 +79,7 @@ namespace MP3Boss.ViewModels
             TagArt.Locked = selectAll;
         }
 
-        public void Clear()
+        public void ClearTags()
         {
             Title.Item = string.Empty;
             Artist.Item = string.Empty;
@@ -89,6 +89,13 @@ namespace MP3Boss.ViewModels
             TrackNo.Item = string.Empty;
             Genre.Item = string.Empty;
             TagArt.Item = null;
+        }
+
+        public void Clear()
+        {
+            SelectAll = false;
+            ClearTags();
+            _manipulateFileTagsLogic.Clear();
         }
         #endregion
     }

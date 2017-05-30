@@ -1,31 +1,32 @@
 ﻿using MP3Boss.Common.Interfaces;
 using MP3Boss.Models.DTOs;
 using System.Collections.Generic;
+using System;
 
 namespace MP3Boss.Logic.FileTags
 {
     public class FileTagManipulationLogic : IManipulateFileTagsLogic
     {
-        IManipulateFileTagsDataAccess _manipulateFileTags;
+        IManipulateFileTagsDataAccess _manipulateFileTagsDataAccess;
 
-        public FileTagManipulationLogic(IManipulateFileTagsDataAccess manipulateFileTags)
+        public FileTagManipulationLogic(IManipulateFileTagsDataAccess manipulateFileTagsDataAccess)
         {
-            _manipulateFileTags = manipulateFileTags;
+            _manipulateFileTagsDataAccess = manipulateFileTagsDataAccess;
         }
 
         public void Load(string filePath, IAmFileTags fileTags)
         {
-            Map(fileTags, _manipulateFileTags.Read(filePath));
+            Map(fileTags, _manipulateFileTagsDataAccess.Read(filePath));
         }
 
         public void Save(IAmFileTags fileTags)
         {
-            _manipulateFileTags.Write(Map(fileTags));
+            _manipulateFileTagsDataAccess.Write(Map(fileTags));
         }
 
         public void SearchAndReplace(string filePath, string find, string replacement)
         {
-            FileTagsDTO fileTagsDTO = _manipulateFileTags.Read(filePath);
+            FileTagsDTO fileTagsDTO = _manipulateFileTagsDataAccess.Read(filePath);
 
             fileTagsDTO.Title = fileTagsDTO.Title.Replace(find, replacement);
             fileTagsDTO.Artist = fileTagsDTO.Artist.Replace(find, replacement);
@@ -33,7 +34,7 @@ namespace MP3Boss.Logic.FileTags
             fileTagsDTO.Album = fileTagsDTO.Album.Replace(find, replacement);
             fileTagsDTO.Genre = fileTagsDTO.Genre.Replace(find, replacement);
 
-            _manipulateFileTags.Write(fileTagsDTO);
+            _manipulateFileTagsDataAccess.Write(fileTagsDTO);
         }
         public void SearchAndReplace(List<string> audioFilesList, string find, string replacement)
         {
@@ -73,6 +74,11 @@ namespace MP3Boss.Logic.FileTags
                 TrackNo = fileTags.TrackNo.Item,
                 Genre = fileTags.Genre.Item
             };
+        }
+
+        public void Clear()
+        {
+            _manipulateFileTagsDataAccess.Clear();
         }
     }
 }
