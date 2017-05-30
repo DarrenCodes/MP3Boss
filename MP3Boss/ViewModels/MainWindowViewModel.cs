@@ -23,7 +23,7 @@ namespace MP3Boss.ViewModels
 
         public TagViewModel TagViewModel { get; }
         public FilePathPair SelectedFilePathPair { get { return _selectedFilePathPair; } set { _selectedFilePathPair = value; OnPropertyChanged(); FileSelected(); } }
-        public ObservableCollection<FilePathPair> ListViewAudioFilesList { get; }
+        public ObservableCollection<FilePathPair> AudioFilesList { get; }
         public string StatusLabel { get; set; }
         public string AudioFilesCount { get; set; }
         public string FilePathLabel { get; set; }
@@ -50,15 +50,26 @@ namespace MP3Boss.ViewModels
         #region Constructor Methods
         public MainWindowViewModel(TagViewModel tagViewModel, IManipulateFileDirectoryLogic manipulateFileDirectory)
         {
-            ListViewAudioFilesList = new ObservableCollection<FilePathPair>();
+            AudioFilesList = new ObservableCollection<FilePathPair>();
             TagViewModel = tagViewModel;
             _manipulateFileDirectory = manipulateFileDirectory;
-            SaveCommand = new CommandHandler((o) => { if (ApplyToAll) SaveAll(); else SaveLoaded(); });
+            SaveCommand = new CommandHandler((o) => 
+            {
+                if (ApplyToAll)
+                    SaveAll();
+                else
+                    SaveLoaded(AutoNext);
+
+                //Refresh TagViewModel for the currently selected file
+                //This makes sure the TagViewModel works with the current file path,
+                //as this file path could change after a save
+                TagViewModel.Load(SelectedFilePathPair.FilePath);
+            });
         }
         #endregion
 
         #region Methods
-        private void SaveLoaded()
+        private void SaveLoaded(bool autoNext = false)
         {
             TagViewModel.Save();
             FilePathPair renamedFilePathPair = _manipulateFileDirectory.Rename(SelectedFilePathPair.FilePath, TagViewModel, Format);
@@ -68,12 +79,26 @@ namespace MP3Boss.ViewModels
             //ListView to be updated, as it is a new object which isn't in the List
             SelectedFilePathPair.FilePath = renamedFilePathPair.FilePath;
             SelectedFilePathPair.DisplayText = renamedFilePathPair.DisplayText;
-            TagViewModel.Load(SelectedFilePathPair.FilePath);
+
+            if (autoNext)
+                SelectedFilePathPair = GetNextElement(SelectedFilePathPair, AudioFilesList);
+        }
+
+        T GetNextElement<T>(T item, IList<T> list)
+        {
+            int itemIndex = list.IndexOf(item);
+            if (itemIndex == list.Count - 1)
+                return list[0];
+            else if (itemIndex < list.Count && itemIndex > -1)
+                return list[itemIndex + 1];
+            else
+                return default(T);
+
         }
 
         private void SaveAll()
         {
-            foreach (FilePathPair filePathPair in ListViewAudioFilesList)
+            foreach (FilePathPair filePathPair in AudioFilesList)
             {
                 SelectedFilePathPair = filePathPair;
                 TagViewModel.Load(filePathPair.FilePath);
@@ -207,10 +232,10 @@ namespace MP3Boss.ViewModels
                 subDirectorySelection = MessageBox.Show("Include subdirectories?", "Please select...", MessageBoxButton.YesNo);
 
             foreach (FilePathPair filePath in _manipulateFileDirectory.GetFiles(dropedFiles, subDirectorySelection == MessageBoxResult.Yes))
-                ListViewAudioFilesList.Add(filePath);
+                AudioFilesList.Add(filePath);
 
-            AudioFilesCount = ListViewAudioFilesList.Count.ToString();
-            SelectedFilePathPair = ListViewAudioFilesList[0];
+            AudioFilesCount = AudioFilesList.Count.ToString();
+            SelectedFilePathPair = AudioFilesList[0];
             TagViewModel.Load(SelectedFilePathPair.FilePath);
         }
 

@@ -399,7 +399,7 @@
                                       ShadowDepth="3"/>
                 </ComboBox.Effect>
             </ComboBox>
-            <ListView ItemsSource="{Binding ListViewAudioFilesList}" 
+            <ListView ItemsSource="{Binding AudioFilesList}" 
                       Grid.Column="3" 
                       Margin="5,25,5,0" 
                       Grid.Row="1" 
@@ -586,6 +586,7 @@
                 </CheckBox.Effect>
             </CheckBox>
             <CheckBox Content="{DynamicResource contentCBoxAutoNext}"
+                      IsChecked="{Binding AutoNext, Mode=TwoWay}"
                       Grid.Column="3"
                       Margin="0,0,89,6"
                       Grid.Row="4"
