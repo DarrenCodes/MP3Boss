@@ -4,7 +4,6 @@ using MP3Boss.Models.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,6 +16,9 @@ namespace MP3Boss.ViewModels
         #region Members
         IManipulateFileDirectoryLogic _manipulateFileDirectory;
         FilePathPair _selectedFilePathPair;
+
+        bool _applyToAll;
+        bool _autoNext;
         #endregion
 
         #region Properties
@@ -31,8 +33,28 @@ namespace MP3Boss.ViewModels
         public int CurrentIndex { get; set; }
         public int Format { get; set; }
 
-        public bool ApplyToAll { get; set; }
-        public bool AutoNext { get; set; }
+        public bool ApplyToAll
+        {
+            get { return _applyToAll; }
+            set
+            {
+                _applyToAll = value;
+                if (value)
+                    AutoNext = false;
+                OnPropertyChanged();
+            }
+        }
+        public bool AutoNext
+        {
+            get { return _autoNext; }
+            set
+            {
+                _autoNext = value;
+                if (value)
+                    ApplyToAll = false;
+                OnPropertyChanged();
+            }
+        }
 
         #region Commands
         public ICommand SelectAllCommand { get; }
@@ -53,7 +75,7 @@ namespace MP3Boss.ViewModels
             AudioFilesList = new ObservableCollection<FilePathPair>();
             TagViewModel = tagViewModel;
             _manipulateFileDirectory = manipulateFileDirectory;
-            SaveCommand = new CommandHandler((o) => 
+            SaveCommand = new CommandHandler((o) =>
             {
                 if (ApplyToAll)
                     SaveAll();
@@ -93,7 +115,6 @@ namespace MP3Boss.ViewModels
                 return list[itemIndex + 1];
             else
                 return default(T);
-
         }
 
         private void SaveAll()
@@ -104,109 +125,6 @@ namespace MP3Boss.ViewModels
                 TagViewModel.Load(filePathPair.FilePath);
                 SaveLoaded();
             }
-        }
-
-        public void SaveToFile(bool applyToAll, bool autoNext)
-        {
-            //int i = CurrentIndex;
-            //bool firstSave = true;
-            //TagViewModel.Load(filePath);
-            //int loopEnd = 0;
-            //int originalIndex = 0;
-            //string originalPath = "";
-
-            //int listLength = formPropertiesObject.FullPathAudioFilesList.Count;
-            //string filePath = "";
-
-            //if (listLength > 0)
-            //{
-            //    string userDecision = null;
-
-            //    originalIndex = i;
-
-            //    if (applyToAll == true)
-            //        loopEnd = listLength;
-            //    else
-            //        loopEnd = i + 1;
-
-            //    #region Try to save
-            //    try
-            //    {
-            //        #region Save Changes
-            //        for (; i < loopEnd; i++)
-            //        {
-            //            filePath = formPropertiesObject.FullPathAudioFilesList[i];
-
-            //            if (firstSave == false)
-            //                this.SetFormAttributes(filePath);
-
-            //            if (userDecision != "Continue")
-            //                userDecision = this.FormChecker(formPropertiesObject);
-
-            //            bool isAllowedToSave = (userDecision == null || userDecision == "Continue");
-
-            //            if (listLength != 0 && isAllowedToSave)
-            //            {
-            //                originalPath = filePath;
-
-            //                TagViewModel.Save();
-            //                filePath = file.Rename(filePath, formPropertiesObject);
-            //                formPropertiesObject.ListViewAudioFilesList[i] = System.IO.Path.GetFileName(filePath);
-            //                formPropertiesObject.FullPathAudioFilesList[i] = filePath;
-            //                firstSave = false;
-
-            //                if (applyToAll == true && originalIndex != 0 && i == (listLength - 1))
-            //                {
-            //                    i = -1;
-            //                    loopEnd = originalIndex;
-            //                }
-            //            }
-            //            else if (userDecision == "Yes")
-            //            {
-            //                firstSave = true;
-            //                formPropertiesObject.CurrentIndex = i;
-            //                break;
-            //            }
-            //            else if (userDecision == "Skip")
-            //                firstSave = false;
-
-            //            if (applyToAll == true)
-            //                firstSave = false;
-
-            //            formPropertiesObject.StatusLabel = "Done.";
-            //        }
-
-            //        if (i >= formPropertiesObject.FullPathAudioFilesList.Count)
-            //        {
-            //            formPropertiesObject.CurrentIndex = 0;
-            //            this.SetFormAttributes(0);
-            //        }
-            //        #endregion
-
-            //        #region Go to next file
-            //        if ((autoNext == true || userDecision == "Skip") && i < listLength)
-            //        {
-            //            this.SetFormAttributes(formPropertiesObject.FullPathAudioFilesList[i]);
-            //            ++formPropertiesObject.CurrentIndex;
-            //        }
-            //        #endregion
-            //    }
-            //    catch (FileNotFoundException)
-            //    {
-            //        MessageBox.Show("The file was not found.", "Warning!");
-            //    }
-            //    catch (IOException ex)
-            //    {
-            //        MessageBox.Show("An unexpected error occured while trying to save the changes made.", "Warning!");
-            //        ErrorLogging.Logger(ex.ToString());
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        MessageBox.Show("An unexpected error occured. Sorry.", "Warning!");
-            //        ErrorLogging.Logger(ex.ToString());
-            //    }
-            //    #endregion
-            //}
         }
         #endregion
 
