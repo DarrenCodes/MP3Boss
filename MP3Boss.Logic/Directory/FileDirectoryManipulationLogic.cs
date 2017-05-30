@@ -53,7 +53,7 @@ namespace MP3Boss.Logic.Directory
 
             _manipulateFileDirectoryDAL.RenameFile(filePath, newFilePath);
 
-            return new FilePathPair(_manipulateFileDirectoryDAL.GetFileName(filePath), newFilePath);
+            return new FilePathPair(_manipulateFileDirectoryDAL.GetFileName(newFilePath), newFilePath);
         }
 
         private string GenerateFormattedName(string filePath, IAmFileTags fileTags, int format)

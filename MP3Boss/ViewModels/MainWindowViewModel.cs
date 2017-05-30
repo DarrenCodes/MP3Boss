@@ -53,7 +53,7 @@ namespace MP3Boss.ViewModels
             ListViewAudioFilesList = new ObservableCollection<FilePathPair>();
             TagViewModel = tagViewModel;
             _manipulateFileDirectory = manipulateFileDirectory;
-            SaveCommand = new CommandHandler((o) => { SaveLoaded(); });
+            SaveCommand = new CommandHandler((o) => { if (ApplyToAll) SaveAll(); else SaveLoaded(); });
         }
         #endregion
 
@@ -68,6 +68,7 @@ namespace MP3Boss.ViewModels
             //ListView to be updated, as it is a new object which isn't in the List
             SelectedFilePathPair.FilePath = renamedFilePathPair.FilePath;
             SelectedFilePathPair.DisplayText = renamedFilePathPair.DisplayText;
+            TagViewModel.Load(SelectedFilePathPair.FilePath);
         }
 
         private void SaveAll()
@@ -207,7 +208,7 @@ namespace MP3Boss.ViewModels
 
             foreach (FilePathPair filePath in _manipulateFileDirectory.GetFiles(dropedFiles, subDirectorySelection == MessageBoxResult.Yes))
                 ListViewAudioFilesList.Add(filePath);
-            
+
             AudioFilesCount = ListViewAudioFilesList.Count.ToString();
             SelectedFilePathPair = ListViewAudioFilesList[0];
             TagViewModel.Load(SelectedFilePathPair.FilePath);
