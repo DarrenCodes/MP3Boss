@@ -69,14 +69,26 @@ namespace MP3Boss.ViewModels
 
         private void UpdateCheckBoxes(bool selectAll)
         {
-            Title.LockedStatus = selectAll;
-            Artist.LockedStatus = selectAll;
-            ContributingArtists.LockedStatus = selectAll;
-            Album.LockedStatus = selectAll;
-            Year.LockedStatus = selectAll;
-            TrackNo.LockedStatus = selectAll;
-            Genre.LockedStatus = selectAll;
-            TagArt.LockedStatus = selectAll;
+            Title.Locked = selectAll;
+            Artist.Locked = selectAll;
+            ContributingArtists.Locked = selectAll;
+            Album.Locked = selectAll;
+            Year.Locked = selectAll;
+            TrackNo.Locked = selectAll;
+            Genre.Locked = selectAll;
+            TagArt.Locked = selectAll;
+        }
+
+        public void Clear()
+        {
+            Title.Item = string.Empty;
+            Artist.Item = string.Empty;
+            ContributingArtists.Item = string.Empty;
+            Album.Item = string.Empty;
+            Year.Item = string.Empty;
+            TrackNo.Item = string.Empty;
+            Genre.Item = string.Empty;
+            TagArt.Item = null;
         }
         #endregion
     }

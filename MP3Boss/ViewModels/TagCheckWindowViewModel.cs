@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MP3Boss.ViewModels
 {
-    class TagCheckWindowViewModel
+    public class TagCheckWindowViewModel
     {
     }
 }

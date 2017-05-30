@@ -43,21 +43,21 @@ namespace MP3Boss.Logic.FileTags
 
         public void Map(IAmFileTags fileTags, FileTagsDTO fileTagsDTO)
         {
-            if (!fileTags.Title.LockedStatus)
+            if (!fileTags.Title.Locked)
                 fileTags.Title.Item = fileTagsDTO.Title;
-            if (!fileTags.Artist.LockedStatus)
+            if (!fileTags.Artist.Locked)
                 fileTags.Artist.Item = fileTagsDTO.Artist;
-            if (!fileTags.ContributingArtists.LockedStatus)
+            if (!fileTags.ContributingArtists.Locked)
                 fileTags.ContributingArtists.Item = fileTagsDTO.ContributingArtists;
-            if (!fileTags.Album.LockedStatus)
+            if (!fileTags.Album.Locked)
                 fileTags.Album.Item = fileTagsDTO.Album;
-            if (!fileTags.Year.LockedStatus)
+            if (!fileTags.Year.Locked)
                 fileTags.Year.Item = fileTagsDTO.Year;
-            if (!fileTags.TrackNo.LockedStatus)
+            if (!fileTags.TrackNo.Locked)
                 fileTags.TrackNo.Item = fileTagsDTO.TrackNo;
-            if (!fileTags.Genre.LockedStatus)
+            if (!fileTags.Genre.Locked)
                 fileTags.Genre.Item = fileTagsDTO.Genre;
-            if (!fileTags.TagArt.LockedStatus)
+            if (!fileTags.TagArt.Locked)
                 fileTags.TagArt.Item = fileTagsDTO.TagArt;
         }
 

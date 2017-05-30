@@ -8,8 +8,8 @@ namespace MP3Boss.Models.Models
         T _item;
         public T Item { get { return _item; } set { _item = value; OnPropertyChanged(); } }
 
-        bool _lockedStatus;
-        public bool LockedStatus { get { return _lockedStatus; } set { _lockedStatus = value; OnPropertyChanged(); } }
+        bool _locked;
+        public bool Locked { get { return _locked; } set { _locked = value; OnPropertyChanged(); } }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

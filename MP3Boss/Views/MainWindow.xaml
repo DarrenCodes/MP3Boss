@@ -67,7 +67,7 @@
                 </MenuItem>
             </Menu>
             <CheckBox Content="{DynamicResource contentCBoxTitle}" 
-                      IsChecked="{Binding TagViewModel.Title.LockedStatus, Mode=TwoWay}"
+                      IsChecked="{Binding TagViewModel.Title.Locked, Mode=TwoWay}"
                       IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       HorizontalAlignment="Left" 
                       Grid.Row="1"
@@ -83,7 +83,7 @@
                 </CheckBox.Effect>
             </CheckBox>
             <CheckBox Content="{DynamicResource contentCBoxAlbumArtist}" 
-                      IsChecked="{Binding TagViewModel.Artist.LockedStatus, Mode=TwoWay}" 
+                      IsChecked="{Binding TagViewModel.Artist.Locked, Mode=TwoWay}" 
                       IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       HorizontalAlignment="Left" 
                       Margin="10,55,0,0" 
@@ -99,7 +99,7 @@
                 </CheckBox.Effect>
             </CheckBox>
             <CheckBox Content="{DynamicResource contentCBoxContArtists}" 
-                      IsChecked="{Binding TagViewModel.ContributingArtists.LockedStatus, Mode=TwoWay}" 
+                      IsChecked="{Binding TagViewModel.ContributingArtists.Locked, Mode=TwoWay}" 
                       IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       HorizontalAlignment="Left"
                       Margin="10,81,0,0" 
@@ -115,7 +115,7 @@
                 </CheckBox.Effect>
             </CheckBox>
             <CheckBox Content="{DynamicResource contentCBoxAlbum}" 
-                      IsChecked="{Binding TagViewModel.Album.LockedStatus, Mode=TwoWay}"
+                      IsChecked="{Binding TagViewModel.Album.Locked, Mode=TwoWay}"
                       IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       HorizontalAlignment="Left"
                       Margin="10,104,0,0" 
@@ -131,7 +131,7 @@
                 </CheckBox.Effect>
             </CheckBox>
             <CheckBox Content="{DynamicResource contentCBoxYear}" 
-                      IsChecked="{Binding TagViewModel.Year.LockedStatus, Mode=TwoWay}"
+                      IsChecked="{Binding TagViewModel.Year.Locked, Mode=TwoWay}"
                       IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       HorizontalAlignment="Left"
                       Margin="10,130,0,0"
@@ -147,7 +147,7 @@
                 </CheckBox.Effect>
             </CheckBox>
             <CheckBox Content="{DynamicResource contentCBoxTrackNo}" 
-                      IsChecked="{Binding TagViewModel.TrackNo.LockedStatus, Mode=TwoWay}" 
+                      IsChecked="{Binding TagViewModel.TrackNo.Locked, Mode=TwoWay}" 
                       IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       HorizontalAlignment="Left" 
                       Margin="10,156,0,0" 
@@ -163,7 +163,7 @@
                 </CheckBox.Effect>
             </CheckBox>
             <CheckBox Content="{DynamicResource contentCBoxGenres}" 
-                      IsChecked="{Binding TagViewModel.Genre.LockedStatus, Mode=TwoWay}" 
+                      IsChecked="{Binding TagViewModel.Genre.Locked, Mode=TwoWay}" 
                       IsEnabled="{Binding ApplicationControlsAreEnabled}"
                       HorizontalAlignment="Left" 
                       Margin="10,182,0,0" 
@@ -183,7 +183,7 @@
                     Grid.Column="3"
                     Grid.Row="2"
                     HorizontalAlignment="Right"
-                    Width="66" Margin="0,4,0,1"
+                    Width="66" Margin="0,4,17,1"
                     BorderBrush="White"
                     Foreground="White"
                     ToolTip="{DynamicResource tipBtnSuggest}">
@@ -197,8 +197,9 @@
             </Button>
             <Button Content="{DynamicResource contentBtnClear}" 
                     IsEnabled="{Binding ApplicationControlsAreEnabled}"
+                    Command="{Binding ClearCommand}"
                     Grid.Column="3" 
-                    Margin="0,4,71,1"
+                    Margin="0,4,88,1"
                     Grid.Row="2"
                     HorizontalAlignment="Right"
                     Width="66" 
@@ -215,6 +216,7 @@
             </Button>
             <Button Content="{DynamicResource contentBtnReset}" 
                     IsEnabled="{Binding ApplicationControlsAreEnabled}"
+                    Command="{Binding ResetCommand}"
                     Grid.Column="3" 
                     Margin="0,4,159,1" 
                     Grid.Row="2"
@@ -511,7 +513,7 @@
                    ToolTip="{DynamicResource tipTagArtPictureBox}"/>
             <Label Content="{DynamicResource fileCount}" 
                    Grid.Column="4"
-                   Margin="0,0,468,33" 
+                   Margin="0,0,468,17" 
                    Grid.Row="4" 
                    HorizontalAlignment="Right" 
                    VerticalAlignment="Bottom"
@@ -529,7 +531,7 @@
             </Label>
             <Label Content="{Binding AudioFilesCount}" 
                    Grid.Column="4"
-                   Margin="0,0,410,33" 
+                   Margin="0,0,410,18" 
                    Grid.Row="4" 
                    HorizontalAlignment="Right" 
                    VerticalAlignment="Bottom"
@@ -545,26 +547,6 @@
                     <DropShadowEffect Color="{DynamicResource DropShadowColour}"/>
                 </Label.Effect>
             </Label>
-            <Button Content="{DynamicResource contentBtnRefresh}"
-                    IsEnabled="{Binding ApplicationControlsAreEnabled}"
-                    Grid.Column="4"
-                    Margin="0,0,410,6"
-                    Grid.Row="4" 
-                    VerticalAlignment="Bottom" 
-                    Height="22"
-                    HorizontalAlignment="Right"
-                    Width="72" 
-                    BorderBrush="White" 
-                    Foreground="White" 
-                    ToolTip="{DynamicResource tipBtnRefresh}">
-                <Button.Background>
-                    <SolidColorBrush Color="{DynamicResource OutterColour}"/>
-                </Button.Background>
-                <Button.Effect>
-                    <DropShadowEffect Color="{DynamicResource DropShadowColour}" 
-                                      ShadowDepth="3"/>
-                </Button.Effect>
-            </Button>
             <Label Content="Format:" 
                    Grid.Column="4" 
                    Margin="0,0,332,17" 

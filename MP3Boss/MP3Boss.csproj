@@ -97,7 +97,6 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\SearchAndReplaceWindowViewModel.cs" />
     <Compile Include="ViewModels\TagCheckWindowViewModel.cs" />
-    <Compile Include="ViewModels\TagPairViewModel.cs" />
     <Compile Include="ViewModels\TagViewModel.cs" />
     <Compile Include="Views\CheckMessageWindow.xaml.cs">
       <DependentUpon>CheckMessageWindow.xaml</DependentUpon>

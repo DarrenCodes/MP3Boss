@@ -97,11 +97,9 @@ namespace MP3Boss.ViewModels
         }
 
         #region Commands
-        public ICommand SelectAllCommand { get; }
-        public ICommand ResetAllCommand { get; }
+        public ICommand ResetCommand { get; }
+        public ICommand ClearCommand { get; }
         public ICommand SaveCommand { get; }
-        public ICommand CloseCommand { get; }
-        public ICommand HowToCommand { get; }
         #endregion
 
         #region Events
@@ -115,6 +113,9 @@ namespace MP3Boss.ViewModels
             AudioFilesList = new ObservableCollection<FilePathPair>();
             TagViewModel = tagViewModel;
             _manipulateFileDirectory = manipulateFileDirectory;
+
+            ResetCommand = new CommandHandler((o) => { ResetTags(); });
+            ClearCommand = new CommandHandler((o) => { ClearTags(); });
             SaveCommand = new CommandHandler((o) =>
             {
                 if (ApplyToAll)
@@ -213,56 +214,19 @@ namespace MP3Boss.ViewModels
                 MessageBoxImage.Information);
         }
 
-        private void cBoxSelectAll_CheckedChanged(object sender, RoutedEventArgs e)
-        {
-            //ApplyToAllCheckBoxes(cBoxSelectAll.IsChecked.Value);
-        }
-
         public void FileSelected()
         {
             TagViewModel.Load(SelectedFilePathPair.FilePath);
-            //if (containsItems)
-            //{
-            //    BindingObject.StatusLabel = "";
-            //    ClearFormAttributes();
-
-            //    BindingObject.CurrentIndex = listViewAudioFiles.SelectedIndex;
-
-            //    FormManagerObject.SetFormAttributes(BindingObject.CurrentIndex);
-            //}
         }
 
-        private void btnClear_Click(object sender, RoutedEventArgs e)
+        private void ClearTags()
         {
-            //ClearFormAttributes();
+            TagViewModel.Clear();
         }
 
-        private void btnReset_Click(object sender, RoutedEventArgs e)
+        private void ResetTags()
         {
-            //if (containsItems)
-            //    FormManagerObject.SetFormAttributes(BindingObject.CurrentIndex);
-        }
-
-        private void btnSave_Click(object sender, RoutedEventArgs e)
-        {
-            //if (containsItems)
-            //    FormManagerObject.SaveToFile(cBoxApplyToAll.IsChecked.Value, cBoxAutoNext.IsChecked.Value);
-        }
-
-        private void btnRefresh_Click(object sender, RoutedEventArgs e)
-        {
-            //FormManagerObject.RefreshListView();
-        }
-
-        private void cBoxApplyToAll_CheckedChanged(object sender, RoutedEventArgs e)
-        {
-            //if (cBoxApplyToAll.IsChecked.Value)
-            //{
-            //    cBoxAutoNext.IsEnabled = false;
-            //    cBoxAutoNext.IsChecked = false;
-            //}
-            //else
-            //    cBoxAutoNext.IsEnabled = true;
+            TagViewModel.Load(SelectedFilePathPair.FilePath);
         }
 
         private void btnSearchAndReplace_Click(object sender, RoutedEventArgs e)
@@ -303,11 +267,6 @@ namespace MP3Boss.ViewModels
 
             //if (isSuccessful)
             //    BindingObject.StatusLabel = "Done.";
-        }
-
-        private void ComboBoxFormat_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //BindingObject.Format = comboBoxFormat.SelectedIndex;
         }
 
         private void OnPropertyChanged([CallerMemberName]string caller = null)
