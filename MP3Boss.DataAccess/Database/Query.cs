@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Data.SQLite;
 
-namespace MP3Boss.Source.Database
+namespace MP3Boss.DataAccess.Database
 {
-    class Query : IQuery
+    class Query
     {
         private SQLiteDataReader readerResult;
         private string path;

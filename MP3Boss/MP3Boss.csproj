@@ -62,14 +62,7 @@
       <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SQLiteDB">
-      <HintPath>..\..\MP3Boss\SQLiteDB\SQLiteDB\bin\Debug\SQLiteDB.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite">
-      <HintPath>..\..\MP3Boss\SQLiteDB\SQLiteDB\bin\Debug\System.Data.SQLite.dll</HintPath>
-    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\System.Windows.Interactivity.dll</HintPath>
@@ -79,7 +72,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
@@ -104,9 +96,6 @@
     <Compile Include="Views\SearchAndReplaceWindow.xaml.cs">
       <DependentUpon>SearchAndReplaceWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Source\Logging\ErrorLogging.cs" />
-    <Compile Include="Source\Validation\IVerify.cs" />
-    <Compile Include="Source\Validation\Verify.cs" />
     <Page Include="Languages\en.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -123,15 +112,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Source\Database\IDatabaseAdd.cs" />
-    <Compile Include="Source\Database\IDatabaseSuggest.cs" />
-    <Compile Include="Source\Database\IQuery.cs" />
-    <Compile Include="Source\Database\Query.cs" />
-    <Compile Include="Source\Database\SQLite.cs" />
-    <Compile Include="Source\Database\SQLiteAsync.cs" />
-    <Compile Include="Source\Database\TagAdd.cs" />
-    <Compile Include="Source\Database\TagDelete.cs" />
-    <Compile Include="Source\Database\TagSuggest.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

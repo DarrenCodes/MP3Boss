@@ -32,7 +32,7 @@ namespace MP3Boss.DataAccess.FileTags
             string contributingArtists = "";
             foreach (string artist in audioFile.Tag.Performers)
             {
-                contributingArtists += artist + ";";
+                contributingArtists += artist + "; ";
             }
             fileTags.ContributingArtists = contributingArtists.TrimEnd(filter);
 
@@ -72,11 +72,11 @@ namespace MP3Boss.DataAccess.FileTags
 
             audioFile.Tag.Title = fileTags.Title;
             audioFile.Tag.AlbumArtists = new string[1] { fileTags.Artist };
-            audioFile.Tag.Performers = fileTags.ContributingArtists.Split(';');
+            audioFile.Tag.Performers = TrimStringArrayElements(fileTags.ContributingArtists.Split(';'));
             audioFile.Tag.Album = fileTags.Album;
             audioFile.Tag.Year = uint.Parse(fileTags.Year);
             audioFile.Tag.Track = uint.Parse(fileTags.TrackNo);
-            audioFile.Tag.Genres = fileTags.Genre.Split(';');
+            audioFile.Tag.Genres = TrimStringArrayElements(fileTags.Genre.Split(';'));
 
             audioFile.Save();
         }
@@ -93,6 +93,14 @@ namespace MP3Boss.DataAccess.FileTags
         {
             audioFile = null;
             filePath = null;
+        }
+
+        private string[] TrimStringArrayElements(string[] array)
+        {
+            for (int i = 0; i < array.Length; i++)
+                array[i] = array[i].Trim();
+
+            return array;
         }
     }
 }

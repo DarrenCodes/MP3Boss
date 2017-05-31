@@ -10,7 +10,6 @@ namespace MP3Boss.Tests
         [TestMethod]
         public void TestGetAudioFiles()
         {
-            AudioFile file = new AudioFile();
             string[] droppedFiles =
             {
                 "D:\\Music\\03. Everything Fell Into Place - Shwa Losben.mp3",

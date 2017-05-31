@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace MP3Boss.Source.Database
+namespace MP3Boss.DataAccess.Database
 {
-    public class TagAdd : IDatabaseAdd
+    public class TagAdd
     {
         //IQuery tagDB;
 

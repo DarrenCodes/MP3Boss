@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -134,11 +135,6 @@ namespace MP3Boss.ViewModels
                     SaveAll();
                 else
                     SaveLoaded(AutoNext);
-
-                //Refresh TagViewModel for the currently selected file
-                //This makes sure the TagViewModel works with the current file path,
-                //as this file path could change after a save
-                TagViewModel.Load(SelectedFilePathPair.FilePath);
             });
         }
         #endregion
@@ -172,12 +168,18 @@ namespace MP3Boss.ViewModels
 
         private void SaveAll()
         {
+            StatusLabel = "Processing...";
+            ApplicationControlsAreEnabled = false;
+
             foreach (FilePathPair filePathPair in AudioFilesList)
             {
                 SelectedFilePathPair = filePathPair;
                 TagViewModel.Load(filePathPair.FilePath);
                 SaveLoaded();
             }
+
+            StatusLabel = "Completed!";
+            ApplicationControlsAreEnabled = true;
         }
         #endregion
 
@@ -228,6 +230,7 @@ namespace MP3Boss.ViewModels
 
         public void FileSelected()
         {
+            StatusLabel = string.Empty;
             TagViewModel.Load(SelectedFilePathPair.FilePath);
         }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-namespace MP3Boss.Source.Database
+namespace MP3Boss.DataAccess.Database
 {
     public class TagSuggest
     {
