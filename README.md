@@ -25,4 +25,4 @@ Changes can be made to all files or just one at a time. There is also a built in
 * Track no.
 * Genre
 
-![Alt text](https://ibb.co/hPdoYF)
+![Alt text](https://preview.ibb.co/czYNtF/MP3Boss.png)
